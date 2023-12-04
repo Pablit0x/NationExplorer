@@ -1,4 +1,4 @@
-package com.pscode.app.theme
+package com.pscode.app.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
