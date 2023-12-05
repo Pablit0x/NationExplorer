@@ -13,13 +13,13 @@ class CountryRepositoryImpl(
     override suspend fun getAllCountries(): Response<List<Country>> {
         val cachedCountries = countryCache.get()
 
-        if(cachedCountries != null){
+        if (cachedCountries != null) {
             return Response.Success(data = cachedCountries)
         }
 
         val countryListResponse = countryApi.getAllCountries()
 
-        if(countryListResponse is Response.Success) countryCache.set(countryListResponse.data)
+        if (countryListResponse is Response.Success) countryCache.set(countryListResponse.data)
 
         return countryListResponse
     }

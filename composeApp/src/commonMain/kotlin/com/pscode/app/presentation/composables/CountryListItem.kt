@@ -35,7 +35,12 @@ fun CountryListItem(
                 modifier = Modifier.size(width = 100.dp, height = 60.dp)
             )
 
-            Text(text = countryName, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            Text(
+                text = countryName,
+                style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

@@ -16,8 +16,6 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.pscode.app.di.dataModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.theme.AppTheme
-import com.pscode.app.strings.Strings
-import com.pscode.app.strings.StringsEn
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 
