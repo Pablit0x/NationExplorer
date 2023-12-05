@@ -35,17 +35,21 @@ kotlin {
             implementation(libs.libres)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
-            implementation(libs.composeImageLoader)
+            implementation(libs.kamel.image.loader)
             implementation(libs.napier)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.moko.mvvm)
             implementation(libs.ktor.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.composeIcons.featherIcons)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
+            implementation(libs.koin.compose)
             implementation(libs.kstore)
+            implementation(libs.kstore.file)
         }
 
         commonTest.dependencies {

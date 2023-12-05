@@ -25,30 +25,50 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import com.pscode.app.di.dataModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.theme.AppTheme
 import com.pscode.app.presentation.theme.LocalThemeIsDark
+import kotlinx.coroutines.launch
+import org.koin.core.KoinApplication
+import org.koin.compose.KoinApplication
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun App() = AppTheme {
+internal fun App() {
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    Navigator(screen = OverviewScreen()) { navigator ->
-        Scaffold(topBar = {
-            CenterAlignedTopAppBar(title = {})
-        }) { innerPadding ->
-            SlideTransition(
-                navigator = navigator, modifier = Modifier.padding(paddingValues = innerPadding)
-            )
+    KoinApplication(moduleList = { listOf(dataModule) }) {
+        AppTheme {
+            Navigator(screen = OverviewScreen(onShowSnackBar = { errorMsg ->
+                scope.launch {
+                    snackBarHostState.showSnackbar(message = errorMsg)
+                }
+            })) { navigator ->
+                Scaffold(topBar = {
+                    CenterAlignedTopAppBar(title = {})
+                }) { innerPadding ->
+                    SlideTransition(
+                        navigator = navigator,
+                        modifier = Modifier.padding(paddingValues = innerPadding)
+                    )
+                }
+            }
         }
     }
 }
+
+
+

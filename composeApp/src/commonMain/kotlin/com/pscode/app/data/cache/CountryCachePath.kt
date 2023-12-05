@@ -1,7 +1,9 @@
 package com.pscode.app.data.cache
 
+import okio.Path
+
 interface CountryCachePath {
-    val name: String
+    val path: Path
 }
 
 expect fun getCountryCachePath(): CountryCachePath

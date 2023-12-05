@@ -8,7 +8,7 @@ androidx-activityCompose = "1.8.1"
 compose-uitooling = "1.5.4"
 libres = "1.2.2"
 voyager = "1.0.0-rc10"
-composeImageLoader = "1.7.1"
+kamel = "0.8.3"
 napier = "2.6.1"
 buildConfig = "4.1.1"
 kotlinx-coroutines = "1.7.3"
@@ -20,6 +20,7 @@ kotlinx-datetime = "0.5.0"
 multiplatformSettings = "1.1.1"
 koin = "3.5.0"
 kstore = "0.7.1"
+koin-compose = "1.1.0"
 
 [libraries]
 
@@ -29,7 +30,7 @@ compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "
 libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = {module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager"}
-composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
+kamel-image-loader = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -37,12 +38,16 @@ moko-mvvm = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-mvvm
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
+kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
 
 [plugins]
 
