@@ -25,5 +25,5 @@ val httpClient = HttpClient {
 val dataModule = module {
     single<CountryApi> { CountryApiImpl(httpClient) }
     single<KStore<List<Country>>> { CountryCache().cache }
-    single<CountryRepository> { CountryRepositoryImpl(get()) }
+    single<CountryRepository> { CountryRepositoryImpl(get(), get()) }
 }

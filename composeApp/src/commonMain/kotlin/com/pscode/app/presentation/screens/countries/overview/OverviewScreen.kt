@@ -3,6 +3,8 @@ package com.pscode.app.presentation.screens.countries.overview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -44,10 +46,12 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(6.dp)
+                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(items = state.countries) { country ->
                     CountryListItem(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 8.dp),
                         countryName = country.name,
                         flagUrl = country.flagUrl
                     )
