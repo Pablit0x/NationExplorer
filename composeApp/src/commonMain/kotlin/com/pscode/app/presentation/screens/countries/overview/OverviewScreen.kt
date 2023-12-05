@@ -30,7 +30,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
         val errorsChannel = viewModel.errorEventsChannelFlow
 
         LaunchedEffect(errorsChannel){
-            errorsChannel.collectLatest { event ->
+            errorsChannel.collect { event ->
                 when(event){
                     is ErrorEvent.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
