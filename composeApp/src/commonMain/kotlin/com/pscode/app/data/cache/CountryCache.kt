@@ -6,5 +6,5 @@ import io.github.xxfast.kstore.file.storeOf
 
 
 class CountryCache {
-    val cache : KStore<List<Country>> = storeOf(file = getCountryCachePath().path)
+    val cache: KStore<List<Country>> = storeOf(file = getCountryCachePath().path)
 }

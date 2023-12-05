@@ -17,7 +17,6 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.composables.CountryListItem
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
 class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
@@ -25,13 +24,15 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
     @Composable
     override fun Content() {
         val countryRepository = koinInject<CountryRepository>()
-        val viewModel = getViewModel(Unit, viewModelFactory { OverviewViewModel(countryRepository = countryRepository) })
+        val viewModel = getViewModel(
+            Unit,
+            viewModelFactory { OverviewViewModel(countryRepository = countryRepository) })
         val state by viewModel.state.collectAsState()
         val errorsChannel = viewModel.errorEventsChannelFlow
 
-        LaunchedEffect(errorsChannel){
+        LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
-                when(event){
+                when (event) {
                     is ErrorEvent.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
                     }
@@ -45,7 +46,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                items(items = state.countries){ country ->
+                items(items = state.countries) { country ->
                     CountryListItem(
                         countryName = country.name,
                         flagUrl = country.flagUrl

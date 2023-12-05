@@ -1,6 +1,5 @@
 package com.pscode.app.presentation.composables
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size

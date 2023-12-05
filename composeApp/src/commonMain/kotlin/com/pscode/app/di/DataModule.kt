@@ -1,8 +1,6 @@
 package com.pscode.app.di
 
 import com.pscode.app.data.cache.CountryCache
-import com.pscode.app.data.cache.CountryCachePath
-import com.pscode.app.data.cache.getCountryCachePath
 import com.pscode.app.data.remote.CountryApiImpl
 import com.pscode.app.data.repository.CountryRepositoryImpl
 import com.pscode.app.domain.model.Country
@@ -26,6 +24,6 @@ val httpClient = HttpClient {
 
 val dataModule = module {
     single<CountryApi> { CountryApiImpl(httpClient) }
-    single <KStore<List<Country>>> { CountryCache().cache }
+    single<KStore<List<Country>>> { CountryCache().cache }
     single<CountryRepository> { CountryRepositoryImpl(get()) }
 }

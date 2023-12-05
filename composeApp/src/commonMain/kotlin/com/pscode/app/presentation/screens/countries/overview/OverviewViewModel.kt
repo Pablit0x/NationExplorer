@@ -33,6 +33,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                         )
                     }
                 }
+
                 is Response.Error -> {
                     errorChannel.send(ErrorEvent.ShowSnackbarMessage(message = result.message))
 

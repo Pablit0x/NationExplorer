@@ -4,5 +4,5 @@ import com.pscode.app.domain.model.Country
 import com.pscode.app.utils.Response
 
 interface CountryRepository {
-    suspend fun getAllCountries() : Response<List<Country>>
+    suspend fun getAllCountries(): Response<List<Country>>
 }
