@@ -6,6 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,6 +16,8 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.pscode.app.di.dataModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.theme.AppTheme
+import com.pscode.app.strings.Strings
+import com.pscode.app.strings.StringsEn
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 
@@ -32,7 +35,9 @@ internal fun App() {
                 }
             })) { navigator ->
                 Scaffold(topBar = {
-                    CenterAlignedTopAppBar(title = {})
+                    CenterAlignedTopAppBar(title = {
+                        Text(text = SharedRes.string.app_name)
+                    })
                 }, snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -34,7 +35,7 @@ fun CountryListItem(
                 modifier = Modifier.size(width = 100.dp, height = 60.dp)
             )
 
-            Text(text = countryName, style = MaterialTheme.typography.headlineMedium)
+            Text(text = countryName, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
         }
     }
 }

@@ -102,6 +102,8 @@ android {
 
 libres {
     // https://github.com/Skeptick/libres#setup
+    generatedClassName = "SharedRes"
+    generateNamedArguments = true
 }
 
 buildConfig {
