@@ -13,6 +13,7 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
+import kotlinx.coroutines.CancellationException
 
 class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
 
@@ -32,6 +33,7 @@ class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
         } catch (e: HttpRequestTimeoutException) {
             Response.Error("Request timeout: ${e.message}")
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Response.Error("Unexpected error: ${e.message}")
         }
     }

@@ -5,6 +5,8 @@ import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +25,10 @@ class DetailViewModel(
     val errorEventsChannelFlow = errorChannel.receiveAsFlow()
 
     fun getWeatherByCity(cityName: String) {
-        viewModelScope.launch {
-            when (val result = weatherRepository.getWeatherByCity(cityName = cityName)) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = weatherRepository.getWeatherByCity(cityName = cityName)
+
+            when (result) {
                 is Response.Success -> {
                     _cityWeather.update {
                         result.data

@@ -9,7 +9,9 @@ import com.pscode.app.utils.Response
 
 class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherRepository {
     override suspend fun getWeatherByCity(cityName: String): Response<WeatherOverview> {
-        return when (val result = weatherApi.getWeatherByCity(cityName = cityName)) {
+        val result = weatherApi.getWeatherByCity(cityName = cityName)
+
+        return when (result) {
             is Response.Success -> {
                 Response.Success(data = result.data.toWeatherOverview())
             }

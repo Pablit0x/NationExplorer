@@ -1,8 +1,6 @@
 package com.pscode.app.data.remote
 
 import FunApp.composeApp.BuildConfig
-import com.pscode.app.data.model.country.CountryDto
-import com.pscode.app.data.model.country.toCountry
 import com.pscode.app.data.model.weather.WeatherDto
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.utils.Response
@@ -15,6 +13,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
+import kotlinx.coroutines.CancellationException
 
 class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
 
@@ -35,6 +34,7 @@ class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
         } catch (e: HttpRequestTimeoutException) {
             Response.Error("Request timeout: ${e.message}")
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Response.Error("Unexpected error: ${e.message}")
         }
     }

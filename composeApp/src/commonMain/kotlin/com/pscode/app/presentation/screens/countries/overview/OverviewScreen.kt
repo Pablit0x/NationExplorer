@@ -42,14 +42,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
-import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.shared.ErrorEvent
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -58,9 +55,8 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
-        val countryRepository = koinInject<CountryRepository>()
-        val viewModel = getViewModel(Unit,
-            viewModelFactory { OverviewViewModel(countryRepository = countryRepository) })
+        val viewModel = koinInject<OverviewViewModel>()
+
         val isLoading by viewModel.isLoading.collectAsState()
         val isSearching by viewModel.isSearching.collectAsState()
         val countries by viewModel.countries.collectAsState()
