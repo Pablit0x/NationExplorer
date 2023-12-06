@@ -1,5 +1,6 @@
 package com.pscode.app.presentation.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,10 +19,16 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun CountryListItem(
-    countryName: String, flagUrl: String, modifier: Modifier = Modifier
+    countryName: String,
+    flagUrl: String,
+    onCountryClick: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
-    OutlinedCard(modifier = modifier) {
+    OutlinedCard(modifier = modifier
+        .clickable {
+            onCountryClick(countryName)
+        }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

@@ -1,6 +1,5 @@
 package com.pscode.app.presentation.composables
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,13 +25,13 @@ fun AlphabeticalScroller(
         verticalArrangement = Arrangement.Center
     ) {
         alphabet.forEach { letter ->
-            Text(text = letter.uppercase(),
+            Text(
+                text = letter.uppercase(),
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable(
-                        interactionSource = interactionSource, indication = null
-                    ) {
-                        onLetterClick(letter)
-                    }.padding(vertical = 1.dp))
+                modifier = Modifier.noRippleClickable {
+                    onLetterClick(letter)
+                }.padding(vertical = 1.dp)
+            )
         }
     }
 }

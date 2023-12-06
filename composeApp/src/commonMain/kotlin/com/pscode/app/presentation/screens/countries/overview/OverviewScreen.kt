@@ -21,11 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.domain.model.Country
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.LetterHeader
+import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
@@ -37,11 +40,15 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
     @Composable
     override fun Content() {
         val countryRepository = koinInject<CountryRepository>()
-        val viewModel = getViewModel(Unit,
+        val viewModel = getViewModel(
+            Unit,
             viewModelFactory { OverviewViewModel(countryRepository = countryRepository) })
         val state by viewModel.state.collectAsState()
         val groupedCountries = state.countries.groupBy { it.name.first() }
         val errorsChannel = viewModel.errorEventsChannelFlow
+
+        val navigator = LocalNavigator.currentOrThrow
+
         val scope = rememberCoroutineScope()
         val lazyListState = rememberLazyListState()
 
@@ -56,9 +63,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -79,10 +84,12 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
 
                     items(items = countries) { country ->
                         CountryListItem(
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(vertical = 4.dp),
                             countryName = country.name,
-                            flagUrl = country.flagUrl
+                            flagUrl = country.flagUrl,
+                            onCountryClick = { countryName ->
+                                navigator.push(item = DetailScreen(countryName = countryName))
+                            },
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                         )
                     }
                 }
