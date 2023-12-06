@@ -19,7 +19,6 @@ import com.pscode.app.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun App() {
     val scope = rememberCoroutineScope()
@@ -32,11 +31,7 @@ internal fun App() {
                     snackBarHostState.showSnackbar(message = errorMsg)
                 }
             })) { navigator ->
-                Scaffold(topBar = {
-                    CenterAlignedTopAppBar(title = {
-                        Text(text = SharedRes.string.app_name)
-                    })
-                }, snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
+                Scaffold(snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,
                         modifier = Modifier.padding(paddingValues = innerPadding)

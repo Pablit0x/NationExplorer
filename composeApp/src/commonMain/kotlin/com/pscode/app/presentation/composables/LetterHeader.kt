@@ -19,8 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LetterHeader(letter : Char, modifier : Modifier = Modifier) {
-    Box(modifier = modifier, contentAlignment = Alignment.CenterStart){
-        Text(text = letter.uppercase(), fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.headlineLarge)
+fun LetterHeader(letter: Char, modifier: Modifier = Modifier) {
+    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
+        Text(
+            text = letter.uppercase(),
+            fontFamily = FontFamily.Monospace,
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }
