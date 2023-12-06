@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.pscode.app.di.dataModule
+import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ internal fun App() {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
 
-    KoinApplication(moduleList = { listOf(dataModule) }) {
+    KoinApplication(moduleList = { listOf(dataModule, viewModelModule) }) {
         AppTheme {
             Navigator(screen = OverviewScreen(onShowSnackBar = { errorMsg ->
                 scope.launch {

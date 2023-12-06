@@ -34,6 +34,4 @@ val dataModule = module {
     single<KStore<List<CountryOverview>>> { CountryCache().cache }
     single<CountryRepository> { CountryRepositoryImpl(get(), get()) }
     single<WeatherRepository> { WeatherRepositoryImpl(get()) }
-    single<DetailViewModel> { DetailViewModel(get()) }
-    single<OverviewViewModel> { OverviewViewModel(get()) }
 }
