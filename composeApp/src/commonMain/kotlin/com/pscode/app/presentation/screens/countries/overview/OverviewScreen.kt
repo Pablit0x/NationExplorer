@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -117,45 +118,53 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
                     )
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    LazyColumn(
-                        state = lazyListState,
-                        modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                if (isSearching) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
+                        LazyColumn(
+                            state = lazyListState,
+                            modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
 
-                        groupedCountries.forEach { (letter, countries) ->
-                            stickyHeader {
-                                LetterHeader(
-                                    letter,
-                                    modifier = Modifier.fillMaxWidth()
-                                        .background(color = MaterialTheme.colorScheme.surface)
-                                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                                )
-                            }
+                            groupedCountries.forEach { (letter, countries) ->
+                                stickyHeader {
+                                    LetterHeader(
+                                        letter,
+                                        modifier = Modifier.fillMaxWidth()
+                                            .background(color = MaterialTheme.colorScheme.surface)
+                                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                                    )
+                                }
 
-                            items(items = countries) { country ->
-                                CountryListItem(
-                                    countryOverview = country, onCountryClick = { selectedCountry ->
-                                        navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
-                                    }, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                                )
+                                items(items = countries) { country ->
+                                    CountryListItem(
+                                        countryOverview = country,
+                                        onCountryClick = { selectedCountry ->
+                                            navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
+                                        },
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    AlphabeticalScroller(
-                        onLetterClick = { clickedLetter ->
-                            val index = getScrollIndex(groupedCountries, clickedLetter)
-                            scope.launch {
-                                lazyListState.animateScrollToItem(index)
-                            }
-                        }, modifier = Modifier.fillMaxHeight().fillMaxWidth()
-                    )
+                        AlphabeticalScroller(
+                            onLetterClick = { clickedLetter ->
+                                val index = getScrollIndex(groupedCountries, clickedLetter)
+                                scope.launch {
+                                    lazyListState.animateScrollToItem(index)
+                                }
+                            }, modifier = Modifier.fillMaxHeight().fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
