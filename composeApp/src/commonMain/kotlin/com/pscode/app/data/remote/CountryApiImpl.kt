@@ -2,7 +2,7 @@ package com.pscode.app.data.remote
 
 import com.pscode.app.data.model.CountryDto
 import com.pscode.app.data.model.toCountry
-import com.pscode.app.domain.model.Country
+import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.remote.CountryApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
@@ -18,7 +18,7 @@ class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
 
     private val baseUrl = "https://restcountries.com/v3.1/all"
 
-    override suspend fun getAllCountries(): Response<List<Country>> {
+    override suspend fun getAllCountries(): Response<List<CountryOverview>> {
         return try {
             Response.Success(data = httpClient.get {
                 url(baseUrl)

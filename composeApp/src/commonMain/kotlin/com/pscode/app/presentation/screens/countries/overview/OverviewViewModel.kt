@@ -1,6 +1,6 @@
 package com.pscode.app.presentation.screens.countries.overview
 
-import com.pscode.app.domain.model.Country
+import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -26,7 +26,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private var _countries = MutableStateFlow(emptyList<Country>())
+    private var _countries = MutableStateFlow(emptyList<CountryOverview>())
     val countries =
         searchText.onEach { _isSearching.update { true } }.combine(_countries) { text, countries ->
             if (text.isBlank()) {

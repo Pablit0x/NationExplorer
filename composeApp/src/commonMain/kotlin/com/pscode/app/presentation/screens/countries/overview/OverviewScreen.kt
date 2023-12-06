@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,7 +39,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.Country
+import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
@@ -88,11 +90,17 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
         ) {
 
             AnimatedVisibility(visible = showSearch) {
-                OutlinedTextField(
-                    value = searchText,
+                OutlinedTextField(value = searchText,
                     onValueChange = { viewModel.onSearchTextChange(it) },
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                    },
+                    trailingIcon = {
+                        if(searchText.isNotEmpty()){
+                            IconButton(onClick = { viewModel.onSearchTextChange("") }) {
+                                Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                            }
+                        }
                     },
                     placeholder = {
                         Text(text = SharedRes.string.search)
@@ -125,10 +133,9 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
 
                         items(items = countries) { country ->
                             CountryListItem(
-                                countryName = country.name,
-                                flagUrl = country.flagUrl,
-                                onCountryClick = { countryName ->
-                                    navigator.push(item = DetailScreen(countryName = countryName))
+                                countryOverview = country,
+                                onCountryClick = { selectedCountry ->
+                                    navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
                                 },
                                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                             )
@@ -148,7 +155,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
         }
     }
 
-    private fun getScrollIndex(groupedCountries: Map<Char, List<Country>>, letter: Char): Int {
+    private fun getScrollIndex(groupedCountries: Map<Char, List<CountryOverview>>, letter: Char): Int {
         var index = 0
         for ((key, value) in groupedCountries) {
             if (key == letter) {

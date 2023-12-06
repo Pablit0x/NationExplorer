@@ -14,20 +14,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.pscode.app.domain.model.CountryOverview
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
 fun CountryListItem(
-    countryName: String,
-    flagUrl: String,
-    onCountryClick: (String) -> Unit,
+    countryOverview: CountryOverview,
+    onCountryClick: (CountryOverview) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     OutlinedCard(modifier = modifier
         .clickable {
-            onCountryClick(countryName)
+            onCountryClick(countryOverview)
         }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -36,14 +36,14 @@ fun CountryListItem(
         ) {
 
             KamelImage(
-                resource = asyncPainterResource(flagUrl),
+                resource = asyncPainterResource(countryOverview.flagUrl),
                 contentDescription = "Country flag",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(width = 100.dp, height = 60.dp)
             )
 
             Text(
-                text = countryName,
+                text = countryOverview.name,
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()

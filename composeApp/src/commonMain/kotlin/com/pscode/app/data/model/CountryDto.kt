@@ -1,8 +1,7 @@
 package com.pscode.app.data.model
 
-import com.pscode.app.domain.model.Country
+import com.pscode.app.domain.model.CountryOverview
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class CountryDto(
@@ -16,6 +15,13 @@ data class CountryDto(
     val timezones: List<String>,
 )
 
-fun CountryDto.toCountry(): Country {
-    return Country(name = this.name.common, flagUrl = this.flags.png)
+fun CountryDto.toCountry(): CountryOverview {
+    return CountryOverview(
+        name = this.name.common,
+        flagUrl = this.flags.png,
+        capitals = this.capital,
+        population = this.population,
+        area = this.area,
+        timezones = this.timezones
+    )
 }
