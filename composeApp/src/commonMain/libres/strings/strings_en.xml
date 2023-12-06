@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Fun App</string>
     <string name="search">Search</string>
+    <string name="weather">Weather</string>
 </resources>

@@ -47,6 +47,7 @@ import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
+import com.pscode.app.presentation.screens.shared.ErrorEvent
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
@@ -58,8 +59,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
     @Composable
     override fun Content() {
         val countryRepository = koinInject<CountryRepository>()
-        val viewModel = getViewModel(
-            Unit,
+        val viewModel = getViewModel(Unit,
             viewModelFactory { OverviewViewModel(countryRepository = countryRepository) })
         val isLoading by viewModel.isLoading.collectAsState()
         val isSearching by viewModel.isSearching.collectAsState()
@@ -95,8 +95,7 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
                 CircularProgressIndicator()
             } else {
                 AnimatedVisibility(visible = showSearch) {
-                    OutlinedTextField(
-                        value = searchText,
+                    OutlinedTextField(value = searchText,
                         onValueChange = { viewModel.onSearchTextChange(it) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Search, contentDescription = null)
@@ -148,7 +147,13 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
                                     CountryListItem(
                                         countryOverview = country,
                                         onCountryClick = { selectedCountry ->
-                                            navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
+                                            navigator.push(
+                                                item = DetailScreen(
+                                                    onShowSnackBar = { errorMsg ->
+                                                        onShowSnackBar(errorMsg)
+                                                    }, selectedCountry = selectedCountry
+                                                )
+                                            )
                                         },
                                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                                     )

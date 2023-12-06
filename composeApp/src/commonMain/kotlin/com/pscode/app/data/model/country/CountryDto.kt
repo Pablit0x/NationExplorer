@@ -1,4 +1,4 @@
-package com.pscode.app.data.model
+package com.pscode.app.data.model.country
 
 import com.pscode.app.domain.model.CountryOverview
 import kotlinx.serialization.Serializable

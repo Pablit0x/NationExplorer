@@ -9,24 +9,49 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.repository.WeatherRepository
+import com.pscode.app.presentation.screens.shared.ErrorEvent
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.koin.compose.koinInject
 
-class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
+class DetailScreen(val onShowSnackBar: (String) -> Unit, private val selectedCountry: CountryOverview) : Screen {
     @Composable
     override fun Content() {
+        val weatherRepository = koinInject<WeatherRepository>()
+        val viewModel = getViewModel(Unit, viewModelFactory { DetailViewModel(weatherRepository = weatherRepository) })
+        val errorsChannel = viewModel.errorEventsChannelFlow
+        val weatherOverview by viewModel.cityWeather.collectAsState()
+
+        LaunchedEffect(errorsChannel) {
+            errorsChannel.collect { event ->
+                when (event) {
+                    is ErrorEvent.ShowSnackbarMessage -> {
+                        onShowSnackBar(event.message)
+                    }
+                }
+            }
+        }
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,8 +82,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     modifier = Modifier.padding(8.dp)
                 )
                 Text(
-                    text = "Area: ${selectedCountry.area} km²",
-                    modifier = Modifier.padding(8.dp)
+                    text = "Area: ${selectedCountry.area} km²", modifier = Modifier.padding(8.dp)
                 )
                 Text(
                     text = "Population: ${selectedCountry.population}",
@@ -70,6 +94,14 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 )
             }
 
+            Text(text = SharedRes.string.weather, style = MaterialTheme.typography.headlineLarge)
+
+            Button(onClick = {
+                viewModel.getWeatherByCity(selectedCountry.capitals.first())
+            }){
+                Text(text = "Press me please!")
+            }
+            Text(text = weatherOverview.toString())
 
         }
     }

@@ -2,6 +2,7 @@ package com.pscode.app.presentation.screens.countries.overview
 
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
+import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.channels.Channel

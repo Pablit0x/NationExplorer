@@ -1,9 +1,10 @@
 package com.pscode.app.data.remote
 
+import FunApp.composeApp.BuildConfig
 import com.pscode.app.data.model.country.CountryDto
 import com.pscode.app.data.model.country.toCountry
-import com.pscode.app.domain.model.CountryOverview
-import com.pscode.app.domain.remote.CountryApi
+import com.pscode.app.data.model.weather.WeatherDto
+import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -11,18 +12,20 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
 
-class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
+class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
 
-    private val baseUrl = "https://restcountries.com/v3.1/all"
+    private val baseUrl = "https://api.api-ninjas.com/v1/weather"
 
-    override suspend fun getAllCountries(): Response<List<CountryOverview>> {
+    override suspend fun getWeatherByCity(cityName: String): Response<WeatherDto> {
         return try {
             Response.Success(data = httpClient.get {
-                url(baseUrl)
-            }.body<List<CountryDto>>().sortedBy { it.name.common }.map { it.toCountry() })
+                url("$baseUrl?city=$cityName")
+                header("X-Api-Key", BuildConfig.WEATHER_API_KEY)
+            }.body<WeatherDto>())
         } catch (e: IOException) {
             Response.Error("Network error: ${e.message}")
         } catch (e: ClientRequestException) {

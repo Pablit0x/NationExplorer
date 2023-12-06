@@ -28,6 +28,7 @@ internal fun App() {
                     snackBarHostState.showSnackbar(message = errorMsg)
                 }
             })) { navigator ->
+
                 Scaffold(snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,

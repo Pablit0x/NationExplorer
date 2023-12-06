@@ -107,6 +107,7 @@ libres {
 }
 
 buildConfig {
+    buildConfigField("String", "WEATHER_API_KEY", "\"MSCq/6p2+AQneqFCP2YgVQ==JsSkjWNNEsdqxKYo\"")
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
 }
