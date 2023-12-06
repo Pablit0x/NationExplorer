@@ -53,6 +53,11 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
     private fun getAllCountries() {
+
+        _isLoading.update {
+            true
+        }
+
         viewModelScope.launch {
             when (val result = countryRepository.getAllCountries()) {
                 is Response.Success -> {
@@ -73,38 +78,3 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 }
-
-
-//    private fun getAllCountries(searchText: String? = null) {
-//        viewModelScope.launch {
-//            when (val result = countryRepository.getAllCountries()) {
-//                is Response.Success -> {
-//                    if (!searchText.isNullOrEmpty()) {
-//                        _state.update {
-//                            it.copy(isLoading = false, countries = result.data.filter { country ->
-//                                country.name.contains(
-//                                    other = searchText, ignoreCase = true
-//                                )
-//                            })
-//                        }
-//                    } else {
-//                        _state.update {
-//                            it.copy(
-//                                isLoading = false, countries = result.data
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                is Response.Error -> {
-//                    errorChannel.send(ErrorEvent.ShowSnackbarMessage(message = result.message))
-//
-//                    _state.update {
-//                        it.copy(
-//                            isLoading = false
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//    }

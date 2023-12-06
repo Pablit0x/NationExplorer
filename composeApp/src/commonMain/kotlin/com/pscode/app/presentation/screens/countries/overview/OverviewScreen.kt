@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -89,73 +90,80 @@ class OverviewScreen(val onShowSnackBar: (String) -> Unit) : Screen {
             verticalArrangement = Arrangement.Center
         ) {
 
-            AnimatedVisibility(visible = showSearch) {
-                OutlinedTextField(value = searchText,
-                    onValueChange = { viewModel.onSearchTextChange(it) },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                    },
-                    trailingIcon = {
-                        if(searchText.isNotEmpty()){
-                            IconButton(onClick = { viewModel.onSearchTextChange("") }) {
-                                Icon(imageVector = Icons.Default.Close, contentDescription = null)
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else {
+                AnimatedVisibility(visible = showSearch) {
+                    OutlinedTextField(
+                        value = searchText,
+                        onValueChange = { viewModel.onSearchTextChange(it) },
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                        },
+                        trailingIcon = {
+                            if (searchText.isNotEmpty()) {
+                                IconButton(onClick = { viewModel.onSearchTextChange("") }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close, contentDescription = null
+                                    )
+                                }
                             }
-                        }
-                    },
-                    placeholder = {
-                        Text(text = SharedRes.string.search)
-                    },
-                    shape = RoundedCornerShape(percent = 30),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                LazyColumn(
-                    state = lazyListState,
-                    modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-
-                    groupedCountries.forEach { (letter, countries) ->
-                        stickyHeader {
-                            LetterHeader(
-                                letter,
-                                modifier = Modifier.fillMaxWidth()
-                                    .background(color = MaterialTheme.colorScheme.surface)
-                                    .padding(vertical = 4.dp, horizontal = 8.dp)
-                            )
-                        }
-
-                        items(items = countries) { country ->
-                            CountryListItem(
-                                countryOverview = country,
-                                onCountryClick = { selectedCountry ->
-                                    navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
-                                },
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                            )
-                        }
-                    }
+                        },
+                        placeholder = {
+                            Text(text = SharedRes.string.search)
+                        },
+                        shape = RoundedCornerShape(percent = 30),
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
 
-                AlphabeticalScroller(
-                    onLetterClick = { clickedLetter ->
-                        val index = getScrollIndex(groupedCountries, clickedLetter)
-                        scope.launch {
-                            lazyListState.animateScrollToItem(index)
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    LazyColumn(
+                        state = lazyListState,
+                        modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+
+                        groupedCountries.forEach { (letter, countries) ->
+                            stickyHeader {
+                                LetterHeader(
+                                    letter,
+                                    modifier = Modifier.fillMaxWidth()
+                                        .background(color = MaterialTheme.colorScheme.surface)
+                                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                                )
+                            }
+
+                            items(items = countries) { country ->
+                                CountryListItem(
+                                    countryOverview = country, onCountryClick = { selectedCountry ->
+                                        navigator.push(item = DetailScreen(selectedCountry = selectedCountry))
+                                    }, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                                )
+                            }
                         }
-                    }, modifier = Modifier.fillMaxHeight().fillMaxWidth()
-                )
+                    }
+
+                    AlphabeticalScroller(
+                        onLetterClick = { clickedLetter ->
+                            val index = getScrollIndex(groupedCountries, clickedLetter)
+                            scope.launch {
+                                lazyListState.animateScrollToItem(index)
+                            }
+                        }, modifier = Modifier.fillMaxHeight().fillMaxWidth()
+                    )
+                }
             }
         }
     }
 
-    private fun getScrollIndex(groupedCountries: Map<Char, List<CountryOverview>>, letter: Char): Int {
+    private fun getScrollIndex(
+        groupedCountries: Map<Char, List<CountryOverview>>, letter: Char
+    ): Int {
         var index = 0
         for ((key, value) in groupedCountries) {
             if (key == letter) {
