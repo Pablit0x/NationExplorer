@@ -6,8 +6,8 @@ data class WeatherOverview(
     val humidity: Int,
     val maxTemp : Int,
     val minTemp : Int,
-    val sunriseTimestamp: Int,
-    val sunsetTimestamp: Int,
+    val sunriseTime: String,
+    val sunsetTime: String,
     val currentTemperature: Int,
     val windDegrees: Int,
     val windSpeed: Double

@@ -5,6 +5,8 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -59,7 +61,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             true
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (val result = countryRepository.getAllCountries()) {
                 is Response.Success -> {
                     _isLoading.update {

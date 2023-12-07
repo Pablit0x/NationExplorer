@@ -1,6 +1,9 @@
 package com.pscode.app.data.model.weather
 
 import com.pscode.app.domain.model.WeatherOverview
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,10 +27,18 @@ fun WeatherDto.toWeatherOverview() : WeatherOverview {
         humidity = this.humidity,
         maxTemp = this.max_temp,
         minTemp = this.min_temp,
-        sunriseTimestamp = this.sunrise,
-        sunsetTimestamp = this.sunset,
+        sunriseTime = convertTimestampToHourMinute(this.sunrise.toLong()),
+        sunsetTime = convertTimestampToHourMinute(this.sunset.toLong()),
         currentTemperature = this.temp,
         windDegrees = this.wind_degrees,
         windSpeed = this.wind_speed
     )
+}
+
+private fun convertTimestampToHourMinute(timestamp: Long): String {
+    val instant = Instant.fromEpochSeconds(timestamp)
+    val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+    return "${localDateTime.hour.toString().padStart(2, '0')}:${
+        localDateTime.minute.toString().padStart(2, '0')
+    }"
 }

@@ -25,6 +25,8 @@ class DetailViewModel(
     val errorEventsChannelFlow = errorChannel.receiveAsFlow()
 
     fun getWeatherByCity(cityName: String) {
+        _cityWeather.update { null }
+
         viewModelScope.launch(Dispatchers.IO) {
             val result = weatherRepository.getWeatherByCity(cityName = cityName)
 
