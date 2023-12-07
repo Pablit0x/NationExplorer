@@ -1,5 +1,6 @@
 package com.pscode.app.presentation.composables
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
@@ -12,6 +13,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import com.pscode.app.SharedRes
+import com.pscode.app.presentation.screens.countries.detail.DetailScreen
+import com.pscode.app.presentation.screens.countries.flag_game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,32 +27,50 @@ fun DefaultTopAppBar(
 ) {
     val currentScreen = navigator.lastItem
 
-    CenterAlignedTopAppBar(title = {
-        Text(
-            text = selectedCountryName ?: SharedRes.string.countries
-        )
-    }, actions = {
-        when (currentScreen) {
-            is OverviewScreen -> {
+    var topBarTitle: String = SharedRes.string.app_name
+    var actions: @Composable() (RowScope.() -> Unit) = {}
+    var navigationIcon: @Composable () -> Unit = {}
+
+    when (currentScreen) {
+        is OverviewScreen -> {
+            topBarTitle = SharedRes.string.countries
+            actions = {
                 IconButton(onClick = onSearchClicked) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 }
             }
-
-            else -> {}
+            navigationIcon = {}
         }
-    }, navigationIcon = {
-        when (currentScreen) {
-            is OverviewScreen -> {}
-            else -> {
+
+        is FlagGameScreen -> {
+            topBarTitle = SharedRes.string.flag_matcher
+            actions = {}
+            navigationIcon = {
                 IconButton(onClick = { navigator.pop() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Navigate back"
+                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
                     )
                 }
             }
         }
-    }, scrollBehavior = if (currentScreen is OverviewScreen) scrollBehavior else null
+
+        is DetailScreen -> {
+            topBarTitle = selectedCountryName ?: SharedRes.string.unknown
+            actions = {}
+            navigationIcon = {
+                IconButton(onClick = { navigator.pop() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
+                    )
+                }
+            }
+        }
+    }
+
+    CenterAlignedTopAppBar(
+        title = { Text(text = topBarTitle) },
+        actions = actions,
+        navigationIcon = navigationIcon,
+        scrollBehavior = if (currentScreen is OverviewScreen) scrollBehavior else null
     )
 }

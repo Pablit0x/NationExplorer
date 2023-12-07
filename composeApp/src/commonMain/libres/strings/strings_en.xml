@@ -6,4 +6,6 @@
     <string name="information">Information</string>
     <string name="countries">Countries</string>
     <string name="play_game">Play Game</string>
+    <string name="unknown">Unknown</string>
+    <string name="flag_matcher">Flag Matcher</string>
 </resources>
