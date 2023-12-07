@@ -26,6 +26,7 @@ import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.composables.MainTopAppBar
 import com.pscode.app.presentation.composables.isScrollingUp
+import com.pscode.app.presentation.screens.countries.flag_game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
@@ -74,7 +75,9 @@ internal fun App() {
                     floatingActionButton = {
                         if (navigator.lastItem is OverviewScreen) {
                             ExtendedFloatingActionButton(
-                                onClick = {},
+                                onClick = {
+                                    navigator.push(item = FlagGameScreen())
+                                },
                                 icon = {
                                     Icon(
                                         imageVector = Icons.Default.Games,

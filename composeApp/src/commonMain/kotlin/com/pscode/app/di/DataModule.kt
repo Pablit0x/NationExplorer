@@ -10,8 +10,6 @@ import com.pscode.app.domain.remote.CountryApi
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.WeatherRepository
-import com.pscode.app.presentation.screens.countries.detail.DetailViewModel
-import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import io.github.xxfast.kstore.KStore
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -29,9 +27,14 @@ val httpClient = HttpClient {
 
 
 val dataModule = module {
-    single<CountryApi> { CountryApiImpl(httpClient) }
-    single<WeatherApi> { WeatherApiImpl(httpClient) }
+    single<CountryApi> { CountryApiImpl(httpClient = httpClient) }
+    single<WeatherApi> { WeatherApiImpl(httpClient = httpClient) }
     single<KStore<List<CountryOverview>>> { CountryCache().cache }
-    single<CountryRepository> { CountryRepositoryImpl(get(), get()) }
-    single<WeatherRepository> { WeatherRepositoryImpl(get()) }
+    single<CountryRepository> {
+        CountryRepositoryImpl(
+            countryApi = get(),
+            countryOverviewCache = get()
+        )
+    }
+    single<WeatherRepository> { WeatherRepositoryImpl(weatherApi = get()) }
 }
