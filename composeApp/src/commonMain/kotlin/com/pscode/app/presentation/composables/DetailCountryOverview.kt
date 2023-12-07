@@ -61,7 +61,7 @@ fun DetailCountryOverview(
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
-                text = "Population: ${selectedCountry.population}",
+                text = "Population: " + formatNumber(number = selectedCountry.population),
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
@@ -71,4 +71,8 @@ fun DetailCountryOverview(
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
+}
+
+fun formatNumber(number: Int): String {
+    return number.toString().reversed().chunked(3).joinToString(" ").reversed()
 }
