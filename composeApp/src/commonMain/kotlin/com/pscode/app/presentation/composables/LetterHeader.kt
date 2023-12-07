@@ -15,7 +15,7 @@ fun LetterHeader(letter: Char, modifier: Modifier = Modifier) {
             text = letter.uppercase(),
             fontFamily = FontFamily.Monospace,
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }

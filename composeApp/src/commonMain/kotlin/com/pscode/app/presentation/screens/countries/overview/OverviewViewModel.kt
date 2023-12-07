@@ -29,6 +29,12 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
+    private val _searchWidgetState = MutableStateFlow(SearchWidgetState.CLOSED)
+    val searchWidgetState = _searchWidgetState.asStateFlow()
+
+    private val _selectedCountryName = MutableStateFlow<String?>(null)
+    val selectedCountryName = _selectedCountryName.asStateFlow()
+
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
     val countries =
         searchText.onEach { _isSearching.update { true } }.combine(_countries) { text, countries ->
@@ -53,6 +59,16 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     fun onSearchTextChange(text: String) {
         _searchText.update { text }
+    }
+
+    fun onSearchWidgetChange(newState: SearchWidgetState) {
+        _searchWidgetState.update { newState }
+    }
+
+    fun setSelectedCountryName(countryName: String?) {
+        _selectedCountryName.update {
+            countryName
+        }
     }
 
     private fun getAllCountries() {

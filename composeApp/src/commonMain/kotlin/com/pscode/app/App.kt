@@ -1,36 +1,67 @@
 package com.pscode.app
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
+import com.pscode.app.presentation.composables.MainTopAppBar
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
+import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
+import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 import com.pscode.app.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun App() {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
 
     KoinApplication(moduleList = { listOf(dataModule, viewModelModule) }) {
-        AppTheme {
-            Navigator(screen = OverviewScreen(onShowSnackBar = { errorMsg ->
-                scope.launch {
-                    snackBarHostState.showSnackbar(message = errorMsg)
-                }
-            })) { navigator ->
 
-                Scaffold(snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
+        val overviewViewModel = koinInject<OverviewViewModel>()
+        val searchWidgetState by overviewViewModel.searchWidgetState.collectAsState()
+        val searchText by overviewViewModel.searchText.collectAsState()
+        val selectedCountryName by overviewViewModel.selectedCountryName.collectAsState()
+
+        AppTheme {
+            Navigator(
+                screen = OverviewScreen(viewModel = overviewViewModel,
+                    onShowSnackBar = { errorMsg ->
+                        scope.launch {
+                            snackBarHostState.showSnackbar(message = errorMsg)
+                        }
+                    })
+            ) { navigator ->
+                Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    topBar = {
+                        MainTopAppBar(navigator = navigator,
+                            selectedCountryName = selectedCountryName,
+                            scrollBehavior = scrollBehavior,
+                            searchWidgetState = searchWidgetState,
+                            searchTextState = searchText,
+                            onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
+                            onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
+                            onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
+                    },
+                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,
                         modifier = Modifier.padding(paddingValues = innerPadding)
