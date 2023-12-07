@@ -1,16 +1,27 @@
 package com.pscode.app
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Games
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.navigator.Navigator
@@ -32,6 +43,7 @@ internal fun App() {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val listState = rememberLazyListState()
 
 
     KoinApplication(moduleList = { listOf(dataModule, viewModelModule) }) {
@@ -43,12 +55,13 @@ internal fun App() {
 
         AppTheme {
             Navigator(
-                screen = OverviewScreen(viewModel = overviewViewModel,
-                    onShowSnackBar = { errorMsg ->
+                screen = OverviewScreen(
+                    viewModel = overviewViewModel, onShowSnackBar = { errorMsg ->
                         scope.launch {
                             snackBarHostState.showSnackbar(message = errorMsg)
                         }
-                    })
+                    }, lazyListState = listState
+                )
             ) { navigator ->
                 Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                     topBar = {
@@ -61,6 +74,23 @@ internal fun App() {
                             onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
                             onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
                     },
+                    floatingActionButton = {
+                        ExtendedFloatingActionButton(
+                            onClick = {},
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Games,
+                                    contentDescription = "Play games"
+                                )
+                            },
+                            text = {
+                                Text(text = SharedRes.string.play_game)
+                            },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            expanded = listState.isScrollingUp(),
+                        )
+                    },
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,
@@ -70,6 +100,24 @@ internal fun App() {
             }
         }
     }
+}
+
+@Composable
+private fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
 }
 
 

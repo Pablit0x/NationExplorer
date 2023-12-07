@@ -5,4 +5,5 @@
     <string name="weather">Weather</string>
     <string name="information">Information</string>
     <string name="countries">Countries</string>
+    <string name="play_game">Play Game</string>
 </resources>

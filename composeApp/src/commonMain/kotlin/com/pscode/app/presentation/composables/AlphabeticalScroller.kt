@@ -23,7 +23,7 @@ fun AlphabeticalScroller(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         alphabet.forEach { letter ->
             Text(
