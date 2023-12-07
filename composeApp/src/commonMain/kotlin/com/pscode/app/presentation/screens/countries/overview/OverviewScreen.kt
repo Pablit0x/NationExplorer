@@ -52,12 +52,7 @@ class OverviewScreen(
         val errorsChannel = viewModel.errorEventsChannelFlow
 
         val navigator = LocalNavigator.currentOrThrow
-
         val scope = rememberCoroutineScope()
-
-        LaunchedEffect(Unit) {
-            viewModel.setSelectedCountryName(countryName = null)
-        }
 
 
         LaunchedEffect(errorsChannel) {
