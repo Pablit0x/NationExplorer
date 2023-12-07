@@ -108,6 +108,7 @@ class OverviewScreen(
                                         countryOverview = country,
                                         onCountryClick = { selectedCountry ->
                                             viewModel.setSelectedCountryName(countryName = selectedCountry.name)
+                                            viewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED)
                                             navigator.push(
                                                 item = DetailScreen(
                                                     onShowSnackBar = { errorMsg ->

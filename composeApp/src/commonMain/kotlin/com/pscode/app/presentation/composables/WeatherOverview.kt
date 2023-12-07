@@ -15,7 +15,8 @@ import com.pscode.app.domain.model.WeatherOverview
 
 @Composable
 fun WeatherOverview(
-    weatherInCapitalCity: WeatherOverview?, modifier: Modifier = Modifier
+    weatherInCapitalCity: WeatherOverview?,
+    modifier: Modifier = Modifier
 ) {
     if (weatherInCapitalCity == null) {
         WeatherOverviewShimmerItem(

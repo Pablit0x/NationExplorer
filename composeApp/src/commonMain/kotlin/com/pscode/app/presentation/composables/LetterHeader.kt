@@ -13,8 +13,8 @@ fun LetterHeader(letter: Char, modifier: Modifier = Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
         Text(
             text = letter.uppercase(),
-            fontFamily = FontFamily.Monospace,
-            style = MaterialTheme.typography.headlineLarge,
+            fontFamily = FontFamily.SansSerif,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.outline
         )
     }

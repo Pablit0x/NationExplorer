@@ -22,8 +22,9 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun DetailCountryOverview(
-    selectedCountry: CountryOverview, modifier: Modifier = Modifier
+    selectedCountry: CountryOverview, hasCapitalCity: Boolean, modifier: Modifier = Modifier
 ) {
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,7 +51,9 @@ fun DetailCountryOverview(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Capitals: ${selectedCountry.capitals}",
+                text = if (selectedCountry.capitals.size >= 2) "Capitals: " else "Capital: " + if (hasCapitalCity) selectedCountry.capitals.joinToString(
+                    separator = ", "
+                ) else "No capital city",
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
@@ -62,7 +65,7 @@ fun DetailCountryOverview(
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
-                text = "Timezones: ${selectedCountry.timezones}",
+                text = "Timezones: ${selectedCountry.timezones.joinToString(separator = ", ")}",
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))

@@ -32,6 +32,7 @@ class DetailScreen(
         val viewModel = koinInject<DetailViewModel>()
         val weatherOverview by viewModel.cityWeather.collectAsState()
         val errorsChannel = viewModel.errorEventsChannelFlow
+        val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
 
         LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
@@ -57,22 +58,25 @@ class DetailScreen(
         ) {
 
             DetailCountryOverview(
-                selectedCountry = selectedCountry, modifier = Modifier.fillMaxWidth()
+                selectedCountry = selectedCountry,
+                hasCapitalCity = hasCapitalCity,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = SharedRes.string.weather,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.secondary
-            )
+            if (hasCapitalCity) {
+                Text(
+                    text = "${SharedRes.string.weather} in ${selectedCountry.capitals.first()}",
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
-            WeatherOverview(
-                weatherInCapitalCity = weatherOverview,
-                modifier = Modifier.fillMaxWidth()
-            )
+                WeatherOverview(
+                    weatherInCapitalCity = weatherOverview, modifier = Modifier.fillMaxWidth()
+                )
+            }
 
         }
     }
