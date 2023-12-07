@@ -25,7 +25,10 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier.statusBarsPadding().fillMaxWidth().height(56.dp),
+        modifier = Modifier
+            .statusBarsPadding()
+            .fillMaxWidth()
+            .height(64.dp),
     ) {
 
         OutlinedTextField(
@@ -43,8 +46,7 @@ fun SearchAppBar(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Icon"
+                        imageVector = Icons.Default.Close, contentDescription = "Close Icon"
                     )
                 }
             },
@@ -52,7 +54,8 @@ fun SearchAppBar(
                 Text(text = SharedRes.string.search)
             },
             shape = RoundedCornerShape(percent = 30),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp)
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
+import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -18,22 +19,31 @@ fun MainTopAppBar(
     onSearchTriggered: () -> Unit,
     selectedCountryName: String? = null,
 ) {
-    when (searchWidgetState) {
-        SearchWidgetState.CLOSED -> {
-            DefaultTopAppBar(
-                navigator = navigator,
-                onSearchClicked = onSearchTriggered,
-                scrollBehavior = scrollBehavior,
-                selectedCountryName = selectedCountryName
-            )
-        }
+    if (navigator.lastItem is OverviewScreen) {
+        when (searchWidgetState) {
+            SearchWidgetState.CLOSED -> {
+                DefaultTopAppBar(
+                    navigator = navigator,
+                    onSearchClicked = onSearchTriggered,
+                    scrollBehavior = scrollBehavior,
+                    selectedCountryName = selectedCountryName
+                )
+            }
 
-        SearchWidgetState.OPENED -> {
-            SearchAppBar(
-                text = searchTextState,
-                onTextChange = onTextChange,
-                onCloseClicked = onCloseClicked,
-            )
+            SearchWidgetState.OPENED -> {
+                SearchAppBar(
+                    text = searchTextState,
+                    onTextChange = onTextChange,
+                    onCloseClicked = onCloseClicked,
+                )
+            }
         }
+    } else {
+        DefaultTopAppBar(
+            navigator = navigator,
+            onSearchClicked = onSearchTriggered,
+            scrollBehavior = scrollBehavior,
+            selectedCountryName = selectedCountryName
+        )
     }
 }

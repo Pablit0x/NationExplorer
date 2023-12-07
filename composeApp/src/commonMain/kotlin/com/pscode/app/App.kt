@@ -1,7 +1,6 @@
 package com.pscode.app
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Games
@@ -16,12 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.navigator.Navigator
@@ -29,6 +25,7 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.composables.MainTopAppBar
+import com.pscode.app.presentation.composables.isScrollingUp
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
@@ -75,21 +72,23 @@ internal fun App() {
                             onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
                     },
                     floatingActionButton = {
-                        ExtendedFloatingActionButton(
-                            onClick = {},
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Default.Games,
-                                    contentDescription = "Play games"
-                                )
-                            },
-                            text = {
-                                Text(text = SharedRes.string.play_game)
-                            },
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            expanded = listState.isScrollingUp(),
-                        )
+                        if (navigator.lastItem is OverviewScreen) {
+                            ExtendedFloatingActionButton(
+                                onClick = {},
+                                icon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Games,
+                                        contentDescription = "Play games"
+                                    )
+                                },
+                                text = {
+                                    Text(text = SharedRes.string.play_game)
+                                },
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                expanded = listState.isScrollingUp(),
+                            )
+                        }
                     },
                     snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
@@ -102,23 +101,6 @@ internal fun App() {
     }
 }
 
-@Composable
-private fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
-}
 
 
 
