@@ -72,7 +72,9 @@ class FlagGameScreen : Screen {
                 ) {
 
                     CustomLinearProgressIndicator(
-                        currentRound = round, modifier = Modifier.fillMaxWidth(0.7f)
+                        currentRound = round,
+                        numberOfRounds = FlagGameViewModel.NUMBER_OF_ROUNDS,
+                        modifier = Modifier.fillMaxWidth(0.7f)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

@@ -37,7 +37,7 @@ fun DetailCountryOverview(
             modifier = Modifier.size(width = 200.dp, height = 120.dp)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
             text = SharedRes.string.information,
@@ -51,21 +51,25 @@ fun DetailCountryOverview(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = if (selectedCountry.capitals.size >= 2) "Capitals: " else "Capital: " + if (hasCapitalCity) selectedCountry.capitals.joinToString(
+                text = SharedRes.string.capital.format(selectedCountry.capitals.size) + ": " + if (hasCapitalCity) selectedCountry.capitals.joinToString(
                     separator = ", "
-                ) else "No capital city",
+                ) else SharedRes.string.no_capital_city,
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
-                text = "Area: ${selectedCountry.area} km²",
+                text = "${SharedRes.string.area}: ${selectedCountry.area} km²",
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
-                text = "Population: " + formatNumber(number = selectedCountry.population),
+                text = "${SharedRes.string.population}: " + formatNumber(number = selectedCountry.population),
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Text(
-                text = "Timezones: ${selectedCountry.timezones.joinToString(separator = ", ")}",
+                text = "${SharedRes.string.timezone.format(selectedCountry.timezones.size)}: ${
+                    selectedCountry.timezones.joinToString(
+                        separator = ", "
+                    )
+                }",
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))

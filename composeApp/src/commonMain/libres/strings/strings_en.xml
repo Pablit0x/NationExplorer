@@ -3,6 +3,7 @@
     <string name="app_name">Fun App</string>
     <string name="search">Search</string>
     <string name="weather">Weather</string>
+    <string name="weather_in">Weather in</string>
     <string name="information">Information</string>
     <string name="countries">Countries</string>
     <string name="play_game">Play Game</string>
@@ -17,4 +18,15 @@
     <string name="restart">Restart</string>
     <string name="congratulations">Congratulations!</string>
     <string name="message_with_score">You've completed the challenge with a score of ${score}!</string>
+    <plurals name="capital">
+        <item quantity="one">Capital</item>
+        <item quantity="other">Capitals</item>
+    </plurals>
+    <string name="no_capital_city">No capital city</string>
+    <string name="area">Area</string>
+    <string name="population">Population</string>
+    <plurals name="timezone">
+        <item quantity="one">Timezone</item>
+        <item quantity="other">Timezones</item>
+    </plurals>
 </resources>

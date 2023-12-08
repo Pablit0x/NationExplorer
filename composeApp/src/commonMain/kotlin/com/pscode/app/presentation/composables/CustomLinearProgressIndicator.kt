@@ -14,7 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomLinearProgressIndicator(currentRound: Int, modifier: Modifier = Modifier) {
+fun CustomLinearProgressIndicator(
+    currentRound: Int,
+    numberOfRounds: Int,
+    modifier: Modifier = Modifier
+) {
 
     val animatedProgress by animateFloatAsState(
         targetValue = currentRound / 10f, animationSpec = TweenSpec(durationMillis = 500)
@@ -23,7 +27,7 @@ fun CustomLinearProgressIndicator(currentRound: Int, modifier: Modifier = Modifi
 
     Column(modifier = modifier) {
         Text(
-            text = "$currentRound/10",
+            text = "$currentRound/$numberOfRounds",
             modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
             color = MaterialTheme.colorScheme.outline
         )

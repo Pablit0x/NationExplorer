@@ -63,11 +63,11 @@ class DetailScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             if (hasCapitalCity) {
                 Text(
-                    text = "${SharedRes.string.weather} in ${selectedCountry.capitals.first()}",
+                    text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.secondary
