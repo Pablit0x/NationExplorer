@@ -1,6 +1,8 @@
 package com.pscode.app.presentation.screens.countries.flag_game
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,21 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
+import com.pscode.app.presentation.composables.CustomAlertDialog
 import com.pscode.app.presentation.composables.CustomLinearProgressIndicator
 import com.pscode.app.presentation.composables.FlagGameOption
 import com.pscode.app.presentation.composables.QuizButton
@@ -37,6 +36,8 @@ class FlagGameScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel = koinInject<FlagGameViewModel>()
+
+        val navigator = LocalNavigator.currentOrThrow
 
         val round by viewModel.round.collectAsState()
         val roundData by viewModel.roundData.collectAsState()
@@ -56,49 +57,59 @@ class FlagGameScreen : Screen {
 
         roundData?.let { currentRound ->
 
-            Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            CustomAlertDialog(title = SharedRes.string.congratulations,
+                message = SharedRes.string.message_with_score.format(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}"),
+                isOpen = showScore,
+                onEndClicked = { navigator.pop() },
+                onRestartClicked = {
+                    viewModel.startNewGame()
+                })
 
-                CustomLinearProgressIndicator(
-                    currentRound = round, modifier = Modifier.fillMaxWidth(0.7f)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                RoundHeadlineText(
-                    hintText = SharedRes.string.pick_the_flag,
-                    countryName = currentRound.targetCountry.name,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-
+            AnimatedVisibility(visible = !showScore, enter = fadeIn(), exit = fadeOut()) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f),
-                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                        items(items = currentRound.options) { option ->
-                            FlagGameOption(flagUrl = option.flagUrl,
-                                isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
-                                isSelectedFlag = option.flagUrl == selectedFlag,
-                                isCorrectSelection = isCorrectSelection,
-                                isSelectionMade = selectedFlag != null,
-                                onClick = { flagUrl ->
-                                    viewModel.setSelectedFlag(flagUrl = flagUrl)
-                                    viewModel.checkAnswer()
-                                })
+
+                    CustomLinearProgressIndicator(
+                        currentRound = round, modifier = Modifier.fillMaxWidth(0.7f)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    RoundHeadlineText(
+                        hintText = SharedRes.string.pick_the_flag,
+                        countryName = currentRound.targetCountry.name,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                            items(items = currentRound.options) { option ->
+                                FlagGameOption(flagUrl = option.flagUrl,
+                                    isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
+                                    isSelectedFlag = option.flagUrl == selectedFlag,
+                                    isCorrectSelection = isCorrectSelection,
+                                    isSelectionMade = selectedFlag != null,
+                                    onClick = { flagUrl ->
+                                        viewModel.setSelectedFlag(flagUrl = flagUrl)
+                                        viewModel.checkAnswer()
+                                    })
+                            }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(64.dp))
+
+                    QuizButton(showButton = showQuizButton, quizButtonState = quizButtonState)
                 }
-
-                Spacer(modifier = Modifier.height(64.dp))
-
-                QuizButton(showButton = showQuizButton, quizButtonState = quizButtonState)
             }
         }
     }
