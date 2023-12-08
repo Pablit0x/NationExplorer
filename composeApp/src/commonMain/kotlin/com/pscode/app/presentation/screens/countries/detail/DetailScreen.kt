@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.DetailCountryOverview
 import com.pscode.app.presentation.composables.WeatherOverview
 import com.pscode.app.presentation.screens.shared.ErrorEvent
@@ -66,12 +66,14 @@ class DetailScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             if (hasCapitalCity) {
-                Text(
+                AutoResizedText(
                     text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.secondary
                 )
+
+                Spacer(modifier = Modifier.height(2.dp))
 
                 WeatherOverview(
                     weatherInCapitalCity = weatherOverview, modifier = Modifier.fillMaxWidth()

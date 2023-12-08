@@ -51,6 +51,8 @@ fun DetailCountryOverview(
             color = MaterialTheme.colorScheme.secondary
         )
 
+        Spacer(modifier = Modifier.height(2.dp))
+
         OutlinedCard(
             modifier = Modifier.fillMaxWidth()
         ) {
