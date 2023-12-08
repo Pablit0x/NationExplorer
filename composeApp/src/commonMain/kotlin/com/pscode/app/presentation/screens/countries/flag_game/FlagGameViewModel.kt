@@ -85,9 +85,6 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         if (currentRound == NUMBER_OF_ROUNDS) _quizButtonState.update {
             QuizButtonState.FINISH(onFinishClick = {
                 _showScore.update { true }
-                _quizButtonState.update {
-                    QuizButtonState.HOME
-                }
             })
         }
     }

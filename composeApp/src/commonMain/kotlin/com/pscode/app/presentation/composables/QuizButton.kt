@@ -22,15 +22,12 @@ import com.pscode.app.presentation.screens.countries.flag_game.QuizButtonState
 @Composable
 fun QuizButton(
     showButton: Boolean,
-    quizButtonState: QuizButtonState,
-    navigateHome: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+    quizButtonState: QuizButtonState) {
 
     AnimatedVisibility(visible = showButton, enter = fadeIn(), exit = fadeOut()) {
         when (quizButtonState) {
             is QuizButtonState.NEXT -> {
-                OutlinedButton(onClick = { quizButtonState.onNextClick() }) {
+                Button(onClick = { quizButtonState.onNextClick() }) {
                     Text(text = SharedRes.string.next)
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(imageVector = Icons.Default.NavigateNext, contentDescription = "Next flag")
@@ -45,14 +42,6 @@ fun QuizButton(
                         imageVector = Icons.Default.Done,
                         contentDescription = "Finish quiz and show score"
                     )
-                }
-            }
-
-            is QuizButtonState.HOME -> {
-                Button(onClick = { navigateHome() }) {
-                    Text(text = SharedRes.string.navigate_home)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(imageVector = Icons.Default.Home, contentDescription = "Navigate home")
                 }
             }
         }

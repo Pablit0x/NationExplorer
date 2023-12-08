@@ -26,9 +26,11 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.pscode.app.SharedRes
 import com.pscode.app.presentation.composables.CustomLinearProgressIndicator
 import com.pscode.app.presentation.composables.FlagGameOption
 import com.pscode.app.presentation.composables.QuizButton
+import com.pscode.app.presentation.composables.RoundHeadlineText
 import org.koin.compose.koinInject
 
 class FlagGameScreen : Screen {
@@ -46,8 +48,6 @@ class FlagGameScreen : Screen {
         val showScore by viewModel.showScore.collectAsState()
         val showQuizButton by viewModel.showQuizButton.collectAsState()
 
-        val navigator = LocalNavigator.currentOrThrow
-
         LaunchedEffect(isDataReady) {
             if (isDataReady) {
                 viewModel.startNewGame()
@@ -57,7 +57,7 @@ class FlagGameScreen : Screen {
         roundData?.let { currentRound ->
 
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -65,19 +65,16 @@ class FlagGameScreen : Screen {
                     currentRound = round, modifier = Modifier.fillMaxWidth(0.7f)
                 )
 
-                Text(
-                    text = currentRound.targetCountry.name.uppercase(),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.2f).padding(16.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                RoundHeadlineText(
+                    hintText = SharedRes.string.pick_the_flag,
+                    countryName = currentRound.targetCountry.name,
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
 
+                Spacer(modifier = Modifier.height(16.dp))
 
-                AnimatedVisibility(showScore) {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Text(text = "$score/10", fontSize = 32.sp)
-                }
 
                 Column(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f),
@@ -99,13 +96,9 @@ class FlagGameScreen : Screen {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(64.dp))
 
-
-                QuizButton(
-                    showButton = showQuizButton,
-                    quizButtonState = quizButtonState,
-                    navigateHome = { navigator.pop() })
+                QuizButton(showButton = showQuizButton, quizButtonState = quizButtonState)
             }
         }
     }
