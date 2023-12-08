@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -49,30 +54,45 @@ fun DetailCountryOverview(
         OutlinedCard(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = SharedRes.string.capital.format(selectedCountry.capitals.size) + ": " + if (hasCapitalCity) selectedCountry.capitals.joinToString(
+
+            DetailCountryInformationItem(
+                icon = Icons.Default.LocationCity,
+                iconDescription = "Capital Icon",
+                key = SharedRes.string.capital.format(selectedCountry.capitals.size),
+                value = if (hasCapitalCity) selectedCountry.capitals.joinToString(
                     separator = ", "
                 ) else SharedRes.string.no_capital_city,
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                    .padding(vertical = 4.dp, horizontal = 8.dp)
             )
-            Text(
-                text = "${SharedRes.string.area}: ${selectedCountry.area} km²",
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+
+
+            DetailCountryInformationItem(
+                icon = Icons.Default.Layers,
+                iconDescription = "Area Icon",
+                key = SharedRes.string.area,
+                value = selectedCountry.area.toString(),
+                valueAppendix = " km²",
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp)
             )
-            Text(
-                text = "${SharedRes.string.population}: " + formatNumber(number = selectedCountry.population),
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+
+
+            DetailCountryInformationItem(
+                icon = Icons.Default.People,
+                iconDescription = "Population Icon",
+                key = SharedRes.string.population,
+                value = formatNumber(number = selectedCountry.population),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp)
             )
-            Text(
-                text = "${SharedRes.string.timezone.format(selectedCountry.timezones.size)}: ${
-                    selectedCountry.timezones.joinToString(
-                        separator = ", "
-                    )
-                }",
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+
+            DetailCountryInformationItem(
+                icon = Icons.Default.Alarm,
+                iconDescription = "Timezone Icon",
+                key = SharedRes.string.timezone.format(selectedCountry.timezones.size),
+                value = selectedCountry.timezones.joinToString(separator = ", "),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                    .padding(vertical = 4.dp, horizontal = 8.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
