@@ -4,12 +4,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +37,7 @@ fun FlagGameOption(
     )
 
     OutlinedCard(
-        onClick = { onClick(flagUrl) },
+        onClick = { if (!isSelectionMade) onClick(flagUrl) },
         border = BorderStroke(width = 4.dp, color = borderColor),
         modifier = Modifier.size(width = 160.dp, height = 130.dp).padding(12.dp)
     ) {

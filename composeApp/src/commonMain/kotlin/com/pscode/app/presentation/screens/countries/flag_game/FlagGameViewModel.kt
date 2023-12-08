@@ -13,6 +13,10 @@ import kotlinx.coroutines.launch
 
 class FlagGameViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
+    companion object {
+        const val NUMBER_OF_ROUNDS = 10
+    }
+
     init {
         getAllCountries()
     }
@@ -20,7 +24,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _isDataReady = MutableStateFlow(false)
     val isDataReady = _isDataReady.asStateFlow()
 
-    private val _round = MutableStateFlow(1)
+    private val _round = MutableStateFlow(0)
     val round = _round.asStateFlow()
 
     private val _points = MutableStateFlow(0)
@@ -33,20 +37,39 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _roundData = MutableStateFlow<RoundData?>(null)
     val roundData = _roundData.asStateFlow()
 
-    private val _isSelectionMade = MutableStateFlow(false)
-    val isSelectionMade = _isSelectionMade.asStateFlow()
-
     private val _isSelectionCorrect = MutableStateFlow(false)
     val isSelectionCorrect = _isSelectionCorrect.asStateFlow()
 
     private val _selectedFlag = MutableStateFlow<String?>(null)
     val selectedFlag = _selectedFlag.asStateFlow()
 
+    private val _quizButtonState =
+        MutableStateFlow<QuizButtonState>(QuizButtonState.NEXT(onNextClick = { this.nextStage() }))
+    val quizButtonState = _quizButtonState.asStateFlow()
+
+    private val _showScore = MutableStateFlow(false)
+    val showScore = _showScore.asStateFlow()
+
+    private val _showQuizButton = MutableStateFlow(false)
+    val showQuizButton = _showQuizButton.asStateFlow()
+
     fun nextStage() {
-        if (round.value < 10) {
+        if (round.value < NUMBER_OF_ROUNDS) {
             _round.update { it + 1 }
-            resetSelection()
+            resetRound()
             playRound()
+            updateIsLastRound(round.value)
+        }
+    }
+
+    private fun updateIsLastRound(currentRound: Int) {
+        if (currentRound == NUMBER_OF_ROUNDS) _quizButtonState.update {
+            QuizButtonState.FINISH(onFinishClick = {
+                _showScore.update { true }
+                _quizButtonState.update {
+                    QuizButtonState.HOME
+                }
+            })
         }
     }
 
@@ -54,14 +77,15 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         _points.update { it + 1 }
     }
 
-    private fun resetSelection() {
+    private fun resetRound() {
         _isSelectionCorrect.update { false }
         _selectedFlag.update { null }
-        _isSelectionMade.update { false }
+        _showQuizButton.update { false }
     }
 
     fun setSelectedFlag(flagUrl: String) {
         _selectedFlag.update { flagUrl }
+        _showQuizButton.update { true }
     }
 
 
@@ -87,6 +111,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
     fun startNewGame() {
         gameCountries.update { _allCountries.value.shuffled().take(10) }
+        _round.update { 1 }
         playRound()
     }
 
@@ -105,6 +130,5 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         val isAnswerCorrect = selectedFlag.value == roundData.value?.targetCountry?.flagUrl
         _isSelectionCorrect.update { isAnswerCorrect }
         if (isAnswerCorrect) increasePoint()
-        _isSelectionMade.update { true }
     }
 }

@@ -8,4 +8,7 @@
     <string name="play_game">Play Game</string>
     <string name="unknown">Unknown</string>
     <string name="flag_matcher">Flag Matcher</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+    <string name="navigate_home">Navigate Home</string>
 </resources>
