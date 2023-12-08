@@ -24,7 +24,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _isDataReady = MutableStateFlow(false)
     val isDataReady = _isDataReady.asStateFlow()
 
-    private val _round = MutableStateFlow(0)
+    private val _round = MutableStateFlow(1)
     val round = _round.asStateFlow()
 
     private val _points = MutableStateFlow(0)
@@ -32,7 +32,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
     private val _allCountries = MutableStateFlow(emptyList<CountryOverview>())
 
-    private val gameCountries = MutableStateFlow(emptyList<CountryOverview>())
+    private val _gameCountries = MutableStateFlow(emptyList<CountryOverview>())
 
     private val _roundData = MutableStateFlow<RoundData?>(null)
     val roundData = _roundData.asStateFlow()
@@ -44,7 +44,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     val selectedFlag = _selectedFlag.asStateFlow()
 
     private val _quizButtonState =
-        MutableStateFlow<QuizButtonState>(QuizButtonState.NEXT(onNextClick = { this.nextStage() }))
+        MutableStateFlow<QuizButtonState>(QuizButtonState.NEXT(onNextClick = ::nextStage))
     val quizButtonState = _quizButtonState.asStateFlow()
 
     private val _showScore = MutableStateFlow(false)
@@ -53,11 +53,30 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _showQuizButton = MutableStateFlow(false)
     val showQuizButton = _showQuizButton.asStateFlow()
 
-    fun nextStage() {
+
+    fun startNewGame() {
+        resetGameSettings()
+        setCurrentGameCountries()
+        startRound()
+    }
+
+    fun checkAnswer() {
+        val isAnswerCorrect = selectedFlag.value == roundData.value?.targetCountry?.flagUrl
+        _isSelectionCorrect.update { isAnswerCorrect }
+        if (isAnswerCorrect) increasePoint()
+    }
+
+    fun setSelectedFlag(flagUrl: String) {
+        _selectedFlag.update { flagUrl }
+        _showQuizButton.update { true }
+    }
+
+
+    private fun nextStage() {
         if (round.value < NUMBER_OF_ROUNDS) {
             _round.update { it + 1 }
             resetRound()
-            playRound()
+            startRound()
             updateIsLastRound(round.value)
         }
     }
@@ -83,12 +102,6 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         _showQuizButton.update { false }
     }
 
-    fun setSelectedFlag(flagUrl: String) {
-        _selectedFlag.update { flagUrl }
-        _showQuizButton.update { true }
-    }
-
-
     private fun getAllCountries() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = countryRepository.getAllCountries()
@@ -109,16 +122,14 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun startNewGame() {
-        gameCountries.update { _allCountries.value.shuffled().take(10) }
-        _round.update { 1 }
-        playRound()
+    private fun setCurrentGameCountries() {
+        _gameCountries.update { _allCountries.value.shuffled().take(10) }
     }
 
 
-    private fun playRound() {
+    private fun startRound() {
         val roundIndex = round.value - 1
-        val targetCountry = gameCountries.value[roundIndex]
+        val targetCountry = _gameCountries.value[roundIndex]
         val options =
             _allCountries.value.shuffled().filter { it != targetCountry }.take(3) + targetCountry
         val shuffledOptions = options.shuffled()
@@ -126,9 +137,15 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     }
 
 
-    fun checkAnswer() {
-        val isAnswerCorrect = selectedFlag.value == roundData.value?.targetCountry?.flagUrl
-        _isSelectionCorrect.update { isAnswerCorrect }
-        if (isAnswerCorrect) increasePoint()
+    private fun resetGameSettings() {
+        _round.update { 1 }
+        _points.update { 0 }
+        _gameCountries.update { emptyList() }
+        _roundData.update { null }
+        _isSelectionCorrect.update { false }
+        _selectedFlag.update { null }
+        _quizButtonState.update { QuizButtonState.NEXT(onNextClick = ::nextStage) }
+        _showScore.update { false }
+        _showQuizButton.update { false }
     }
 }

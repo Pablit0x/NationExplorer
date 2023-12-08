@@ -102,7 +102,8 @@ class FlagGameScreen : Screen {
                 Spacer(modifier = Modifier.height(32.dp))
 
 
-                QuizButton(showButton = showQuizButton,
+                QuizButton(
+                    showButton = showQuizButton,
                     quizButtonState = quizButtonState,
                     navigateHome = { navigator.pop() })
             }
