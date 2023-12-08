@@ -27,8 +27,8 @@ fun AlphabeticalScroller(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .noRippleClickable {
-                    onLetterClick(letter)
-                }.padding(vertical = 1.dp)
+                        onLetterClick(letter)
+                    }.padding(vertical = 1.dp)
             )
         }
     }

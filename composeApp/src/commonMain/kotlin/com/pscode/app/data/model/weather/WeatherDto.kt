@@ -20,10 +20,10 @@ data class WeatherDto(
     val wind_speed: Double
 )
 
-fun WeatherDto.toWeatherOverview() : WeatherOverview {
+fun WeatherDto.toWeatherOverview(): WeatherOverview {
     return WeatherOverview(
         cloudCoverPercent = this.cloud_pct,
-        perceptibleTemperature =  this.feels_like,
+        perceptibleTemperature = this.feels_like,
         humidity = this.humidity,
         maxTemp = this.max_temp,
         minTemp = this.min_temp,

@@ -21,7 +21,10 @@ import com.pscode.app.presentation.screens.countries.flag_game.QuizButtonState
 
 @Composable
 fun QuizButton(
-    showButton: Boolean, quizButtonState: QuizButtonState, navigateHome : () -> Unit, modifier: Modifier = Modifier
+    showButton: Boolean,
+    quizButtonState: QuizButtonState,
+    navigateHome: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     AnimatedVisibility(visible = showButton, enter = fadeIn(), exit = fadeOut()) {
