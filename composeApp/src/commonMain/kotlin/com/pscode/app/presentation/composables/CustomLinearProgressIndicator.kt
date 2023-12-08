@@ -14,16 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomLinearProgressIndicator(gameStage: Int, modifier: Modifier = Modifier) {
+fun CustomLinearProgressIndicator(currentRound: Int, modifier: Modifier = Modifier) {
 
     val animatedProgress by animateFloatAsState(
-        targetValue = gameStage / 10f, animationSpec = TweenSpec(durationMillis = 500)
+        targetValue = currentRound / 10f, animationSpec = TweenSpec(durationMillis = 500)
     )
 
 
     Column(modifier = modifier) {
         Text(
-            text = "$gameStage/10",
+            text = "$currentRound/10",
             modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
             color = MaterialTheme.colorScheme.outline
         )
