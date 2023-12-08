@@ -1,12 +1,10 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,33 +49,37 @@ class DetailScreen(
         }
 
 
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
 
-            DetailCountryOverview(
-                selectedCountry = selectedCountry,
-                hasCapitalCity = hasCapitalCity,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
+            item {
+                DetailCountryOverview(
+                    selectedCountry = selectedCountry,
+                    hasCapitalCity = hasCapitalCity,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+                )
+            }
 
             if (hasCapitalCity) {
-                AutoResizedText(
-                    text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.secondary
-                )
 
-                Spacer(modifier = Modifier.height(2.dp))
+                item {
+                    AutoResizedText(
+                        text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 2.dp),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
 
-                WeatherOverview(
-                    weatherInCapitalCity = weatherOverview, modifier = Modifier.fillMaxWidth()
-                )
+                item {
+                    WeatherOverview(
+                        weatherInCapitalCity = weatherOverview, modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
             }
 
         }

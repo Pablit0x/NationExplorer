@@ -30,9 +30,9 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _points = MutableStateFlow(0)
     val points = _points.asStateFlow()
 
-    private val _allCountries = MutableStateFlow(emptyList<CountryOverview>())
+    private var allCountries = emptyList<CountryOverview>()
 
-    private val _gameCountries = MutableStateFlow(emptyList<CountryOverview>())
+    private val _targetCountries = MutableStateFlow(emptyList<CountryOverview>())
 
     private val _roundData = MutableStateFlow<RoundData?>(null)
     val roundData = _roundData.asStateFlow()
@@ -59,6 +59,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         setCurrentGameCountries()
         startRound()
     }
+
 
     fun checkAnswer() {
         val isAnswerCorrect = selectedFlag.value == roundData.value?.targetCountry?.flagUrl
@@ -105,9 +106,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
             when (result) {
                 is Response.Success -> {
-                    _allCountries.update {
-                        result.data
-                    }
+                    allCountries = result.data
                     _isDataReady.update { true }
                 }
 
@@ -120,15 +119,14 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     }
 
     private fun setCurrentGameCountries() {
-        _gameCountries.update { _allCountries.value.shuffled().take(10) }
+        _targetCountries.update { allCountries.shuffled().take(10) }
     }
 
 
     private fun startRound() {
         val roundIndex = round.value - 1
-        val targetCountry = _gameCountries.value[roundIndex]
-        val options =
-            _allCountries.value.shuffled().filter { it != targetCountry }.take(3) + targetCountry
+        val targetCountry = _targetCountries.value[roundIndex]
+        val options = allCountries.shuffled().filter { it != targetCountry }.take(3) + targetCountry
         val shuffledOptions = options.shuffled()
         _roundData.update { RoundData(targetCountry, shuffledOptions) }
     }
@@ -137,7 +135,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private fun resetGameSettings() {
         _round.update { 1 }
         _points.update { 0 }
-        _gameCountries.update { emptyList() }
+        _targetCountries.update { emptyList() }
         _roundData.update { null }
         _isSelectionCorrect.update { false }
         _selectedFlag.update { null }

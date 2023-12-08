@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.CurrencyExchange
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.People
@@ -42,7 +44,7 @@ fun DetailCountryOverview(
             modifier = Modifier.size(width = 200.dp, height = 120.dp)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = SharedRes.string.information,
@@ -60,7 +62,7 @@ fun DetailCountryOverview(
             DetailCountryInformationItem(
                 icon = Icons.Default.LocationCity,
                 iconDescription = "Capital Icon",
-                key = SharedRes.string.capital.format(selectedCountry.capitals.size),
+                key = SharedRes.string.capital.format(number = selectedCountry.capitals.size),
                 value = if (hasCapitalCity) selectedCountry.capitals.joinToString(
                     separator = ", "
                 ) else SharedRes.string.no_capital_city,
@@ -79,6 +81,27 @@ fun DetailCountryOverview(
             )
 
 
+            if (selectedCountry.currency.isNotEmpty()) {
+                DetailCountryInformationItem(
+                    icon = Icons.Default.CurrencyExchange,
+                    iconDescription = "Currency Icon",
+                    key = SharedRes.string.currency.format(number = selectedCountry.currency.size),
+                    value = selectedCountry.currency.joinToString(separator = ", "),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp)
+                )
+            }
+
+            if (selectedCountry.languages.isNotEmpty()) {
+                DetailCountryInformationItem(
+                    icon = Icons.Default.Language,
+                    iconDescription = "Language Icon",
+                    key = SharedRes.string.language.format(number = selectedCountry.languages.size),
+                    value = selectedCountry.languages.joinToString(separator = ", "),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp)
+                )
+            }
+
+
             DetailCountryInformationItem(
                 icon = Icons.Default.People,
                 iconDescription = "Population Icon",
@@ -90,7 +113,7 @@ fun DetailCountryOverview(
             DetailCountryInformationItem(
                 icon = Icons.Default.Alarm,
                 iconDescription = "Timezone Icon",
-                key = SharedRes.string.timezone.format(selectedCountry.timezones.size),
+                key = SharedRes.string.timezone.format(number = selectedCountry.timezones.size),
                 value = selectedCountry.timezones.joinToString(separator = ", "),
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                     .padding(vertical = 4.dp, horizontal = 8.dp)

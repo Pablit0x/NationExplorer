@@ -65,7 +65,9 @@ class FlagGameScreen : Screen {
                     viewModel.startNewGame()
                 })
 
-            AnimatedVisibility(visible = !showScore, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(
+                visible = !showScore, enter = fadeIn(), exit = fadeOut()
+            ) {
                 Column(
                     modifier = Modifier.fillMaxSize().padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

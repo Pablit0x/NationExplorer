@@ -9,8 +9,12 @@ data class CountryDto(
     val capital: List<String> = emptyList(),
     val cca2: String,
     val continents: List<String>,
+    val currencies: Currencies = Currencies(),
+    val languages: Languages = Languages(),
+    val maps: Maps,
     val flags: Flags,
     val name: Name,
+    val startOfWeek: String,
     val population: Int,
     val timezones: List<String>,
 )
@@ -22,6 +26,9 @@ fun CountryDto.toCountry(): CountryOverview {
         capitals = this.capital,
         population = this.population,
         area = this.area,
-        timezones = this.timezones
+        timezones = this.timezones,
+        languages = this.languages.toNonEmptyList(),
+        currency = this.currencies.toNonEmptyCurrencyNamesList(),
+        startOfWeek = this.startOfWeek
     )
 }

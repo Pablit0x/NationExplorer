@@ -23,6 +23,14 @@
         <item quantity="other">Capitals</item>
     </plurals>
     <string name="no_capital_city">No capital city</string>
+    <plurals name="currency">
+        <item quantity="one">Currency</item>
+        <item quantity="other">Currencies</item>
+    </plurals>
+    <plurals name="language">
+        <item quantity="one">Language</item>
+        <item quantity="other">Languages</item>
+    </plurals>
     <string name="area">Area</string>
     <string name="population">Population</string>
     <plurals name="timezone">
