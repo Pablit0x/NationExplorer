@@ -1,6 +1,7 @@
 package com.pscode.app.presentation.composables
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
@@ -8,9 +9,12 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
@@ -68,7 +72,13 @@ fun DefaultTopAppBar(
     }
 
     CenterAlignedTopAppBar(
-        title = { Text(text = topBarTitle) },
+        title = {
+            AutoResizedText(
+                text = topBarTitle,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        },
         actions = actions,
         navigationIcon = navigationIcon,
         scrollBehavior = if (currentScreen is OverviewScreen) scrollBehavior else null
