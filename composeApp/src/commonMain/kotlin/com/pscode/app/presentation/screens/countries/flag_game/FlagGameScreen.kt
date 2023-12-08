@@ -83,12 +83,12 @@ class FlagGameScreen : Screen {
                         modifier = Modifier.padding(vertical = 16.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
 
 
                     Column(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f),
-                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.75f),
+                        verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
@@ -105,8 +105,6 @@ class FlagGameScreen : Screen {
                             }
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(64.dp))
 
                     QuizButton(showButton = showQuizButton, quizButtonState = quizButtonState)
                 }

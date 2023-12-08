@@ -16,7 +16,5 @@
     <string name="end_game">End Game</string>
     <string name="restart">Restart</string>
     <string name="congratulations">Congratulations!</string>
-    <string name="message_with_score">Bravo! You've completed the challenge with a score of
-        ${score}
-    </string>
+    <string name="message_with_score">You've completed the challenge with a score of ${score}!</string>
 </resources>
