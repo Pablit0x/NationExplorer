@@ -19,6 +19,7 @@ import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.DetailCountryOverview
+import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.WeatherOverview
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import org.koin.compose.koinInject
@@ -83,6 +84,8 @@ class DetailScreen(
                         )
 
                     }
+
+                    WeatherCard()
                 }
             }
 
