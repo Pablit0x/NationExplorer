@@ -32,7 +32,7 @@ fun DetailCountryInformationItem(
         }
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold
+                color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold
             )
         ) {
             append(value)

@@ -34,7 +34,7 @@ fun WeatherItem(
 
     AnimatedBorderCard(
         modifier = modifier,
-        shape = RoundedCornerShape(percent = 15),
+        shape = RoundedCornerShape(percent = 10),
         borderWidth = 1.dp,
     ) {
         Row(
