@@ -42,7 +42,7 @@ fun DetailCountryOverview(
             modifier = Modifier.size(width = 200.dp, height = 120.dp)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedCard(
             modifier = Modifier.fillMaxWidth()
