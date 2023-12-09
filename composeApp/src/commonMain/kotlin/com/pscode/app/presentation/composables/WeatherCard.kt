@@ -4,6 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
+import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.WbCloudy
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,26 +18,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.WeatherOverview
-import com.pscode.app.images.SharedResImages
-import com.pscode.app.strings.SharedResStrings
-import io.github.skeptick.libres.compose.painterResource
 
 data class WeatherItemData(
-    val icon: Painter, val contentDescription: String, val label: String, val value: String
+    val icon: ImageVector, val contentDescription: String, val label: String, val value: String
 )
 
 @Composable
 fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifier) {
-
-    val humidityIcon = painterResource(image = SharedResImages.humidity)
-    val sunriseIcon = painterResource(image = SharedResImages.sunrise)
-    val sunsetIcon = painterResource(image = SharedResImages.sunset)
-    val windSpeedIcon = painterResource(image = SharedResImages.wind_speed)
-    val temperatureIcon = painterResource(image = SharedResImages.temperature)
-    val cloudsIcon = painterResource(image = SharedResImages.clouds)
 
     var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>>(emptyList()) }
 
@@ -40,44 +38,45 @@ fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifie
         } else {
             listOfWeatherItems = listOf(
                 WeatherItemData(
-                    icon = temperatureIcon,
+                    icon = Icons.Default.Thermostat,
                     contentDescription = "Temperature",
-                    label = SharedResStrings.temperature,
+                    label = SharedRes.string.temperature,
                     value = weatherInCapital.currentTemperature
                 ),
                 WeatherItemData(
-                    icon = cloudsIcon,
+                    icon = Icons.Default.WbCloudy,
                     contentDescription = "Cloudiness",
-                    label = SharedResStrings.cloudiness,
+                    label = SharedRes.string.cloudiness,
                     value = weatherInCapital.cloudCoverPercent
                 ),
                 WeatherItemData(
-                    icon = humidityIcon,
+                    icon = Icons.Default.WaterDrop,
                     contentDescription = "Humidity",
-                    label = SharedResStrings.humidity,
+                    label = SharedRes.string.humidity,
                     value = weatherInCapital.humidity
                 ),
                 WeatherItemData(
-                    icon = windSpeedIcon,
+                    icon = Icons.Default.Air,
                     contentDescription = "Wind Speed",
-                    label = SharedResStrings.wind_speed,
+                    label = SharedRes.string.wind_speed,
                     value = weatherInCapital.windSpeed
                 ),
                 WeatherItemData(
-                    icon = sunriseIcon,
+                    icon = Icons.Default.WbSunny,
                     contentDescription = "Sunrise",
-                    label = SharedResStrings.sunrise,
+                    label = SharedRes.string.sunrise,
                     value = weatherInCapital.sunriseTime
                 ),
                 WeatherItemData(
-                    icon = sunsetIcon,
+                    icon = Icons.Default.WbTwilight,
                     contentDescription = "Sunset",
-                    label = SharedResStrings.sunset,
+                    label = SharedRes.string.sunset,
                     value = weatherInCapital.sunsetTime
                 ),
             )
         }
     }
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 2),
@@ -89,7 +88,7 @@ fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifie
         else {
             items(items = listOfWeatherItems) { weatherItem ->
                 WeatherItem(
-                    iconPainter = weatherItem.icon,
+                    iconVector = weatherItem.icon,
                     contentDescription = weatherItem.contentDescription,
                     label = weatherItem.label,
                     value = weatherItem.value

@@ -66,7 +66,7 @@ class DetailScreen(
                     text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp),
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 WeatherCard(weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth())
