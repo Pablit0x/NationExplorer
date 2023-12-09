@@ -1,6 +1,7 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -56,31 +57,35 @@ class DetailScreen(
         ) {
 
             item {
-                DetailCountryOverview(
-                    selectedCountry = selectedCountry,
-                    hasCapitalCity = hasCapitalCity,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    DetailCountryOverview(
+                        selectedCountry = selectedCountry,
+                        hasCapitalCity = hasCapitalCity,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+                    )
+
+                    if (hasCapitalCity) {
+
+                        AutoResizedText(
+                            text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 2.dp),
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+
+                        WeatherOverview(
+                            weatherInCapitalCity = weatherOverview,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                    }
+                }
             }
 
-            if (hasCapitalCity) {
-
-                item {
-                    AutoResizedText(
-                        text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                        style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 2.dp),
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                }
-
-                item {
-                    WeatherOverview(
-                        weatherInCapitalCity = weatherOverview, modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-            }
 
         }
     }

@@ -14,7 +14,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 
@@ -24,11 +28,15 @@ fun SearchAppBar(
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
 ) {
+
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     Surface(
-        modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxWidth()
-            .height(64.dp),
+        modifier = Modifier.statusBarsPadding().fillMaxWidth().height(64.dp),
     ) {
 
         OutlinedTextField(
@@ -54,8 +62,8 @@ fun SearchAppBar(
                 Text(text = SharedRes.string.search)
             },
             shape = RoundedCornerShape(percent = 30),
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp)
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
+                .focusRequester(focusRequester = focusRequester)
         )
     }
 }
