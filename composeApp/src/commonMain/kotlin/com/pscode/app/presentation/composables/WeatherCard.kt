@@ -43,25 +43,25 @@ fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifie
                     icon = temperatureIcon,
                     contentDescription = "Temperature",
                     label = SharedResStrings.temperature,
-                    value = weatherInCapital.currentTemperature.toString()
+                    value = weatherInCapital.currentTemperature
                 ),
                 WeatherItemData(
                     icon = cloudsIcon,
                     contentDescription = "Cloudiness",
                     label = SharedResStrings.cloudiness,
-                    value = weatherInCapital.cloudCoverPercent.toString()
+                    value = weatherInCapital.cloudCoverPercent
                 ),
                 WeatherItemData(
                     icon = humidityIcon,
                     contentDescription = "Humidity",
                     label = SharedResStrings.humidity,
-                    value = weatherInCapital.humidity.toString()
+                    value = weatherInCapital.humidity
                 ),
                 WeatherItemData(
                     icon = windSpeedIcon,
                     contentDescription = "Wind Speed",
                     label = SharedResStrings.wind_speed,
-                    value = weatherInCapital.windSpeed.toString()
+                    value = weatherInCapital.windSpeed
                 ),
                 WeatherItemData(
                     icon = sunriseIcon,
