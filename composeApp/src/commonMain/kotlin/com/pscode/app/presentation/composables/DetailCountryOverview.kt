@@ -14,9 +14,7 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.People
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,15 +43,6 @@ fun DetailCountryOverview(
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = SharedRes.string.information,
-            modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.secondary
-        )
-
-        Spacer(modifier = Modifier.height(2.dp))
 
         OutlinedCard(
             modifier = Modifier.fillMaxWidth()

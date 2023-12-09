@@ -1,74 +1,100 @@
 package com.pscode.app.presentation.composables
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.images.SharedResImages
+import com.pscode.app.strings.SharedResStrings
 import io.github.skeptick.libres.compose.painterResource
 
+data class WeatherItemData(
+    val icon: Painter, val contentDescription: String, val label: String, val value: String
+)
 
 @Composable
-fun WeatherCard(modifier: Modifier = Modifier) {
+fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifier) {
 
     val humidityIcon = painterResource(image = SharedResImages.humidity)
     val sunriseIcon = painterResource(image = SharedResImages.sunrise)
     val sunsetIcon = painterResource(image = SharedResImages.sunset)
     val windSpeedIcon = painterResource(image = SharedResImages.wind_speed)
+    val temperatureIcon = painterResource(image = SharedResImages.temperature)
+    val cloudsIcon = painterResource(image = SharedResImages.clouds)
 
-    AnimatedBorderCard(
+    var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>>(emptyList()) }
+
+    LaunchedEffect(weatherInCapital) {
+        if (weatherInCapital == null) {
+            listOfWeatherItems = emptyList()
+        } else {
+            listOfWeatherItems = listOf(
+                WeatherItemData(
+                    icon = temperatureIcon,
+                    contentDescription = "Temperature",
+                    label = SharedResStrings.temperature,
+                    value = weatherInCapital.currentTemperature.toString()
+                ),
+                WeatherItemData(
+                    icon = cloudsIcon,
+                    contentDescription = "Cloudiness",
+                    label = SharedResStrings.cloudiness,
+                    value = weatherInCapital.cloudCoverPercent.toString()
+                ),
+                WeatherItemData(
+                    icon = humidityIcon,
+                    contentDescription = "Humidity",
+                    label = SharedResStrings.humidity,
+                    value = weatherInCapital.humidity.toString()
+                ),
+                WeatherItemData(
+                    icon = windSpeedIcon,
+                    contentDescription = "Wind Speed",
+                    label = SharedResStrings.wind_speed,
+                    value = weatherInCapital.windSpeed.toString()
+                ),
+                WeatherItemData(
+                    icon = sunriseIcon,
+                    contentDescription = "Sunrise",
+                    label = SharedResStrings.sunrise,
+                    value = weatherInCapital.sunriseTime
+                ),
+                WeatherItemData(
+                    icon = sunsetIcon,
+                    contentDescription = "Sunset",
+                    label = SharedResStrings.sunset,
+                    value = weatherInCapital.sunsetTime
+                ),
+            )
+        }
+    }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(count = 2),
         modifier = modifier,
-        shape = RoundedCornerShape(percent = 15),
-        borderWidth = 3.dp,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Image(
-                painter = humidityIcon,
-                contentDescription = "Humidity",
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp).padding(16.dp)
-            )
-
-
-            Image(
-                painter = sunriseIcon,
-                contentDescription = "Sunrise",
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp).padding(16.dp)
-            )
-
-            Image(
-                painter = sunsetIcon,
-                contentDescription = "Sunset",
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp).padding(16.dp)
-            )
-
-            Image(
-                painter = windSpeedIcon,
-                contentDescription = "Wind speed",
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp).padding(16.dp)
-            )
+        if (listOfWeatherItems.isEmpty()) items(count = 6) { WeatherItemShimmer() }
+        else {
+            items(items = listOfWeatherItems) { weatherItem ->
+                WeatherItem(
+                    iconPainter = weatherItem.icon,
+                    contentDescription = weatherItem.contentDescription,
+                    label = weatherItem.label,
+                    value = weatherItem.value
+                )
+            }
         }
     }
 }
