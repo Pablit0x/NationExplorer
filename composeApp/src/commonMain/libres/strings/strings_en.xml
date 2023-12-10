@@ -19,7 +19,7 @@
     <string name="results">Results</string>
     <string name="results_score">Score: ${score}</string>
     <string name="results_time">Time: ${time}</string>
-    <string name="new_personal_best">NEW PERSONAL BEST!</string>
+    <string name="new_personal_best">*NEW PERSONAL BEST*</string>
     <string name="old_personal_best">Personal Best: ${oldPb}</string>
     <plurals name="capital">
         <item quantity="one">Capital</item>

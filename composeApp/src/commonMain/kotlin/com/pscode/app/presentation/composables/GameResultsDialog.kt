@@ -27,12 +27,22 @@ fun GameResultsDialog(
     score: String,
     time: String,
     pbMessage: String,
+    newBest: Boolean,
     isOpen: Boolean,
     onEndClicked: () -> Unit,
     onRestartClicked: () -> Unit
 ) {
     if (isOpen) {
         AlertDialog(
+            title = {
+                Text(
+                    text = SharedRes.string.results,
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
             confirmButton = {
                 Button(onClick = {
                     onRestartClicked()
@@ -52,34 +62,31 @@ fun GameResultsDialog(
             onDismissRequest = onEndClicked,
             text = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(
-                        8.dp
-                    ), modifier = Modifier.padding(vertical = 4.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(vertical = 4.dp)
                 ) {
 
                     Text(
                         text = score,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium
                     )
 
                     Text(
                         text = time,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium
                     )
 
-                    Text(
+                    AutoResizedText(
                         text = pbMessage,
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.secondary,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
+                        textAlign = if (newBest) TextAlign.Center else TextAlign.Start,
+                        color = if (newBest) MaterialTheme.colorScheme.scrim else MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(top = if (newBest) 8.dp else 0.dp)
                     )
                 }
             },

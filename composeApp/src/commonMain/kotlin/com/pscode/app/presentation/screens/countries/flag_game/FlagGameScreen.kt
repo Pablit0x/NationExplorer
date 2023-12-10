@@ -72,6 +72,7 @@ class FlagGameScreen : Screen {
                     SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${FlagGameViewModel.NUMBER_OF_ROUNDS}, ${personalBest.second})")
                 },
                 isOpen = showScore,
+                newBest = isNewPersonalBest,
                 onEndClicked = { navigator.pop() },
                 onRestartClicked = {
                     viewModel.startNewGame()
