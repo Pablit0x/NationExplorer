@@ -110,7 +110,11 @@ class FlagGameScreen : Screen {
                         }
                     }
 
-                    QuizButton(showButton = showQuizButton, quizButtonState = quizButtonState)
+                    QuizButton(
+                        showButton = showQuizButton,
+                        quizButtonState = quizButtonState,
+                        modifier = Modifier.fillMaxWidth(0.3f).height(50.dp)
+                    )
                 }
             }
         }

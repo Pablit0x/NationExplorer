@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +53,7 @@ fun DefaultTopAppBar(
             navigationIcon = {
                 IconButton(onClick = { navigator.pop() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
+                        imageVector = Icons.Default.NavigateBefore, contentDescription = "Navigate back"
                     )
                 }
             }
@@ -64,7 +65,7 @@ fun DefaultTopAppBar(
             navigationIcon = {
                 IconButton(onClick = { navigator.pop() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
+                        imageVector = Icons.Default.NavigateBefore, contentDescription = "Navigate back"
                     )
                 }
             }
