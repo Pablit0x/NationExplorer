@@ -26,6 +26,7 @@ import com.pscode.app.SharedRes
 fun GameResultsDialog(
     score: String,
     time: String,
+    pbMessage: String,
     isOpen: Boolean,
     onEndClicked: () -> Unit,
     onRestartClicked: () -> Unit
@@ -61,13 +62,22 @@ fun GameResultsDialog(
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Medium
                     )
 
                     Text(
                         text = time,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Text(
+                        text = pbMessage,
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )

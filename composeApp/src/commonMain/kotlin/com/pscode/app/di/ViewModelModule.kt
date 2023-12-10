@@ -8,5 +8,5 @@ import org.koin.dsl.module
 val viewModelModule = module {
     single<DetailViewModel> { DetailViewModel(weatherRepository = get()) }
     single<OverviewViewModel> { OverviewViewModel(countryRepository = get()) }
-    single<FlagGameViewModel> { FlagGameViewModel(countryRepository = get()) }
+    single<FlagGameViewModel> { FlagGameViewModel(countryRepository = get(), savedResults = get()) }
 }

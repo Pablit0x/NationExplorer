@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.multiplatformSettings)
+            implementation(libs.multiplatformSettings.noArgs)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.kstore)

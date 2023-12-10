@@ -52,6 +52,8 @@ class FlagGameScreen : Screen {
         val showScore by viewModel.showScore.collectAsState()
         val showQuizButton by viewModel.showQuizButton.collectAsState()
         val stopWatchTime by viewModel.stopWatchTime.collectAsState()
+        val personalBest by viewModel.personalBest.collectAsState()
+        val isNewPersonalBest by viewModel.isNewPersonalBest.collectAsState()
 
         LaunchedEffect(isDataReady) {
             if (isDataReady) {
@@ -64,6 +66,11 @@ class FlagGameScreen : Screen {
             GameResultsDialog(
                 score = SharedRes.string.results_score.format(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}"),
                 time = SharedRes.string.results_time.format(time = stopWatchTime),
+                pbMessage = if (isNewPersonalBest) {
+                    SharedRes.string.new_personal_best
+                } else {
+                    SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${FlagGameViewModel.NUMBER_OF_ROUNDS}, ${personalBest.second})")
+                },
                 isOpen = showScore,
                 onEndClicked = { navigator.pop() },
                 onRestartClicked = {

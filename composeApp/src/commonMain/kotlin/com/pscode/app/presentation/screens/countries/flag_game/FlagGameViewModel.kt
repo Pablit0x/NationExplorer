@@ -2,7 +2,9 @@ package com.pscode.app.presentation.screens.countries.flag_game
 
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
+import com.pscode.app.utils.Constants
 import com.pscode.app.utils.Response
+import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -17,7 +19,9 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlin.time.Duration
 
-class FlagGameViewModel(private val countryRepository: CountryRepository) : ViewModel() {
+class FlagGameViewModel(
+    private val countryRepository: CountryRepository, private val savedResults: Settings
+) : ViewModel() {
 
     companion object {
         const val NUMBER_OF_ROUNDS = 10
@@ -64,11 +68,26 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
     private var stopwatchJob: Job? = null
 
+    private val _personalBest = MutableStateFlow(Pair(0, "00:00:000"))
+    val personalBest = _personalBest.asStateFlow()
+
+    private val _isNewPersonalBest = MutableStateFlow(false)
+    val isNewPersonalBest = _isNewPersonalBest.asStateFlow()
+
+
     fun startNewGame() {
         resetGameSettings()
         setCurrentGameCountries()
         startRound()
         startStopwatch()
+        getPersonalBest()
+    }
+
+    private fun getPersonalBest() {
+        val pbScore = savedResults.getInt(key = Constants.SCORE_KEY, defaultValue = 0)
+        val pbTime = savedResults.getString(key = Constants.TIME_KEY, defaultValue = "00:00:000")
+        val pbResult = Pair(pbScore, pbTime)
+        _personalBest.update { pbResult }
     }
 
 
@@ -83,6 +102,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         _showQuizButton.update { true }
     }
 
+
     private fun startStopwatch() {
         val startTime = Clock.System.now()
         stopStopwatch()
@@ -96,7 +116,20 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    private fun formatStopWatchTime(elapsed : Duration) : String {
+    private fun parseTimeToMillis(timeString: String): Long {
+        val (minutes, seconds, millis) = timeString.split(":").map { it.toLongOrNull() ?: 0L }
+        return (minutes * 60 * 1000) + (seconds * 1000) + millis
+    }
+
+    private fun compareTimes(currentTime: String, personalBest: String): Boolean {
+        val currentTimeMillis = parseTimeToMillis(currentTime)
+        val personalBestMillis = parseTimeToMillis(personalBest)
+        val comparisonResult = currentTimeMillis.compareTo(personalBestMillis)
+        return comparisonResult <= 0
+    }
+
+
+    private fun formatStopWatchTime(elapsed: Duration): String {
         val minutes = (elapsed.inWholeMinutes).toString().padStart(2, '0')
         val seconds = ((elapsed.inWholeSeconds) % 60).toString().padStart(2, '0')
         val millis = (elapsed.inWholeMilliseconds % 1000).toString().padStart(3, '0')
@@ -119,12 +152,44 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
     private fun updateIsLastRound(currentRound: Int) {
         if (currentRound == NUMBER_OF_ROUNDS) _quizButtonState.update {
-            QuizButtonState.FINISH(onFinishClick = {
-                _showScore.update { true }
-                stopStopwatch()
-            })
+            QuizButtonState.FINISH(onFinishClick = { onFinishQuiz() })
         }
     }
+
+    private fun onFinishQuiz() {
+        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
+        stopStopwatch()
+        _showScore.update { true }
+    }
+
+    private fun updatePersonalBestIfNeeded(): Boolean {
+        val pbScore = personalBest.value.first
+        val pbTime = personalBest.value.second
+
+        val newScore = points.value
+        val newTime = stopWatchTime.value
+
+        if (newScore > pbScore) {
+            updatePersonalBest(newScore, newTime)
+            return true
+        } else if (newScore == pbScore && compareTimes(
+                currentTime = newTime,
+                personalBest = pbTime
+            )
+        ) {
+            updatePersonalBest(newScore, newTime)
+            return true
+        }
+
+        return false
+    }
+
+    private fun updatePersonalBest(newScore: Int, newTime: String) {
+        savedResults.putInt(Constants.SCORE_KEY, newScore)
+        savedResults.putString(Constants.TIME_KEY, newTime)
+        _personalBest.update { Pair(newScore, newTime) }
+    }
+
 
     private fun increasePoint() {
         _points.update { it + 1 }
@@ -170,6 +235,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
     private fun resetGameSettings() {
         _stopWatchTime.update { "00:00:000" }
+        _isNewPersonalBest.update { false }
         _round.update { 1 }
         _points.update { 0 }
         _targetCountries.update { emptyList() }
