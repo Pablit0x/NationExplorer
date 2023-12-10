@@ -16,9 +16,9 @@
     <string name="close">Close</string>
     <string name="end_game">End Game</string>
     <string name="restart">Restart</string>
-    <string name="congratulations">Congratulations!</string>
-    <string name="message_with_score">You've completed the challenge with a score of ${score}!
-    </string>
+    <string name="results">Results</string>
+    <string name="results_score">Score: ${score}</string>
+    <string name="results_time">Time: ${time}</string>
     <plurals name="capital">
         <item quantity="one">Capital</item>
         <item quantity="other">Capitals</item>

@@ -3,15 +3,8 @@ package com.pscode.app.presentation.screens.countries.flag_game
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,22 +13,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
-import com.pscode.app.presentation.composables.CustomAlertDialog
 import com.pscode.app.presentation.composables.CustomLinearProgressIndicator
 import com.pscode.app.presentation.composables.FlagGameOption
+import com.pscode.app.presentation.composables.GameResultsDialog
 import com.pscode.app.presentation.composables.QuizButton
 import com.pscode.app.presentation.composables.RoundHeadlineText
 import com.pscode.app.presentation.composables.navigateBackOnDrag
@@ -57,6 +51,7 @@ class FlagGameScreen : Screen {
         val quizButtonState by viewModel.quizButtonState.collectAsState()
         val showScore by viewModel.showScore.collectAsState()
         val showQuizButton by viewModel.showQuizButton.collectAsState()
+        val stopWatchTime by viewModel.stopWatchTime.collectAsState()
 
         LaunchedEffect(isDataReady) {
             if (isDataReady) {
@@ -66,8 +61,9 @@ class FlagGameScreen : Screen {
 
         roundData?.let { currentRound ->
 
-            CustomAlertDialog(title = SharedRes.string.congratulations,
-                message = SharedRes.string.message_with_score.format(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}"),
+            GameResultsDialog(
+                score = SharedRes.string.results_score.format(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}"),
+                time = SharedRes.string.results_time.format(time = stopWatchTime),
                 isOpen = showScore,
                 onEndClicked = { navigator.pop() },
                 onRestartClicked = {
@@ -104,26 +100,26 @@ class FlagGameScreen : Screen {
 
                             Spacer(modifier = Modifier.height(32.dp))
 
+                            Text(
+                                text = stopWatchTime,
+                                color = MaterialTheme.colorScheme.outlineVariant,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                textAlign = TextAlign.End
+                            )
 
-                            Column(
-                                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.75f),
-                                verticalArrangement = Arrangement.Top,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2), modifier = Modifier.height(310.dp)
                             ) {
-                                LazyVerticalGrid(
-                                    columns = GridCells.Fixed(2), modifier = Modifier.height(310.dp)
-                                ) {
-                                    items(items = currentRound.options) { option ->
-                                        FlagGameOption(flagUrl = option.flagUrl,
-                                            isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
-                                            isSelectedFlag = option.flagUrl == selectedFlag,
-                                            isCorrectSelection = isCorrectSelection,
-                                            isSelectionMade = selectedFlag != null,
-                                            onClick = { flagUrl ->
-                                                viewModel.setSelectedFlag(flagUrl = flagUrl)
-                                                viewModel.checkAnswer()
-                                            })
-                                    }
+                                items(items = currentRound.options) { option ->
+                                    FlagGameOption(flagUrl = option.flagUrl,
+                                        isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
+                                        isSelectedFlag = option.flagUrl == selectedFlag,
+                                        isCorrectSelection = isCorrectSelection,
+                                        isSelectionMade = selectedFlag != null,
+                                        onClick = { flagUrl ->
+                                            viewModel.setSelectedFlag(flagUrl = flagUrl)
+                                            viewModel.checkAnswer()
+                                        })
                                 }
                             }
 

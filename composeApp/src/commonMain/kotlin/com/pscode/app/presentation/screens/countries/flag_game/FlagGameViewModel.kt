@@ -6,10 +6,16 @@ import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlin.time.Duration
 
 class FlagGameViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
@@ -53,11 +59,16 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
     private val _showQuizButton = MutableStateFlow(false)
     val showQuizButton = _showQuizButton.asStateFlow()
 
+    private val _stopWatchTime = MutableStateFlow("00:00:000")
+    val stopWatchTime: StateFlow<String> = _stopWatchTime.asStateFlow()
+
+    private var stopwatchJob: Job? = null
 
     fun startNewGame() {
         resetGameSettings()
         setCurrentGameCountries()
         startRound()
+        startStopwatch()
     }
 
 
@@ -72,6 +83,30 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         _showQuizButton.update { true }
     }
 
+    private fun startStopwatch() {
+        val startTime = Clock.System.now()
+        stopStopwatch()
+        stopwatchJob = viewModelScope.launch(Dispatchers.Default) {
+            while (isActive) {
+                val elapsed = Clock.System.now() - startTime
+                val formattedTime = formatStopWatchTime(elapsed = elapsed)
+                _stopWatchTime.update { formattedTime }
+                delay(10L)
+            }
+        }
+    }
+
+    private fun formatStopWatchTime(elapsed : Duration) : String {
+        val minutes = (elapsed.inWholeMinutes).toString().padStart(2, '0')
+        val seconds = ((elapsed.inWholeSeconds) % 60).toString().padStart(2, '0')
+        val millis = (elapsed.inWholeMilliseconds % 1000).toString().padStart(3, '0')
+
+        return "$minutes:$seconds:$millis"
+    }
+
+    private fun stopStopwatch() {
+        stopwatchJob?.cancel()
+    }
 
     private fun nextStage() {
         if (round.value < NUMBER_OF_ROUNDS) {
@@ -86,6 +121,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
         if (currentRound == NUMBER_OF_ROUNDS) _quizButtonState.update {
             QuizButtonState.FINISH(onFinishClick = {
                 _showScore.update { true }
+                stopStopwatch()
             })
         }
     }
@@ -133,6 +169,7 @@ class FlagGameViewModel(private val countryRepository: CountryRepository) : View
 
 
     private fun resetGameSettings() {
+        _stopWatchTime.update { "00:00:000" }
         _round.update { 1 }
         _points.update { 0 }
         _targetCountries.update { emptyList() }
