@@ -3,6 +3,11 @@ package com.pscode.app.presentation.screens.countries.flag_game
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +26,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -31,6 +38,7 @@ import com.pscode.app.presentation.composables.CustomLinearProgressIndicator
 import com.pscode.app.presentation.composables.FlagGameOption
 import com.pscode.app.presentation.composables.QuizButton
 import com.pscode.app.presentation.composables.RoundHeadlineText
+import com.pscode.app.presentation.composables.navigateBackOnDrag
 import org.koin.compose.koinInject
 
 class FlagGameScreen : Screen {
@@ -72,6 +80,7 @@ class FlagGameScreen : Screen {
 
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().padding(16.dp)
+                        .navigateBackOnDrag(onNavigateBack = { navigator.pop() })
                 ) {
                     item {
                         Column(

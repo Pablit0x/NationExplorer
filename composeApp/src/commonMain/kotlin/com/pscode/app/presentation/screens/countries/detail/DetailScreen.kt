@@ -15,11 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.DetailCountryOverview
 import com.pscode.app.presentation.composables.WeatherCard
+import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import org.koin.compose.koinInject
 
@@ -32,6 +35,7 @@ class DetailScreen(
         val weatherOverview by viewModel.cityWeather.collectAsState()
         val errorsChannel = viewModel.errorEventsChannelFlow
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
+        val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
@@ -49,7 +53,10 @@ class DetailScreen(
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(16.dp)
+                .navigateBackOnDrag(onNavigateBack = { navigator.pop() })
+        ) {
             item {
                 Column(
                     modifier = Modifier.fillMaxSize(),
