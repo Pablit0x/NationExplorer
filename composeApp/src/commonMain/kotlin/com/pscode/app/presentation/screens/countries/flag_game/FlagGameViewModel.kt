@@ -111,7 +111,7 @@ class FlagGameViewModel(
                 val elapsed = Clock.System.now() - startTime
                 val formattedTime = formatStopWatchTime(elapsed = elapsed)
                 _stopWatchTime.update { formattedTime }
-                delay(10L)
+                delay(50L)
             }
         }
     }

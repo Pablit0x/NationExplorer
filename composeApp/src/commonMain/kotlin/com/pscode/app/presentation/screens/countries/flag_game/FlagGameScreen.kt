@@ -3,6 +3,7 @@ package com.pscode.app.presentation.screens.countries.flag_game
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,20 +14,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
+import com.pscode.app.presentation.composables.AnimatedStopwatch
 import com.pscode.app.presentation.composables.CustomLinearProgressIndicator
 import com.pscode.app.presentation.composables.FlagGameOption
 import com.pscode.app.presentation.composables.GameResultsDialog
@@ -108,12 +108,15 @@ class FlagGameScreen : Screen {
 
                             Spacer(modifier = Modifier.height(32.dp))
 
-                            Text(
-                                text = stopWatchTime,
-                                color = MaterialTheme.colorScheme.outlineVariant,
+                            Box(
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                                textAlign = TextAlign.End
-                            )
+                                contentAlignment = Alignment.CenterEnd
+                            ) {
+                                AnimatedStopwatch(
+                                    timeString = stopWatchTime,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            }
 
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(2), modifier = Modifier.height(310.dp)
