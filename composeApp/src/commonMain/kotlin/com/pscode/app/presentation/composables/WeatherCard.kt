@@ -1,6 +1,7 @@
 package com.pscode.app.presentation.composables
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -77,10 +78,9 @@ fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifie
         }
     }
 
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 2),
-        modifier = modifier,
+        modifier = modifier.height(320.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {

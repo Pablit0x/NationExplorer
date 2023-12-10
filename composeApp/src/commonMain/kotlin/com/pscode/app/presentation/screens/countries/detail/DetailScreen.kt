@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,28 +49,35 @@ class DetailScreen(
             }
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
 
-            DetailCountryOverview(
-                selectedCountry = selectedCountry,
-                hasCapitalCity = hasCapitalCity,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
-            )
+                    DetailCountryOverview(
+                        selectedCountry = selectedCountry,
+                        hasCapitalCity = hasCapitalCity,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+                    )
 
-            if (hasCapitalCity) {
+                    if (hasCapitalCity) {
 
-                AutoResizedText(
-                    text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                        AutoResizedText(
+                            text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(vertical = 8.dp, horizontal = 8.dp),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
 
-                WeatherCard(weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth())
+                        WeatherCard(
+                            weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         }
     }

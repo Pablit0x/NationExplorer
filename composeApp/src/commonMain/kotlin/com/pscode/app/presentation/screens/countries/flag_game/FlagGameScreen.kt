@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -68,53 +69,62 @@ class FlagGameScreen : Screen {
             AnimatedVisibility(
                 visible = !showScore, enter = fadeIn(), exit = fadeOut()
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
                 ) {
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                    CustomLinearProgressIndicator(
-                        currentRound = round,
-                        numberOfRounds = FlagGameViewModel.NUMBER_OF_ROUNDS,
-                        modifier = Modifier.fillMaxWidth(0.7f)
-                    )
+                            CustomLinearProgressIndicator(
+                                currentRound = round,
+                                numberOfRounds = FlagGameViewModel.NUMBER_OF_ROUNDS,
+                                modifier = Modifier.fillMaxWidth(0.7f)
+                            )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                    RoundHeadlineText(
-                        hintText = SharedRes.string.pick_the_flag,
-                        countryName = currentRound.targetCountry.name,
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
+                            RoundHeadlineText(
+                                hintText = SharedRes.string.pick_the_flag,
+                                countryName = currentRound.targetCountry.name,
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(32.dp))
 
 
-                    Column(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.75f),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                            items(items = currentRound.options) { option ->
-                                FlagGameOption(flagUrl = option.flagUrl,
-                                    isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
-                                    isSelectedFlag = option.flagUrl == selectedFlag,
-                                    isCorrectSelection = isCorrectSelection,
-                                    isSelectionMade = selectedFlag != null,
-                                    onClick = { flagUrl ->
-                                        viewModel.setSelectedFlag(flagUrl = flagUrl)
-                                        viewModel.checkAnswer()
-                                    })
+                            Column(
+                                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.75f),
+                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                LazyVerticalGrid(
+                                    columns = GridCells.Fixed(2), modifier = Modifier.height(310.dp)
+                                ) {
+                                    items(items = currentRound.options) { option ->
+                                        FlagGameOption(flagUrl = option.flagUrl,
+                                            isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
+                                            isSelectedFlag = option.flagUrl == selectedFlag,
+                                            isCorrectSelection = isCorrectSelection,
+                                            isSelectionMade = selectedFlag != null,
+                                            onClick = { flagUrl ->
+                                                viewModel.setSelectedFlag(flagUrl = flagUrl)
+                                                viewModel.checkAnswer()
+                                            })
+                                    }
+                                }
                             }
+
+                            QuizButton(
+                                showButton = showQuizButton,
+                                quizButtonState = quizButtonState,
+                                modifier = Modifier.fillMaxWidth(0.3f).height(50.dp)
+                            )
                         }
                     }
-
-                    QuizButton(
-                        showButton = showQuizButton,
-                        quizButtonState = quizButtonState,
-                        modifier = Modifier.fillMaxWidth(0.3f).height(50.dp)
-                    )
                 }
             }
         }
