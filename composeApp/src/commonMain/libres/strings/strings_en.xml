@@ -46,4 +46,5 @@
     <string name="sunset">Sunset</string>
     <string name="temperature">Temperature</string>
     <string name="cloudiness">Cloudiness</string>
+    <string name="show_map">Show Map</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.pscode.app.presentation.screens.countries.detail
 
+import com.pscode.app.domain.model.GeoLocationOverview
 import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.repository.GeoLocationRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Response
@@ -15,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val geoLocationRepository: GeoLocationRepository
 ) : ViewModel() {
 
     private val _cityWeather = MutableStateFlow<WeatherOverview?>(null)
@@ -24,11 +27,39 @@ class DetailViewModel(
     private val errorChannel = Channel<ErrorEvent>()
     val errorEventsChannelFlow = errorChannel.receiveAsFlow()
 
+    private val _showMap = MutableStateFlow(false)
+    val showMap = _showMap.asStateFlow()
+
+    private val _geoLocation = MutableStateFlow<GeoLocationOverview?>(null)
+    val geoLocation = _geoLocation.asStateFlow()
+
+    fun getGeoLocation(cityName: String, countryName: String) {
+        _geoLocation.update { null }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = geoLocationRepository.getGeoLocationByCountry(
+                cityName = cityName, countryName = countryName
+            )
+
+            when (result) {
+                is Response.Success -> {
+                    _geoLocation.update {
+                        result.data
+                    }
+                }
+
+                is Response.Error -> {
+                }
+            }
+        }
+    }
+
     fun getWeatherByCity(cityName: String) {
         _cityWeather.update { null }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = weatherRepository.getWeatherByCity(cityName = cityName)
+            val result: Response<WeatherOverview> =
+                weatherRepository.getWeatherByCity(cityName = cityName)
 
             when (result) {
                 is Response.Success -> {
@@ -43,4 +74,13 @@ class DetailViewModel(
             }
         }
     }
+
+    fun showMap() {
+        _showMap.update { true }
+    }
+
+    fun hideMap() {
+        _showMap.update { false }
+    }
+
 }

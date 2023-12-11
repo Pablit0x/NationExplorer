@@ -51,6 +51,9 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.kstore)
             implementation(libs.kstore.file)
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
         }
 
         commonTest.dependencies {

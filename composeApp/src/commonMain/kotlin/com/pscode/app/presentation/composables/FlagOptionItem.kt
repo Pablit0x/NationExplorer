@@ -35,6 +35,7 @@ fun FlagGameOption(
         }, animationSpec = tween(1000)
     )
 
+
     OutlinedCard(border = BorderStroke(width = 4.dp, color = borderColor),
         modifier = Modifier.size(width = 160.dp, height = 130.dp).padding(12.dp).bounceClick {
             if (!isSelectionMade) onClick(flagUrl)

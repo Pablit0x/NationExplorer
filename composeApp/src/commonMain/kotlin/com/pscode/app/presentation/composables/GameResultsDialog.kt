@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -81,12 +82,14 @@ fun GameResultsDialog(
                     AutoResizedText(
                         text = pbMessage,
                         textAlign = if (newBest) TextAlign.Center else TextAlign.Start,
-                        color = if (newBest) MaterialTheme.colorScheme.scrim else MaterialTheme.colorScheme.outline,
+                        color = if (newBest) Color.Yellow else MaterialTheme.colorScheme.outline,
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Medium,
                         ),
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(top = if (newBest) 8.dp else 0.dp)
+                        modifier = Modifier.fillMaxWidth().then(
+                            if (newBest) Modifier.padding(top = 4.dp) else Modifier
+                        )
+
                     )
                 }
             },

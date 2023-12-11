@@ -80,7 +80,7 @@ fun WeatherCard(weatherInCapital: WeatherOverview?, modifier: Modifier = Modifie
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 2),
-        modifier = modifier.height(320.dp),
+        modifier = modifier.height(190.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
