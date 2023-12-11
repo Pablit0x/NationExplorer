@@ -114,7 +114,7 @@ class DetailScreen(
                                 ModalBottomSheet(sheetState = sheetState,
                                     onDismissRequest = { viewModel.hideMap() }) {
                                     MapView(
-                                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.4f),
+                                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
                                         geoLocationOverview = geoLocation!!
                                     )
                                 }

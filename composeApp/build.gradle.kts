@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.secrets)
 }
 
 kotlin {
@@ -66,6 +67,8 @@ kotlin {
             implementation(libs.compose.uitooling)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.google.maps.compose)
+            implementation(libs.google.play.services.maps)
         }
 
         iosMain.dependencies {

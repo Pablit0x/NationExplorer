@@ -21,6 +21,9 @@ multiplatformSettings = "1.1.1"
 koin = "3.5.0"
 kstore = "0.7.1"
 koin-compose = "1.1.0"
+maps-compose = "2.7.2"
+maps-services = "18.1.0"
+secrets-plugin = "2.0.1"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -48,6 +51,8 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
+google-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
+google-play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps-services" }
 
 
 [plugins]
@@ -57,3 +62,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets-plugin" }
