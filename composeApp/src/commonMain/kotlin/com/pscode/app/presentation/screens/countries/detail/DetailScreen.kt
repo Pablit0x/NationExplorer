@@ -115,6 +115,7 @@ class DetailScreen(
                                     onDismissRequest = { viewModel.hideMap() }) {
                                     MapView(
                                         modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
+                                        countryArea = selectedCountry.area,
                                         locationOverview = geoLocation!!
                                     )
                                 }

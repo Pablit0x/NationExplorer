@@ -14,13 +14,14 @@ import platform.MapKit.MKMapView
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun MapView(locationOverview: LocationOverview, modifier: Modifier) {
+actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modifier: Modifier) {
+    val location = CLLocationCoordinate2DMake(
+        latitude = locationOverview.latitude, longitude = locationOverview.longitude,
+    )
+
     val mkMapView by remember {
         mutableStateOf(MKMapView().apply {
-            // setRegion for camera management
-            centerCoordinate = CLLocationCoordinate2DMake(
-                latitude = locationOverview.latitude, longitude = locationOverview.longitude,
-            )
+            centerCoordinate = location
             showsUserLocation = false
         })
     }
