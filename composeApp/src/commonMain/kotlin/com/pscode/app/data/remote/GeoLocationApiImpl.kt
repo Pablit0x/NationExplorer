@@ -1,10 +1,7 @@
 package com.pscode.app.data.remote
 
 import FunApp.composeApp.BuildConfig
-import com.pscode.app.data.model.geo_location.GeoLocationDto
-import com.pscode.app.data.model.weather.WeatherDto
-import com.pscode.app.di.httpClient
-import com.pscode.app.domain.model.GeoLocationOverview
+import com.pscode.app.data.model.geo_location.LocationDto
 import com.pscode.app.domain.remote.GeoLocationApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
@@ -13,23 +10,20 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CancellationException
 
 class GeoLocationApiImpl(val httpClient: HttpClient) : GeoLocationApi {
-    private val baseUrl = "https://api.api-ninjas.com/v1/geocoding"
+    private val baseUrl = "https://api.opencagedata.com/geocode/v1/"
 
     override suspend fun getGeoLocationByCountry(
-        cityName: String,
         countryName: String
-    ): Response<List<GeoLocationDto>> {
+    ): Response<LocationDto> {
         return try {
             Response.Success(data = httpClient.get {
-                url("$baseUrl?city=$cityName&country=$countryName")
-                header("X-Api-Key", BuildConfig.WEATHER_API_KEY)
-            }.body<List<GeoLocationDto>>())
+                url("${baseUrl}json?q=URI-ENCODED-$countryName&key=${BuildConfig.GEO_LOCATION_API_KEY}")
+            }.body<LocationDto>())
         } catch (e: IOException) {
             Response.Error("Network error: ${e.message}")
         } catch (e: ClientRequestException) {

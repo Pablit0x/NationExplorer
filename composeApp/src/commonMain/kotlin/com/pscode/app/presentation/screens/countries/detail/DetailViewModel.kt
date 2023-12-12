@@ -1,6 +1,6 @@
 package com.pscode.app.presentation.screens.countries.detail
 
-import com.pscode.app.domain.model.GeoLocationOverview
+import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.repository.GeoLocationRepository
 import com.pscode.app.domain.repository.WeatherRepository
@@ -30,7 +30,7 @@ class DetailViewModel(
     private val _showMap = MutableStateFlow(false)
     val showMap = _showMap.asStateFlow()
 
-    private val _geoLocation = MutableStateFlow<GeoLocationOverview?>(null)
+    private val _geoLocation = MutableStateFlow<LocationOverview?>(null)
     val geoLocation = _geoLocation.asStateFlow()
 
     fun getGeoLocation(cityName: String, countryName: String) {
@@ -38,7 +38,7 @@ class DetailViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = geoLocationRepository.getGeoLocationByCountry(
-                cityName = cityName, countryName = countryName
+                countryName = countryName
             )
 
             when (result) {

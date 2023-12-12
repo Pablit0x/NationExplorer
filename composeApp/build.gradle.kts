@@ -18,9 +18,7 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
+        iosX64(), iosArm64(), iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
             baseName = "ComposeApp"
@@ -53,8 +51,7 @@ kotlin {
             implementation(libs.kstore)
             implementation(libs.kstore.file)
 
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) implementation(compose.components.resources)
         }
 
         commonTest.dependencies {
@@ -115,6 +112,9 @@ libres {
 
 buildConfig {
     buildConfigField("String", "WEATHER_API_KEY", "\"MSCq/6p2+AQneqFCP2YgVQ==JsSkjWNNEsdqxKYo\"")
+    buildConfigField(
+        "String", "GEO_LOCATION_API_KEY", "\"5373eb48ea3a42459facdc6fc37e689f\""
+    )
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
 }

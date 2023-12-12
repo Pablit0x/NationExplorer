@@ -2,7 +2,7 @@ package com.pscode.app.presentation.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.pscode.app.domain.model.GeoLocationOverview
+import com.pscode.app.domain.model.LocationOverview
 
 @Composable
-expect fun MapView(geoLocationOverview: GeoLocationOverview, modifier : Modifier)
+expect fun MapView(locationOverview: LocationOverview, modifier: Modifier)
