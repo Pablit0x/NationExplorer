@@ -6,7 +6,9 @@ plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.realm)
 }
+
 
 kotlin {
     androidTarget {
@@ -50,6 +52,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.kstore)
             implementation(libs.kstore.file)
+            implementation(libs.mongodb.realm)
 
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) implementation(compose.components.resources)
         }

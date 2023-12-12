@@ -65,9 +65,10 @@ class DetailScreen(
         }
 
         LaunchedEffect(Unit) {
+            viewModel.getGeoLocation(countryName = selectedCountry.name)
+
             selectedCountry.capitals.firstOrNull()?.let { capital ->
                 viewModel.getWeatherByCity(cityName = capital)
-                viewModel.getGeoLocation(cityName = capital, countryName = selectedCountry.name)
             }
         }
 

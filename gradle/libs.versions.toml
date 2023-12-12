@@ -22,8 +22,9 @@ koin = "3.5.0"
 kstore = "0.7.1"
 koin-compose = "1.1.0"
 maps-compose = "2.7.2"
-maps-services = "18.1.0"
+maps-services = "18.2.0"
 secrets-plugin = "2.0.1"
+mongodb-realm = "1.13.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -53,7 +54,7 @@ kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
 google-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
 google-play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps-services" }
-
+mongodb-realm = { module = "io.realm.kotlin:library-sync", version.ref = "mongodb-realm" }
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -63,3 +64,4 @@ libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets-plugin" }
+realm = { id = "io.realm.kotlin", version.ref = "mongodb-realm" }

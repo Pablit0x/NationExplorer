@@ -1,11 +1,16 @@
 package com.pscode.app.presentation.screens.countries.flag_game
 
+import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.utils.Constants
+import com.pscode.app.utils.Constants.APP_ID
 import com.pscode.app.utils.Response
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -20,7 +25,8 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration
 
 class FlagGameViewModel(
-    private val countryRepository: CountryRepository, private val savedResults: Settings
+    private val countryRepository: CountryRepository,
+    private val savedResults: Settings
 ) : ViewModel() {
 
     companion object {
@@ -29,6 +35,7 @@ class FlagGameViewModel(
 
     init {
         getAllCountries()
+        loginToRealm()
     }
 
     private val _isDataReady = MutableStateFlow(false)
@@ -157,8 +164,9 @@ class FlagGameViewModel(
     }
 
     private fun onFinishQuiz() {
-        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
         stopStopwatch()
+        sendResults(userName = "Random For Now")
+        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
         _showScore.update { true }
     }
 
@@ -173,8 +181,7 @@ class FlagGameViewModel(
             updatePersonalBest(newScore, newTime)
             return true
         } else if (newScore == pbScore && compareTimes(
-                currentTime = newTime,
-                personalBest = pbTime
+                currentTime = newTime, personalBest = pbTime
             )
         ) {
             updatePersonalBest(newScore, newTime)
@@ -216,6 +223,26 @@ class FlagGameViewModel(
                     _isDataReady.update { false }
                 }
             }
+        }
+    }
+
+    private fun loginToRealm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            App.create(APP_ID).login(credentials = Credentials.anonymous(reuseExisting = true))
+        }
+    }
+
+    private fun sendResults(userName: String) {
+
+        val result = Result().apply {
+            score = points.value
+            time = stopWatchTime.value
+            timeMillis = parseTimeToMillis(timeString = stopWatchTime.value)
+            username = userName
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            MongoRepositoryImpl.insertResult(result)
         }
     }
 

@@ -32,8 +32,7 @@ class DetailViewModel(
 
     private val _geoLocation = MutableStateFlow<LocationOverview?>(null)
     val geoLocation = _geoLocation.asStateFlow()
-
-    fun getGeoLocation(cityName: String, countryName: String) {
+    fun getGeoLocation(countryName: String) {
         _geoLocation.update { null }
 
         viewModelScope.launch(Dispatchers.IO) {
