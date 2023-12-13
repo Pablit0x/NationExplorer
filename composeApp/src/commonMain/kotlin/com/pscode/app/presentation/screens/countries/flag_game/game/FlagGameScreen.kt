@@ -1,4 +1,4 @@
-package com.pscode.app.presentation.screens.countries.flag_game
+package com.pscode.app.presentation.screens.countries.flag_game.game
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -113,8 +113,7 @@ class FlagGameScreen : Screen {
                                 contentAlignment = Alignment.CenterEnd
                             ) {
                                 AnimatedStopwatch(
-                                    timeString = stopWatchTime,
-                                    fontFamily = FontFamily.Monospace
+                                    timeString = stopWatchTime, fontFamily = FontFamily.Monospace
                                 )
                             }
 

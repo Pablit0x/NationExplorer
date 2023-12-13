@@ -26,7 +26,7 @@ import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.composables.MainTopAppBar
 import com.pscode.app.presentation.composables.isScrollingUp
-import com.pscode.app.presentation.screens.countries.flag_game.FlagGameScreen
+import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState

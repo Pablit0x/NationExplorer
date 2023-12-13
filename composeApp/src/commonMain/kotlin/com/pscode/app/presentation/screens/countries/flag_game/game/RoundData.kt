@@ -1,4 +1,4 @@
-package com.pscode.app.presentation.screens.countries.flag_game
+package com.pscode.app.presentation.screens.countries.flag_game.game
 
 import com.pscode.app.domain.model.CountryOverview
 

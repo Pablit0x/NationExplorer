@@ -1,4 +1,4 @@
-package com.pscode.app.presentation.screens.countries.flag_game
+package com.pscode.app.presentation.screens.countries.flag_game.game
 
 import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.domain.model.CountryOverview
@@ -35,7 +35,6 @@ class FlagGameViewModel(
 
     init {
         getAllCountries()
-        loginToRealm()
     }
 
     private val _isDataReady = MutableStateFlow(false)
@@ -165,7 +164,8 @@ class FlagGameViewModel(
 
     private fun onFinishQuiz() {
         stopStopwatch()
-        sendResults(userName = "Random For Now")
+//        loginToRealm()
+//        sendResults(userName = "Random For Now")
         _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
         _showScore.update { true }
     }
@@ -209,7 +209,7 @@ class FlagGameViewModel(
     }
 
     private fun getAllCountries() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = countryRepository.getAllCountries()
 
             when (result) {
