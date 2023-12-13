@@ -25,16 +25,18 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration
 
 class FlagGameViewModel(
-    private val countryRepository: CountryRepository,
-    private val savedResults: Settings
+    private val countryRepository: CountryRepository, private val savedResults: Settings
 ) : ViewModel() {
 
     companion object {
         const val NUMBER_OF_ROUNDS = 10
+        const val DEFAULT_TIME = "00:00:000"
+        const val DELAY_MILLIS = 50L
     }
 
     init {
         getAllCountries()
+        loginToRealm()
     }
 
     private val _isDataReady = MutableStateFlow(false)
@@ -69,16 +71,21 @@ class FlagGameViewModel(
     private val _showQuizButton = MutableStateFlow(false)
     val showQuizButton = _showQuizButton.asStateFlow()
 
-    private val _stopWatchTime = MutableStateFlow("00:00:000")
+    private val _stopWatchTime = MutableStateFlow(DEFAULT_TIME)
     val stopWatchTime: StateFlow<String> = _stopWatchTime.asStateFlow()
 
     private var stopwatchJob: Job? = null
 
-    private val _personalBest = MutableStateFlow(Pair(0, "00:00:000"))
+    private val _personalBest = MutableStateFlow(Pair(0, DEFAULT_TIME))
     val personalBest = _personalBest.asStateFlow()
 
     private val _isNewPersonalBest = MutableStateFlow(false)
     val isNewPersonalBest = _isNewPersonalBest.asStateFlow()
+
+    private val _username = MutableStateFlow("")
+
+    private val _showUsernameInputDialog = MutableStateFlow(false)
+    val showUsernameInputDialog = _showUsernameInputDialog.asStateFlow()
 
 
     fun startNewGame() {
@@ -87,11 +94,12 @@ class FlagGameViewModel(
         startRound()
         startStopwatch()
         getPersonalBest()
+        getUserName()
     }
 
     private fun getPersonalBest() {
         val pbScore = savedResults.getInt(key = Constants.SCORE_KEY, defaultValue = 0)
-        val pbTime = savedResults.getString(key = Constants.TIME_KEY, defaultValue = "00:00:000")
+        val pbTime = savedResults.getString(key = Constants.TIME_KEY, defaultValue = DEFAULT_TIME)
         val pbResult = Pair(pbScore, pbTime)
         _personalBest.update { pbResult }
     }
@@ -108,16 +116,29 @@ class FlagGameViewModel(
         _showQuizButton.update { true }
     }
 
+    private fun getUserName() {
+        val savedUsername = savedResults.getString(key = Constants.USERNAME_KEY, defaultValue = "")
+        _username.update { savedUsername }
+    }
+
+    fun setUserName(username: String) {
+        _username.update { username }
+        savedResults.putString(key = Constants.USERNAME_KEY, value = username)
+        _showUsernameInputDialog.update { false }
+        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
+        _showScore.update { true }
+    }
+
 
     private fun startStopwatch() {
-        val startTime = Clock.System.now()
         stopStopwatch()
+        val startTime = Clock.System.now()
         stopwatchJob = viewModelScope.launch(Dispatchers.Default) {
             while (isActive) {
                 val elapsed = Clock.System.now() - startTime
                 val formattedTime = formatStopWatchTime(elapsed = elapsed)
                 _stopWatchTime.update { formattedTime }
-                delay(50L)
+                delay(DELAY_MILLIS)
             }
         }
     }
@@ -164,10 +185,12 @@ class FlagGameViewModel(
 
     private fun onFinishQuiz() {
         stopStopwatch()
-//        loginToRealm()
-//        sendResults(userName = "Random For Now")
-        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
-        _showScore.update { true }
+        if (_username.value.isBlank()) {
+            _showUsernameInputDialog.update { true }
+        } else {
+            _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
+            _showScore.update { true }
+        }
     }
 
     private fun updatePersonalBestIfNeeded(): Boolean {
@@ -195,6 +218,7 @@ class FlagGameViewModel(
         savedResults.putInt(Constants.SCORE_KEY, newScore)
         savedResults.putString(Constants.TIME_KEY, newTime)
         _personalBest.update { Pair(newScore, newTime) }
+        sendPersonalBestToOnlineLeaderboard()
     }
 
 
@@ -232,13 +256,12 @@ class FlagGameViewModel(
         }
     }
 
-    private fun sendResults(userName: String) {
-
+    private fun sendPersonalBestToOnlineLeaderboard() {
         val result = Result().apply {
             score = points.value
             time = stopWatchTime.value
             timeMillis = parseTimeToMillis(timeString = stopWatchTime.value)
-            username = userName
+            username = _username.value
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -261,7 +284,8 @@ class FlagGameViewModel(
 
 
     private fun resetGameSettings() {
-        _stopWatchTime.update { "00:00:000" }
+        _showUsernameInputDialog.update { false }
+        _stopWatchTime.update { DEFAULT_TIME }
         _isNewPersonalBest.update { false }
         _round.update { 1 }
         _points.update { 0 }

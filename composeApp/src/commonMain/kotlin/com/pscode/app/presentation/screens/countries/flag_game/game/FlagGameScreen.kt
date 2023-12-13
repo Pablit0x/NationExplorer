@@ -32,7 +32,9 @@ import com.pscode.app.presentation.composables.FlagGameOption
 import com.pscode.app.presentation.composables.GameResultsDialog
 import com.pscode.app.presentation.composables.QuizButton
 import com.pscode.app.presentation.composables.RoundHeadlineText
+import com.pscode.app.presentation.composables.UsernameInputDialog
 import com.pscode.app.presentation.composables.navigateBackOnDrag
+import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.LeaderboardScreen
 import org.koin.compose.koinInject
 
 class FlagGameScreen : Screen {
@@ -54,6 +56,7 @@ class FlagGameScreen : Screen {
         val stopWatchTime by viewModel.stopWatchTime.collectAsState()
         val personalBest by viewModel.personalBest.collectAsState()
         val isNewPersonalBest by viewModel.isNewPersonalBest.collectAsState()
+        val showUsernameInputDialog by viewModel.showUsernameInputDialog.collectAsState()
 
         LaunchedEffect(isDataReady) {
             if (isDataReady) {
@@ -63,9 +66,12 @@ class FlagGameScreen : Screen {
 
         roundData?.let { currentRound ->
 
-            GameResultsDialog(
-                score = SharedRes.string.results_score.format(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}"),
-                time = SharedRes.string.results_time.format(time = stopWatchTime),
+            UsernameInputDialog(
+                isOpen = showUsernameInputDialog, onNextClicked = viewModel::setUserName
+            )
+
+            GameResultsDialog(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}",
+                time = stopWatchTime,
                 pbMessage = if (isNewPersonalBest) {
                     SharedRes.string.new_personal_best
                 } else {
@@ -76,6 +82,9 @@ class FlagGameScreen : Screen {
                 onEndClicked = { navigator.pop() },
                 onRestartClicked = {
                     viewModel.startNewGame()
+                },
+                navigateToLeaderboard = {
+                    navigator.push(item = LeaderboardScreen())
                 })
 
             AnimatedVisibility(

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,12 +26,12 @@ fun QuizButton(
     AnimatedVisibility(visible = showButton, enter = fadeIn(), exit = ExitTransition.None) {
         when (quizButtonState) {
             is QuizButtonState.NEXT -> {
-                Button(modifier = modifier, onClick = { quizButtonState.onNextClick() }) {
+                OutlinedButton(
+                    modifier = modifier, onClick = { quizButtonState.onNextClick() }) {
                     Text(
                         text = SharedRes.string.next,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(imageVector = Icons.Default.NavigateNext, contentDescription = "Next flag")
@@ -39,12 +39,11 @@ fun QuizButton(
             }
 
             is QuizButtonState.FINISH -> {
-                Button(modifier = modifier, onClick = { quizButtonState.onFinishClick() }) {
+                OutlinedButton(modifier = modifier, onClick = { quizButtonState.onFinishClick() }) {
                     Text(
                         text = SharedRes.string.finish,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(

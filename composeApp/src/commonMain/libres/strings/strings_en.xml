@@ -47,4 +47,9 @@
     <string name="temperature">Temperature</string>
     <string name="cloudiness">Cloudiness</string>
     <string name="show_map">Show Map</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="username_placeholder">Username...</string>
+    <string name="time">Time:</string>
+    <string name="score">Score:</string>
+    <string name="view_leaderboard">View Leaderboard</string>
 </resources>
