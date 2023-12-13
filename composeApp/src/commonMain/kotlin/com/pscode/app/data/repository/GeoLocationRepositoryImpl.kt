@@ -13,7 +13,11 @@ class GeoLocationRepositoryImpl(private val geoLocationApi: GeoLocationApi) :
 
         return when (result) {
             is Response.Success -> {
-                Response.Success(data = result.data.toLocationOverview())
+                if (result.data.results.isEmpty()) {
+                    Response.Error(message = "No results")
+                } else {
+                    Response.Success(data = result.data.toLocationOverview())
+                }
             }
 
             is Response.Error -> {
