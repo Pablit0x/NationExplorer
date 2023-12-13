@@ -7,15 +7,18 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.User
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.mongodb.kbson.ObjectId
 
-object MongoRepositoryImpl : MongoRepository {
+class MongoRepositoryImpl(
+    private val user: User?,
+) : MongoRepository {
 
     private val app = App.create(APP_ID)
-    private val user = app.currentUser
+//    private val user = app.currentUser
     private lateinit var realm: Realm
 
     init {

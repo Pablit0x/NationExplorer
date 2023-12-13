@@ -3,8 +3,11 @@ package com.pscode.app.presentation.screens.countries.overview
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.utils.Constants
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
@@ -55,6 +58,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     init {
         getAllCountries()
+        loginToRealm()
     }
 
     fun onSearchTextChange(text: String) {
@@ -94,6 +98,12 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                     _isLoading.update { false }
                 }
             }
+        }
+    }
+
+    private fun loginToRealm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            App.create(Constants.APP_ID).login(credentials = Credentials.anonymous(reuseExisting = true))
         }
     }
 }

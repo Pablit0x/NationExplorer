@@ -4,6 +4,7 @@ import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.CountryRepository
+import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.utils.Constants
 import com.pscode.app.utils.Constants.APP_ID
 import com.pscode.app.utils.Response
@@ -25,7 +26,9 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration
 
 class FlagGameViewModel(
-    private val countryRepository: CountryRepository, private val savedResults: Settings
+    private val countryRepository: CountryRepository,
+    private val savedResults: Settings,
+    private val mongoRepository: MongoRepository
 ) : ViewModel() {
 
     companion object {
@@ -36,7 +39,6 @@ class FlagGameViewModel(
 
     init {
         getAllCountries()
-        loginToRealm()
     }
 
     private val _isDataReady = MutableStateFlow(false)
@@ -250,12 +252,6 @@ class FlagGameViewModel(
         }
     }
 
-    private fun loginToRealm() {
-        viewModelScope.launch(Dispatchers.IO) {
-            App.create(APP_ID).login(credentials = Credentials.anonymous(reuseExisting = true))
-        }
-    }
-
     private fun sendPersonalBestToOnlineLeaderboard() {
         val result = Result().apply {
             score = points.value
@@ -265,7 +261,7 @@ class FlagGameViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            MongoRepositoryImpl.insertResult(result)
+            mongoRepository.insertResult(result)
         }
     }
 

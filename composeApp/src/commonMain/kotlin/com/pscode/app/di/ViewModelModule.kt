@@ -13,6 +13,6 @@ val viewModelModule = module {
         )
     }
     single<OverviewViewModel> { OverviewViewModel(countryRepository = get()) }
-    single<FlagGameViewModel> { FlagGameViewModel(countryRepository = get(), savedResults = get()) }
-    single<LeaderboardViewModel> { LeaderboardViewModel() }
+    single<FlagGameViewModel> { FlagGameViewModel(countryRepository = get(), savedResults = get(), mongoRepository = get()) }
+    single<LeaderboardViewModel> { LeaderboardViewModel(mongoRepository = get()) }
 }
