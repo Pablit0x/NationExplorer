@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
+import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.LeaderboardScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,16 +43,15 @@ fun DefaultTopAppBar(
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 }
             }
-            navigationIcon = {}
         }
 
         is FlagGameScreen -> {
             topBarTitle = SharedRes.string.flag_matcher
-            actions = {}
             navigationIcon = {
                 IconButton(onClick = { navigator.pop() }) {
                     Icon(
-                        imageVector = Icons.Default.NavigateBefore, contentDescription = "Navigate back"
+                        imageVector = Icons.Default.NavigateBefore,
+                        contentDescription = "Navigate back"
                     )
                 }
             }
@@ -59,11 +59,23 @@ fun DefaultTopAppBar(
 
         is DetailScreen -> {
             topBarTitle = selectedCountryName ?: SharedRes.string.unknown
-            actions = {}
             navigationIcon = {
                 IconButton(onClick = { navigator.pop() }) {
                     Icon(
-                        imageVector = Icons.Default.NavigateBefore, contentDescription = "Navigate back"
+                        imageVector = Icons.Default.NavigateBefore,
+                        contentDescription = "Navigate back"
+                    )
+                }
+            }
+        }
+
+        is LeaderboardScreen -> {
+            topBarTitle = SharedRes.string.leaderboard
+            navigationIcon = {
+                IconButton(onClick = { navigator.pop() }) {
+                    Icon(
+                        imageVector = Icons.Default.NavigateBefore,
+                        contentDescription = "Navigate back"
                     )
                 }
             }
