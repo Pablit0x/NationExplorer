@@ -84,7 +84,7 @@ class FlagGameScreen : Screen {
                     viewModel.startNewGame()
                 },
                 navigateToLeaderboard = {
-                    navigator.push(item = LeaderboardScreen())
+                    navigator.replace(item = LeaderboardScreen())
                 })
 
             AnimatedVisibility(
