@@ -52,7 +52,6 @@
     <string name="time">Time:</string>
     <string name="score">Score:</string>
     <string name="view_leaderboard">View Online Leaderboard</string>
-    <string name="username_tooltip">Your username will appear on the game's leaderboard and cannot
-        be changed later.
+    <string name="username_tooltip">Your username will appear on the game's leaderboard and cannot be changed later.
     </string>
 </resources>

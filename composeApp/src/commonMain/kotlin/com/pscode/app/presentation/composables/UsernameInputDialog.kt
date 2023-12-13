@@ -72,7 +72,8 @@ fun UsernameInputDialog(
                 },
                 trailingIcon = {
                     if (username.isEmpty()) {
-                        PlainTooltipBox(containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        PlainTooltipBox(modifier = Modifier.padding(4.dp),
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             shape = RoundedCornerShape(percent = 10),
                             tooltipState = tooltipState,
                             tooltip = {
