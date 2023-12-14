@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.isUnspecified
 
@@ -20,7 +21,8 @@ fun AutoResizedText(
     style: TextStyle = MaterialTheme.typography.bodyMedium,
     textAlign: TextAlign = TextAlign.Center,
     modifier: Modifier = Modifier,
-    color: Color = style.color
+    color: Color = style.color,
+    fontWeight: FontWeight = FontWeight.Normal
 ) {
     var resizedTextStyle by remember {
         mutableStateOf(style)
@@ -31,8 +33,7 @@ fun AutoResizedText(
 
     val defaultFontSize = MaterialTheme.typography.bodyMedium.fontSize
 
-    Text(
-        text = text,
+    Text(text = text,
         color = color,
         modifier = modifier.drawWithContent {
             if (shouldDraw) {
@@ -41,6 +42,7 @@ fun AutoResizedText(
         },
         textAlign = textAlign,
         softWrap = false,
+        fontWeight = fontWeight,
         style = resizedTextStyle,
         onTextLayout = { result ->
             if (result.didOverflowWidth) {
@@ -55,6 +57,5 @@ fun AutoResizedText(
             } else {
                 shouldDraw = true
             }
-        }
-    )
+        })
 }

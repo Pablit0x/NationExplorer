@@ -2,11 +2,9 @@ package com.pscode.app.data.repository
 
 import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.MongoRepository
-import com.pscode.app.utils.Constants.APP_ID
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
-import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.User
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +15,6 @@ class MongoRepositoryImpl(
     private val user: User?,
 ) : MongoRepository {
 
-    private val app = App.create(APP_ID)
-//    private val user = app.currentUser
     private lateinit var realm: Realm
 
     init {
@@ -37,20 +33,30 @@ class MongoRepositoryImpl(
     }
 
     override fun getResults(): Flow<List<Result>> {
-        return realm.query<Result>().asFlow().map { it.list }
+        return realm.query<Result>().asFlow().map { listOfResults ->
+            listOfResults.list.sortedWith(
+                compareBy({ -it.score }, { it.timeMillis })
+            )
+        }
     }
 
-    override suspend fun insertResult(result: Result) {
+    override suspend fun upsertResult(result: Result) {
         if (user != null) {
             realm.write {
-                try {
+                val queriedResult =
+                    query<Result>("userId == $0", result.userId).find().firstOrNull()
+                if (queriedResult == null) {
                     copyToRealm(result.apply {
                         userId = user.id
                     })
-                } catch (ignored: Exception) {
+                } else {
+                    run {
+                        queriedResult.score = result.score
+                        queriedResult.time = result.time
+                        queriedResult.timeMillis = result.timeMillis
+                    }
                 }
             }
         }
     }
-
 }

@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface MongoRepository {
     fun configureRealm()
     fun getResults(): Flow<List<Result>>
-    suspend fun insertResult(result: Result)
+    suspend fun upsertResult(result: Result)
 }

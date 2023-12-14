@@ -35,6 +35,7 @@ import com.pscode.app.presentation.composables.RoundHeadlineText
 import com.pscode.app.presentation.composables.UsernameInputDialog
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.LeaderboardScreen
+import com.pscode.app.utils.Constants.NUMBER_OF_ROUNDS
 import org.koin.compose.koinInject
 
 class FlagGameScreen : Screen {
@@ -70,12 +71,12 @@ class FlagGameScreen : Screen {
                 isOpen = showUsernameInputDialog, onNextClicked = viewModel::setUserName
             )
 
-            GameResultsDialog(score = "$score/${FlagGameViewModel.NUMBER_OF_ROUNDS}",
+            GameResultsDialog(score = "$score/${NUMBER_OF_ROUNDS}",
                 time = stopWatchTime,
                 pbMessage = if (isNewPersonalBest) {
                     SharedRes.string.new_personal_best
                 } else {
-                    SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${FlagGameViewModel.NUMBER_OF_ROUNDS}, ${personalBest.second})")
+                    SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${NUMBER_OF_ROUNDS}, ${personalBest.second})")
                 },
                 isOpen = showScore,
                 newBest = isNewPersonalBest,
@@ -103,7 +104,7 @@ class FlagGameScreen : Screen {
 
                             CustomLinearProgressIndicator(
                                 currentRound = round,
-                                numberOfRounds = FlagGameViewModel.NUMBER_OF_ROUNDS,
+                                numberOfRounds = NUMBER_OF_ROUNDS,
                                 modifier = Modifier.fillMaxWidth(0.7f)
                             )
 

@@ -1,17 +1,16 @@
 package com.pscode.app.presentation.screens.countries.flag_game.game
 
-import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.utils.Constants
-import com.pscode.app.utils.Constants.APP_ID
+import com.pscode.app.utils.Constants.DEFAULT_TIME
+import com.pscode.app.utils.Constants.DELAY_MILLIS
+import com.pscode.app.utils.Constants.NUMBER_OF_ROUNDS
 import com.pscode.app.utils.Response
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -30,12 +29,6 @@ class FlagGameViewModel(
     private val savedResults: Settings,
     private val mongoRepository: MongoRepository
 ) : ViewModel() {
-
-    companion object {
-        const val NUMBER_OF_ROUNDS = 10
-        const val DEFAULT_TIME = "00:00:000"
-        const val DELAY_MILLIS = 50L
-    }
 
     init {
         getAllCountries()
@@ -261,7 +254,7 @@ class FlagGameViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            mongoRepository.insertResult(result)
+            mongoRepository.upsertResult(result)
         }
     }
 
