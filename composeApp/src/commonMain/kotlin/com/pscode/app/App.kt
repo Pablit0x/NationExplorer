@@ -32,6 +32,7 @@ import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 import com.pscode.app.presentation.theme.AppTheme
+import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 
@@ -53,14 +54,13 @@ internal fun App() {
 
         AppTheme {
             Navigator(
-                screen = LeaderboardScreen()
-//                OverviewScreen(
-//                    viewModel = overviewViewModel, onShowSnackBar = { errorMsg ->
-//                        scope.launch {
-//                            snackBarHostState.showSnackbar(message = errorMsg)
-//                        }
-//                    }, lazyListState = listState
-//                )
+                screen = OverviewScreen(
+                    viewModel = overviewViewModel, onShowSnackBar = { errorMsg ->
+                        scope.launch {
+                            snackBarHostState.showSnackbar(message = errorMsg)
+                        }
+                    }, lazyListState = listState
+                )
             ) { navigator ->
                 Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                     topBar = {
