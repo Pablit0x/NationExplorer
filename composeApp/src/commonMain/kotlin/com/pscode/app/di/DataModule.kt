@@ -23,22 +23,24 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.User
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-val httpClient = HttpClient {
-    install(ContentNegotiation) {
-        json(Json {
-            ignoreUnknownKeys = true
-        })
-    }
-}
-
-
 val dataModule = module {
-    single<CountryApi> { CountryApiImpl(httpClient = httpClient) }
-    single<WeatherApi> { WeatherApiImpl(httpClient = httpClient) }
-    single<GeoLocationApi> { GeoLocationApiImpl(httpClient = httpClient) }
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
+    }
+    single<User?> { App.create(APP_ID).currentUser }
+    single<CountryApi> { CountryApiImpl(httpClient = get()) }
+    single<WeatherApi> { WeatherApiImpl(httpClient = get()) }
+    single<GeoLocationApi> { GeoLocationApiImpl(httpClient = get()) }
     single<KStore<List<CountryOverview>>> { CountryCache().cache }
     single<Settings> { Settings() }
     single<CountryRepository> {
@@ -52,5 +54,5 @@ val dataModule = module {
         )
     }
     single<WeatherRepository> { WeatherRepositoryImpl(weatherApi = get()) }
-    single<MongoRepository> { MongoRepositoryImpl(user = App.create(APP_ID).currentUser) }
+    single<MongoRepository> { MongoRepositoryImpl(user = get()) }
 }
