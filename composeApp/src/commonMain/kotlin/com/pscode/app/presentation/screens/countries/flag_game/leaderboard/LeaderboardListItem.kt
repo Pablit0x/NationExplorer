@@ -1,8 +1,10 @@
 package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
@@ -20,12 +22,16 @@ import com.pscode.app.utils.Constants.NUMBER_OF_ROUNDS
 
 @Composable
 fun LeaderboardListItem(rank: Int, result: Result, modifier: Modifier = Modifier) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.height(IntrinsicSize.Max)
+    ) {
         Text(
             text = "$rank",
             modifier = Modifier.weight(0.5f)
                 .border(color = MaterialTheme.colorScheme.outlineVariant, width = 1.dp)
                 .padding(4.dp),
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.ExtraBold
         )
@@ -35,6 +41,7 @@ fun LeaderboardListItem(rank: Int, result: Result, modifier: Modifier = Modifier
             modifier = Modifier.weight(1f)
                 .border(color = MaterialTheme.colorScheme.outlineVariant, width = 1.dp)
                 .padding(4.dp),
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )
@@ -44,6 +51,7 @@ fun LeaderboardListItem(rank: Int, result: Result, modifier: Modifier = Modifier
             modifier = Modifier.weight(1f)
                 .border(color = MaterialTheme.colorScheme.outlineVariant, width = 1.dp)
                 .padding(4.dp),
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )
@@ -53,6 +61,7 @@ fun LeaderboardListItem(rank: Int, result: Result, modifier: Modifier = Modifier
             modifier = Modifier.weight(1f)
                 .border(color = MaterialTheme.colorScheme.outlineVariant, width = 1.dp)
                 .padding(4.dp),
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )

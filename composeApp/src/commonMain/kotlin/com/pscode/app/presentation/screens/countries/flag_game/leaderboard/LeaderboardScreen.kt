@@ -25,7 +25,7 @@ class LeaderboardScreen : Screen {
         LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
 
             stickyHeader {
-                LeaderboardHeader(modifier = Modifier.fillMaxWidth())
+                LeaderboardHeader(modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp))
             }
 
             itemsIndexed(items = results) { index, result ->

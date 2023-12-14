@@ -25,48 +25,48 @@ import com.pscode.app.SharedRes
 fun LeaderboardHeader(modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = modifier.border(
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.tertiaryContainer,
             width = 1.dp,
             shape = RoundedCornerShape(topStartPercent = 10, topEndPercent = 10)
-        )
+        ).background(color = MaterialTheme.colorScheme.background)
     ) {
         Text(
             text = SharedRes.string.rank_leaderboard,
             modifier = Modifier.weight(0.5f).border(
-                    color = MaterialTheme.colorScheme.primary, width = 1.dp
-                ).padding(4.dp),
+                color = MaterialTheme.colorScheme.tertiaryContainer, width = 1.dp
+            ).padding(4.dp),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.ExtraBold
         )
 
         Text(
             text = SharedRes.string.name_leaderboard,
             modifier = Modifier.weight(1f).border(
-                color = MaterialTheme.colorScheme.primary, width = 1.dp
+                color = MaterialTheme.colorScheme.tertiaryContainer, width = 1.dp
             ).padding(4.dp),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.ExtraBold
         )
 
         Text(
             text = SharedRes.string.score_leaderboard,
             modifier = Modifier.weight(1f).border(
-                color = MaterialTheme.colorScheme.primary, width = 1.dp
+                color = MaterialTheme.colorScheme.tertiaryContainer, width = 1.dp
             ).padding(4.dp),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.ExtraBold
         )
 
         Text(
             text = SharedRes.string.time_leaderboard,
             modifier = Modifier.weight(1f).border(
-                color = MaterialTheme.colorScheme.primary, width = 1.dp
+                color = MaterialTheme.colorScheme.tertiaryContainer, width = 1.dp
             ).padding(4.dp),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.ExtraBold
         )
     }
