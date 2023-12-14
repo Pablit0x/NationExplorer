@@ -21,6 +21,7 @@ class LeaderboardScreen : Screen {
     override fun Content() {
         val viewModel = koinInject<LeaderboardViewModel>()
         val results by viewModel.results.collectAsState()
+        val currentUser = viewModel.currentUser
 
         LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
 
@@ -30,7 +31,10 @@ class LeaderboardScreen : Screen {
 
             itemsIndexed(items = results) { index, result ->
                 LeaderboardListItem(
-                    rank = index + 1, result = result, modifier = Modifier.fillMaxWidth()
+                    rank = index + 1,
+                    result = result,
+                    currentUser = currentUser,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

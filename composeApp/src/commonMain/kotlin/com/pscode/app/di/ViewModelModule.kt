@@ -18,5 +18,9 @@ val viewModelModule = module {
             countryRepository = get(), savedResults = get(), mongoRepository = get()
         )
     }
-    single<LeaderboardViewModel> { LeaderboardViewModel(mongoRepository = get()) }
+    single<LeaderboardViewModel> {
+        LeaderboardViewModel(
+            mongoRepository = get(), currentUser = get()
+        )
+    }
 }
