@@ -3,7 +3,7 @@
 
     <application
         android:name=".AndroidApp"
-        android:icon="@android:drawable/ic_menu_compass"
+        android:icon="@drawable/app_icon_android"
         android:label="Nation Explorer"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity

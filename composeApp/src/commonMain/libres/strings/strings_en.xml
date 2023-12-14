@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fun App</string>
+    <string name="app_name">Nation Explorer</string>
     <string name="search">Search</string>
     <string name="weather">Weather</string>
     <string name="weather_in">Weather in</string>
