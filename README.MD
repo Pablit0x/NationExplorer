@@ -3,8 +3,11 @@
 
 Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users with an engaging experience to discover and interact with countries across the globe.
 
+**Compose Multiplatform**
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/08b52b4e-c9e6-47d8-a410-87693dab7b7f" alt="Logo" height="70"> 
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/f32b676e-c1f8-44d9-8015-4819e2330337" alt="Logo" height="70"> 
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/062bec05-07fc-43e3-b055-3a4472b47c91" alt="Logo" height="70"> 
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/6a02831b-019b-4c44-be99-4e91b3b29048" alt="Logo" height="70"> 
 
 ## Features
 
@@ -33,13 +36,13 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 
 ## Screenshots
 
-### iOS <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/f32b676e-c1f8-44d9-8015-4819e2330337" alt="Logo" width="40" height="40"> 
+### iOS <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/f32b676e-c1f8-44d9-8015-4819e2330337" alt="Logo" height="70"> 
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/6a6e4115-9936-43ad-bfdd-3bac630a4da1)
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/40c33947-799e-4352-a43b-0c1a5746ab62)
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/fd93a498-a395-4f80-a3bf-7eebbfd26665)
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/21d303c7-8899-4ebe-908e-1c2fe5a68e42)
 
-### Android <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/08b52b4e-c9e6-47d8-a410-87693dab7b7f" alt="Logo" width="40" height="40"> 
+### Android <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/08b52b4e-c9e6-47d8-a410-87693dab7b7f" alt="Logo" height="70"> 
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/523d1e80-27a5-4887-a6ce-9265ad15e02b)
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/7e735609-6f42-444f-88ba-066271469c4f)
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/1bd2e3b4-92f7-4ac7-82cf-ecf3005d1e41)
