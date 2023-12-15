@@ -14,7 +14,7 @@ Nation Explorer is a powerful Compose Multiplatform mobile app that offers an ex
 
 - **Koin**: Dependency injection ([Koin](https://github.com/InsertKoinIO/koin))
 - **Voyager**: Navigation ([Voyager](https://voyager.adriel.cafe/))
-- **Ktor Client & Kotlin Serialization**: HTTP client for making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
+- **Ktor Client & Kotlin Serialization**: Making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
 - **Google Maps & Apple Maps**: Map integrations
 - **Weather, Country, and Geolocation APIs**: Data sources 
 - **MongoDB Device Sync**: Online leaderboard with live updates ([MongoDb Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
