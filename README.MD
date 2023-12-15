@@ -18,7 +18,7 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 - **Ktor Client & Kotlin Serialization**: Making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
 - **Google Maps & Apple Maps**: Map integrations ([Google Maps](https://developers.google.com/maps/documentation/android-sdk/maps-compose), [Apple Maps](https://developer.apple.com/documentation/mapkit/))
 - **Weather, Country, and Geolocation APIs**: Data sources([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/))
-- **MongoDB Device Sync**: Online leaderboard with live updates ([MongoDb Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
+- **MongoDB Device Sync**: Online leaderboard with live updates ([MongoDB Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
 - **MOKO MVVM**: ViewModel sharing ([MOKO MVVM](https://github.com/icerockdev/moko-mvvm))
 - **Multiplatform Settings**: Persistent key-value pair storage ([Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings))
 - **KStore**: Caching for offline support ([KStore](https://github.com/xxfast/KStore))
