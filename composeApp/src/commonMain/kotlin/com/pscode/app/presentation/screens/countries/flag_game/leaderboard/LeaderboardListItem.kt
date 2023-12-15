@@ -34,15 +34,15 @@ fun LeaderboardListItem(
             Text(
                 text = "$rank",
                 modifier = Modifier.weight(0.5f).padding(vertical = 8.dp),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.ExtraBold
             )
 
-            Text(
+            AutoResizedText(
                 text = result.username,
                 modifier = Modifier.weight(1f).padding(vertical = 8.dp),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Medium,
             )
@@ -50,7 +50,7 @@ fun LeaderboardListItem(
             AutoResizedText(
                 text = "${result.score}/$NUMBER_OF_ROUNDS",
                 modifier = Modifier.weight(1f).padding(vertical = 8.dp),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.End,
                 fontWeight = FontWeight.Medium
             )
@@ -58,7 +58,7 @@ fun LeaderboardListItem(
             AutoResizedText(
                 text = result.time,
                 modifier = Modifier.weight(1f).padding(vertical = 8.dp),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.End,
                 fontWeight = FontWeight.Medium
             )

@@ -53,7 +53,8 @@ fun TopRankItem(
             AutoResizedText(
                 text = result.username,
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(4.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))

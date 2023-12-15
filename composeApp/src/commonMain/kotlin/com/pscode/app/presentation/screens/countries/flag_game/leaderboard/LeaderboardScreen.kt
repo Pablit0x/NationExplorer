@@ -57,7 +57,7 @@ class LeaderboardScreen : Screen {
                                 rank = 2,
                                 result = results[1],
                                 borderGradientColors = Gradients.SILVER,
-                                modifier = Modifier.weight(1f).height(160.dp)
+                                modifier = Modifier.weight(1f).height(165.dp)
                             )
 
                             TopRankItem(
@@ -71,7 +71,7 @@ class LeaderboardScreen : Screen {
                                 rank = 3,
                                 result = results[2],
                                 borderGradientColors = Gradients.BRONZE,
-                                modifier = Modifier.weight(1f).height(140.dp)
+                                modifier = Modifier.weight(1f).height(150.dp)
                             )
                         }
 
