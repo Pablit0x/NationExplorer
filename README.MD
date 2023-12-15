@@ -7,11 +7,6 @@
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/ae5f4baa-ec63-459f-bf62-b3ca3597c9b2" width="360">
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/40e542c3-3768-4a30-ad77-a2f6bd62933f" width="360">
 
-
-<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/ee82105f-a981-4baf-a5f4-93f89c42d623" width="360">
-<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/b61e52fc-703b-4436-b0d4-a1675d176382" width="360">
-
-
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/ee82105f-a981-4baf-a5f4-93f89c42d623" width="360">
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/bc588619-865f-4f39-b6a0-090c115f7428" width="360">
 
@@ -22,4 +17,4 @@
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/d3ec6d41-3211-498b-a63d-be343f58bff8" width="360">
 
 
-<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/2f801878-bf65-46f5-be83-d77d55468acc" width="360">
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/2f801878-bf65-46f5-be83-d77d55468acc" width="500">
