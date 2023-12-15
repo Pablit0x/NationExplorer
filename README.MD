@@ -13,6 +13,7 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 
 ## Tech Stack
 
+- **Compose Multiplatform**
 - **Koin**: Dependency Injection ([Koin](https://github.com/InsertKoinIO/koin))
 - **Voyager**: Navigation ([Voyager](https://voyager.adriel.cafe/))
 - **Ktor Client & Kotlin Serialization**: Making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
