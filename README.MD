@@ -7,4 +7,4 @@
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/40c33947-799e-4352-a43b-0c1a5746ab62">
 <br>
 <br>
-<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/55aaf8ce-9d7a-41bb-9bf5-91f1fe06469f">
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/21d303c7-8899-4ebe-908e-1c2fe5a68e42">
