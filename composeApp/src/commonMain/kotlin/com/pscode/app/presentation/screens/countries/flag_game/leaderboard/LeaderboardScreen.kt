@@ -22,6 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.theme.Gradients
 import org.koin.compose.koinInject
 
@@ -33,19 +36,24 @@ class LeaderboardScreen : Screen {
         val viewModel = koinInject<LeaderboardViewModel>()
         val results by viewModel.results.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
 
 
         if (isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.fillMaxSize().navigateBackOnDrag(onNavigateBack = {
+                navigator.popUntilRoot()
+            }), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(16.dp)
+                    .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
             ) {
                 stickyHeader {
                     Column(
-                        modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.background),
+                        modifier = Modifier.fillMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.background),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Row(
@@ -78,8 +86,7 @@ class LeaderboardScreen : Screen {
                         Spacer(modifier = Modifier.height(32.dp))
 
                         LeaderboardHeader(
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(horizontal = 8.dp)
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
                                 .background(color = MaterialTheme.colorScheme.background)
                         )
                     }
