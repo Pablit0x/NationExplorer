@@ -1,4 +1,29 @@
-# Compose Multiplatform Application - Nation Explorer
+# Nation Explorer - Compose Multiplatform App
+
+Nation Explorer is a powerful Compose Multiplatform mobile app that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users with an engaging experience to discover and interact with countries across the globe.
+
+## Features
+
+- **Country Details**: Explore comprehensive information about countries, including flags, capital cities, area, languages spoken, currency, population, and timezones.
+- **Interactive Maps**: View countries on maps using Google Maps for Android and Apple Maps for iOS.
+- **Real-time Weather**: Get up-to-date weather updates for each country's capital city.
+- **Engaging Game**: Test your knowledge by matching flags to their respective countries.
+- **Online Leaderboard**: Compete globally and track your progress on the leaderboard.
+
+## Tech Stack
+
+- **Koin**: Dependency injection ([Koin](https://github.com/InsertKoinIO/koin))
+- **Voyager**: Navigation ([Voyager](https://voyager.adriel.cafe/))
+- **Ktor Client & Kotlin Serialization**: HTTP client for making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
+- **Google Maps & Apple Maps**: Map integrations
+- **Weather, Country, and Geolocation APIs**: Data sources 
+- **MongoDB Device Sync**: Online leaderboard with live updates ([MongoDb Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
+- **MOKO MVVM**: ViewModel sharing ([MOKO MVVM](https://github.com/icerockdev/moko-mvvm))
+- **Multiplatform Settings**: Persistent key-value pair storage ([Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings))
+- **KStore**: Caching for offline support ([KStore](https://github.com/xxfast/KStore))
+- **Libres**: Resource sharing ([Libres](https://github.com/Skeptick/libres))
+- **Napier**: Logging library ([Napier](https://github.com/AAkira/Napier))
+- **Kamel**: Async media loading ([Kamel](https://github.com/Kamel-Media/Kamel))
 
 ## iOS Screenshots
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/6a6e4115-9936-43ad-bfdd-3bac630a4da1">
@@ -24,3 +49,5 @@
 <br>
 <br>
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/633e25b9-6ebe-442f-a653-bd03609eccdd">
+
+Feel free to contribute, report issues, or suggest enhancements!
