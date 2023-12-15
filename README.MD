@@ -1,4 +1,4 @@
-# Nation Explorer - Compose Multiplatform App
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/27b397b2-ef8e-4ace-a25b-1f6c7888a848" alt="Logo" width="40" height="40"># Nation Explorer - Compose Multiplatform App
 
 Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users with an engaging experience to discover and interact with countries across the globe.
 
@@ -24,6 +24,7 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 - **Libres**: Resource sharing ([Libres](https://github.com/Skeptick/libres))
 - **Napier**: Logging library ([Napier](https://github.com/AAkira/Napier))
 - **Kamel**: Async media loading ([Kamel](https://github.com/Kamel-Media/Kamel))
+- **Kotlin Flows and Coroutines**
 
 ## Screenshots
 
