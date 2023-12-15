@@ -20,7 +20,7 @@
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/7e735609-6f42-444f-88ba-066271469c4f">
 <br>
 <br>
-<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/633e25b9-6ebe-442f-a653-bd03609eccdd">
-<br>
-<br>
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/1bd2e3b4-92f7-4ac7-82cf-ecf3005d1e41">
+<br>
+<br>
+<img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/633e25b9-6ebe-442f-a653-bd03609eccdd">
