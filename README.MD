@@ -1,6 +1,6 @@
 # Compose Multiplatform Application - Nation Explorer
 
-## IOS Screenshots
+## iOS Screenshots
 <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/6a6e4115-9936-43ad-bfdd-3bac630a4da1">
 <br>
 <br>
