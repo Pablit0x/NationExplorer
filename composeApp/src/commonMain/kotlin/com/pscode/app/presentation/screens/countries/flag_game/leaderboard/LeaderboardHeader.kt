@@ -1,6 +1,5 @@
 package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,7 +14,7 @@ import com.pscode.app.SharedRes
 fun LeaderboardHeader(modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.background(color = MaterialTheme.colorScheme.background)
+        modifier = modifier
     ) {
         Text(
             text = SharedRes.string.rank_leaderboard,

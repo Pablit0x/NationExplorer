@@ -61,39 +61,42 @@ internal fun App() {
                     }, lazyListState = listState
                 )
             ) { navigator ->
-                Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        MainTopAppBar(navigator = navigator,
-                            selectedCountryName = selectedCountryName,
-                            scrollBehavior = scrollBehavior,
-                            searchWidgetState = searchWidgetState,
-                            searchTextState = searchText,
-                            onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
-                            onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
-                            onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
-                    },
-                    floatingActionButton = {
-                        if (navigator.lastItem is OverviewScreen) {
-                            ExtendedFloatingActionButton(
-                                onClick = {
-                                    navigator.push(item = FlagGameScreen())
-                                },
-                                icon = {
-                                    Icon(
-                                        imageVector = Icons.Default.Games,
-                                        contentDescription = "Play games"
-                                    )
-                                },
-                                text = {
-                                    Text(text = SharedRes.string.play_game)
-                                },
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                expanded = listState.isScrollingUp(),
-                            )
-                        }
-                    },
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
+                Scaffold(modifier = Modifier.then(
+                    if (navigator.lastItem is OverviewScreen) {
+                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    }
+                ), topBar = {
+                    MainTopAppBar(navigator = navigator,
+                        selectedCountryName = selectedCountryName,
+                        scrollBehavior = scrollBehavior,
+                        searchWidgetState = searchWidgetState,
+                        searchTextState = searchText,
+                        onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
+                        onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
+                        onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
+                }, floatingActionButton = {
+                    if (navigator.lastItem is OverviewScreen) {
+                        ExtendedFloatingActionButton(
+                            onClick = {
+                                navigator.push(item = FlagGameScreen())
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Games,
+                                    contentDescription = "Play games"
+                                )
+                            },
+                            text = {
+                                Text(text = SharedRes.string.play_game)
+                            },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            expanded = listState.isScrollingUp(),
+                        )
+                    }
+                }, snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { innerPadding ->
                     SlideTransition(
                         navigator = navigator,
                         modifier = Modifier.padding(paddingValues = innerPadding)
