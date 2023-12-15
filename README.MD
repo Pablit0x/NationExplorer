@@ -1,6 +1,6 @@
 # Nation Explorer - Compose Multiplatform App
 
-Nation Explorer is a powerful Compose Multiplatform mobile app that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users with an engaging experience to discover and interact with countries across the globe.
+Nation Explorer is a Compose Multiplatform mobile app that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users with an engaging experience to discover and interact with countries across the globe.
 
 ## Features
 
