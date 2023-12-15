@@ -20,9 +20,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import com.pscode.app.presentation.theme.Gradients
 import org.koin.compose.koinInject
 
 class LeaderboardScreen : Screen {
@@ -33,10 +33,6 @@ class LeaderboardScreen : Screen {
         val viewModel = koinInject<LeaderboardViewModel>()
         val results by viewModel.results.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
-
-        val silverGradient = listOf(Color(192, 192, 192), Color(169, 169, 169))
-        val goldGradient = listOf(Color(255, 215, 0), Color(255, 165, 0))
-        val bronzeGradient = listOf(Color(205, 127, 50), Color(139, 69, 19))
 
 
         if (isLoading) {
@@ -60,21 +56,21 @@ class LeaderboardScreen : Screen {
                             TopRankItem(
                                 rank = 2,
                                 result = results[1],
-                                borderGradientColors = silverGradient,
+                                borderGradientColors = Gradients.SILVER,
                                 modifier = Modifier.weight(1f).height(160.dp)
                             )
 
                             TopRankItem(
                                 rank = 1,
                                 result = results[0],
-                                borderGradientColors = goldGradient,
+                                borderGradientColors = Gradients.GOLD,
                                 modifier = Modifier.weight(1f).height(180.dp)
                             )
 
                             TopRankItem(
                                 rank = 3,
                                 result = results[2],
-                                borderGradientColors = bronzeGradient,
+                                borderGradientColors = Gradients.BRONZE,
                                 modifier = Modifier.weight(1f).height(140.dp)
                             )
                         }
@@ -93,6 +89,7 @@ class LeaderboardScreen : Screen {
                     LeaderboardListItem(
                         rank = index + 1,
                         result = result,
+                        isCurrentUser = viewModel.currentUser?.id == result.userId,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
                     )
                 }

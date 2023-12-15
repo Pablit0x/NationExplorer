@@ -44,7 +44,7 @@ class MongoRepositoryImpl(
         if (user != null) {
             realm.write {
                 val queriedResult =
-                    query<Result>(query = "userId == $0", result.userId).find().firstOrNull()
+                    query<Result>(query = "userId == $0", user.id).find().firstOrNull()
                 if (queriedResult == null) {
                     copyToRealm(result.apply {
                         userId = user.id

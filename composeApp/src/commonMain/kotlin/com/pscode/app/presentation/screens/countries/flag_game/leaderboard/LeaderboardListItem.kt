@@ -3,6 +3,7 @@ package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,9 +19,14 @@ import com.pscode.app.utils.Constants.NUMBER_OF_ROUNDS
 
 @Composable
 fun LeaderboardListItem(
-    rank: Int, result: Result, modifier: Modifier = Modifier
+    rank: Int, result: Result, isCurrentUser: Boolean, modifier: Modifier = Modifier
 ) {
-    ElevatedCard(modifier = modifier) {
+    ElevatedCard(
+        modifier = modifier, colors = if (isCurrentUser) CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+        ) else CardDefaults.elevatedCardColors()
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)

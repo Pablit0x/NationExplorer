@@ -54,7 +54,9 @@ fun UsernameInputDialog(
             )
         }, confirmButton = {
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                FilledTonalButton(onClick = {
+                FilledTonalButton(
+                    enabled = username.isNotBlank(),
+                    onClick = {
                     onNextClicked(username)
                 }) {
                     Text(text = SharedRes.string.next)
@@ -66,7 +68,11 @@ fun UsernameInputDialog(
             OutlinedTextField(shape = RoundedCornerShape(percent = 10),
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
                 value = username,
-                onValueChange = { username = it },
+                onValueChange = {
+                    if (it.length < 16) {
+                        username = it.uppercase()
+                    }
+                },
                 placeholder = {
                     Text(text = SharedRes.string.username_placeholder)
                 },

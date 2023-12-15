@@ -66,3 +66,9 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 internal val seed = Color(0xFF2C3639)
+
+object Gradients {
+    val GOLD = listOf(Color(255, 215, 0), Color(255, 165, 0))
+    val SILVER = listOf(Color(192, 192, 192), Color(169, 169, 169))
+    val BRONZE = listOf(Color(205, 127, 50), Color(139, 69, 19))
+}
