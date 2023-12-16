@@ -25,16 +25,16 @@ class GeoLocationApiImpl(val httpClient: HttpClient) : GeoLocationApi {
                 url("${baseUrl}json?q=URI-ENCODED-$countryName&key=${BuildConfig.GEO_LOCATION_API_KEY}")
             }.body<LocationDto>())
         } catch (e: IOException) {
-            Response.Error("Network error: ${e.message}")
+            Response.Error("Network issue")
         } catch (e: ClientRequestException) {
-            Response.Error("Client request error: ${e.response.status.description}")
+            Response.Error("Invalid request.")
         } catch (e: ServerResponseException) {
-            Response.Error("Server response error: ${e.response.status.description}")
+            Response.Error("Server unavailable.")
         } catch (e: HttpRequestTimeoutException) {
-            Response.Error("Request timeout: ${e.message}")
+            Response.Error("Request timed out.")
         } catch (e: Exception) {
             if (e is CancellationException) throw e
-            Response.Error("Unexpected error: ${e.message}")
+            Response.Error("Unexpected issue occurred.")
         }
     }
 }

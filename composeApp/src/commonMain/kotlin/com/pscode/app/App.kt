@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import com.pscode.app.di.connectivityModule
 import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.composables.MainTopAppBar
@@ -31,9 +32,11 @@ import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 import com.pscode.app.presentation.theme.AppTheme
+import com.pscode.app.utils.NetworkConnectivity
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +45,11 @@ internal fun App() {
     val snackBarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val listState = rememberLazyListState()
+    val networkConnectivity = NetworkConnectivity()
 
 
-    KoinApplication(moduleList = { listOf(dataModule, viewModelModule) }) {
+
+    KoinApplication(moduleList = { listOf(dataModule, viewModelModule, connectivityModule) }) {
 
         val overviewViewModel = koinInject<OverviewViewModel>()
         val searchWidgetState by overviewViewModel.searchWidgetState.collectAsState()

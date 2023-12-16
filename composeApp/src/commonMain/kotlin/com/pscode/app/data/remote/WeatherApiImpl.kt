@@ -26,16 +26,16 @@ class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
                 header("X-Api-Key", BuildConfig.WEATHER_API_KEY)
             }.body<WeatherDto>())
         } catch (e: IOException) {
-            Response.Error("Network error: ${e.message}")
+            Response.Error("Network issue")
         } catch (e: ClientRequestException) {
-            Response.Error("Client request error: ${e.response.status.description}")
+            Response.Error("Invalid request.")
         } catch (e: ServerResponseException) {
-            Response.Error("Server response error: ${e.response.status.description}")
+            Response.Error("Server unavailable.")
         } catch (e: HttpRequestTimeoutException) {
-            Response.Error("Request timeout: ${e.message}")
+            Response.Error("Request timed out.")
         } catch (e: Exception) {
             if (e is CancellationException) throw e
-            Response.Error("Unexpected error: ${e.message}")
+            Response.Error("Unexpected issue occurred.")
         }
     }
 }

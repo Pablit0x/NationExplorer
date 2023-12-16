@@ -25,16 +25,16 @@ class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
                 url(baseUrl)
             }.body<List<CountryDto>>().sortedBy { it.name.common }.map { it.toCountry() })
         } catch (e: IOException) {
-            Response.Error("Network error: ${e.message}")
+            Response.Error("Network issue")
         } catch (e: ClientRequestException) {
-            Response.Error("Client request error: ${e.response.status.description}")
+            Response.Error("Invalid request.")
         } catch (e: ServerResponseException) {
-            Response.Error("Server response error: ${e.response.status.description}")
+            Response.Error("Server unavailable.")
         } catch (e: HttpRequestTimeoutException) {
-            Response.Error("Request timeout: ${e.message}")
+            Response.Error("Request timed out.")
         } catch (e: Exception) {
             if (e is CancellationException) throw e
-            Response.Error("Unexpected error: ${e.message}")
+            Response.Error("Unexpected issue occurred.")
         }
     }
 }
