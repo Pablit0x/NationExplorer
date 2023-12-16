@@ -13,8 +13,9 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 
 ## Tech Stack
 
-- **Koin**: Dependency Injection ([Koin](https://github.com/InsertKoinIO/koin))
-- **Voyager**: Navigation ([Voyager](https://voyager.adriel.cafe/))
+- **Compose Multiplatform**: UI framework that allows building declarative UIs for multiple platforms (Android, iOS, Desktop, Web)
+- **Koin**: Dependency Injection framework([Koin](https://github.com/InsertKoinIO/koin))
+- **Voyager**: Navigation library([Voyager](https://voyager.adriel.cafe/))
 - **Ktor Client & Kotlin Serialization**: Making requests and handling responses ([Ktor](https://github.com/ktorio/ktor))
 - **Google Maps & Apple Maps**: Map integrations ([Google Maps](https://developers.google.com/maps/documentation/android-sdk/maps-compose), [Apple Maps](https://developer.apple.com/documentation/mapkit/))
 - **Weather, Country, and Geolocation APIs**: Data sources([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/))
@@ -25,7 +26,7 @@ Nation Explorer is a Compose Multiplatform mobile app (**iOS and Android**) that
 - **Libres**: Resource sharing ([Libres](https://github.com/Skeptick/libres))
 - **Napier**: Logging library ([Napier](https://github.com/AAkira/Napier))
 - **Kamel**: Async media loading ([Kamel](https://github.com/Kamel-Media/Kamel))
-- **Kotlin Flows and Coroutines**
+- **Kotlin Coroutines and Flows**: Managing asynchronous tasks and sequences for responsive and concurrent programming 
 
 ## Screenshots
 
