@@ -30,9 +30,23 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**iOS and A
 
 ## Demo Video
 
-| iOS | Android |
-| --- | ------- |
-| [![iOS Video](https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac)](https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac) | [![Android Video](https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32)](https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32) |
+## Demo Videos
+
+<div style="display:flex;">
+  <div style="flex:1;margin-right:5px;">
+    <video width="320" height="240" controls>
+      <source src="https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="flex:1;margin-left:5px;">
+    <video width="320" height="240" controls>
+      <source src="https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
 
 
 ## Screenshots
