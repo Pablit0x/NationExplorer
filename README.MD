@@ -10,6 +10,7 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**for both 
 - **Real-time Weather**: Get up-to-date weather updates for each country's capital city.
 - **Engaging Game**: Test your knowledge by matching flags to their respective countries.
 - **Online Leaderboard**: Compete globally and track your progress on the leaderboard.
+- **Offline First**: Use all features offline post the app's first use, excluding live weather updates. Once it connects to the internet initially, it operates offline seamlessly.
 
 ## Tech Stack
 
