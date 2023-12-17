@@ -29,9 +29,5 @@ actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modi
         position = cameraPosition
     }
 
-    GoogleMap(
-        modifier = modifier,
-        cameraPositionState = cameraPositionState,
-
-        )
+    GoogleMap(modifier = modifier, cameraPositionState = cameraPositionState)
 }

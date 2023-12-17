@@ -52,9 +52,8 @@ class DetailScreen(
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
         val networkStatus by viewModel.connectivityStatus.collectAsState()
-        val sheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = true
-        )
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val didFetchFail by viewModel.didFetchFail.collectAsState()
 
         LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
@@ -66,18 +65,21 @@ class DetailScreen(
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.getGeoLocation(countryName = selectedCountry.name)
+            viewModel.getWeatherByCity(country = selectedCountry)
+        }
+
         LaunchedEffect(networkStatus) {
-            when (networkStatus) {
-                Status.Available -> {
-                    if (geoLocation == null) {
+            if (didFetchFail) {
+                when (networkStatus) {
+                    Status.Available -> {
                         viewModel.getGeoLocation(countryName = selectedCountry.name)
-                    }
-                    if (weatherOverview == null) {
                         viewModel.getWeatherByCity(country = selectedCountry)
                     }
-                }
 
-                else -> {}
+                    else -> {}
+                }
             }
         }
 
@@ -130,11 +132,13 @@ class DetailScreen(
                             if (showMap) {
                                 ModalBottomSheet(sheetState = sheetState,
                                     onDismissRequest = { viewModel.hideMap() }) {
-                                    MapView(
-                                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
-                                        countryArea = selectedCountry.area,
-                                        locationOverview = geoLocation!!
-                                    )
+                                    geoLocation?.let {
+                                        MapView(
+                                            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
+                                            countryArea = selectedCountry.area,
+                                            locationOverview = it
+                                        )
+                                    }
                                 }
                             }
                         }

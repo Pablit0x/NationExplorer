@@ -1,6 +1,7 @@
 package com.pscode.app.di
 
 import com.pscode.app.data.cache.CountryCache
+import com.pscode.app.data.cache.GeoLocationCache
 import com.pscode.app.data.remote.CountryApiImpl
 import com.pscode.app.data.remote.GeoLocationApiImpl
 import com.pscode.app.data.remote.WeatherApiImpl
@@ -50,7 +51,7 @@ val dataModule = module {
     }
     single<GeoLocationRepository> {
         GeoLocationRepositoryImpl(
-            geoLocationApi = get()
+            geoLocationApi = get(), geoLocationCache = GeoLocationCache().cache
         )
     }
     single<WeatherRepository> { WeatherRepositoryImpl(weatherApi = get()) }

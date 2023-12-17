@@ -44,6 +44,9 @@ class DetailViewModel(
     private val _geoLocation = MutableStateFlow<LocationOverview?>(null)
     val geoLocation = _geoLocation.asStateFlow()
 
+    private val _didFetchFail = MutableStateFlow(false)
+    val didFetchFail = _didFetchFail.asStateFlow()
+
     fun getGeoLocation(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = geoLocationRepository.getGeoLocationByCountry(
@@ -57,7 +60,9 @@ class DetailViewModel(
                     }
                 }
 
-                is Response.Error -> {}
+                is Response.Error -> {
+                    _didFetchFail.update { true }
+                }
             }
         }
     }
@@ -75,7 +80,9 @@ class DetailViewModel(
                         }
                     }
 
-                    is Response.Error -> {}
+                    is Response.Error -> {
+                        _didFetchFail.update { true }
+                    }
                 }
             }
         }
@@ -91,6 +98,7 @@ class DetailViewModel(
 
     fun clear() {
         _showMap.update { false }
+        _didFetchFail.update { false }
         _cityWeather.update { null }
         _geoLocation.update { null }
     }
