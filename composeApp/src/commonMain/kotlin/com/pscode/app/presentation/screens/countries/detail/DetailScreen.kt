@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import com.pscode.app.presentation.composables.MapView
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.utils.Status
 import org.koin.compose.koinInject
 
 class DetailScreen(
@@ -49,7 +51,7 @@ class DetailScreen(
         val errorsChannel = viewModel.errorEventsChannelFlow
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
-
+        val networkStatus by viewModel.connectivityStatus.collectAsState()
         val sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true
         )
@@ -64,10 +66,25 @@ class DetailScreen(
             }
         }
 
-        LaunchedEffect(Unit) {
-            viewModel.getGeoLocation(countryName = selectedCountry.name)
-            selectedCountry.capitals.firstOrNull()?.let { capital ->
-                viewModel.getWeatherByCity(cityName = capital)
+        LaunchedEffect(networkStatus) {
+            when (networkStatus) {
+                Status.Available -> {
+                    if (geoLocation == null) {
+                        viewModel.getGeoLocation(countryName = selectedCountry.name)
+                    }
+                    if (weatherOverview == null) {
+                        viewModel.getWeatherByCity(country = selectedCountry)
+                    }
+                }
+
+                else -> {}
+            }
+        }
+
+
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.clear()
             }
         }
 

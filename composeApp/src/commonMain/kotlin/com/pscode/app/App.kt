@@ -32,7 +32,6 @@ import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 import com.pscode.app.presentation.theme.AppTheme
-import com.pscode.app.utils.NetworkConnectivity
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
@@ -45,8 +44,6 @@ internal fun App() {
     val snackBarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val listState = rememberLazyListState()
-    val networkConnectivity = NetworkConnectivity()
-
 
 
     KoinApplication(moduleList = { listOf(dataModule, viewModelModule, connectivityModule) }) {

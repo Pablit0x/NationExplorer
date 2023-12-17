@@ -58,4 +58,5 @@
     <string name="name_leaderboard">Name</string>
     <string name="time_leaderboard">Time</string>
     <string name="score_leaderboard">Score</string>
+    <string name="no_internet">No Internet Connection.</string>
 </resources>

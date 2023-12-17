@@ -9,7 +9,9 @@ import org.koin.dsl.module
 val viewModelModule = module {
     single<DetailViewModel> {
         DetailViewModel(
-            weatherRepository = get(), geoLocationRepository = get()
+            weatherRepository = get(),
+            geoLocationRepository = get(),
+            networkConnectivity = get()
         )
     }
     single<OverviewViewModel> { OverviewViewModel(countryRepository = get()) }

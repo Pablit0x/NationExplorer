@@ -25,7 +25,7 @@ class GeoLocationApiImpl(val httpClient: HttpClient) : GeoLocationApi {
                 url("${baseUrl}json?q=URI-ENCODED-$countryName&key=${BuildConfig.GEO_LOCATION_API_KEY}")
             }.body<LocationDto>())
         } catch (e: IOException) {
-            Response.Error("Network issue")
+            Response.Error("Network issue.")
         } catch (e: ClientRequestException) {
             Response.Error("Invalid request.")
         } catch (e: ServerResponseException) {

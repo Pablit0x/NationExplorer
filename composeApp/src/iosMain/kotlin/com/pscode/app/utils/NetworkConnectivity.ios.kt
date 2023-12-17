@@ -16,7 +16,7 @@ actual class NetworkConnectivity {
                 val status = when (nw_path_get_status(path)) {
                     nw_path_status_satisfied  -> Status.Available
                     nw_path_status_unsatisfied -> Status.Unavailable
-                    else -> Status.Lost
+                    else -> Status.Unavailable
                 }
                 launch { send(status) }
             }

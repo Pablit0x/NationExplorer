@@ -25,7 +25,7 @@ class CountryApiImpl(private val httpClient: HttpClient) : CountryApi {
                 url(baseUrl)
             }.body<List<CountryDto>>().sortedBy { it.name.common }.map { it.toCountry() })
         } catch (e: IOException) {
-            Response.Error("Network issue")
+            Response.Error("Network issue.")
         } catch (e: ClientRequestException) {
             Response.Error("Invalid request.")
         } catch (e: ServerResponseException) {

@@ -9,5 +9,5 @@ expect class NetworkConnectivity() {
 }
 
 enum class Status {
-    Available, Unavailable, Lost
+    Available, Unavailable, Idle
 }
