@@ -28,6 +28,12 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**iOS and A
 - **Kamel**: Async media loading ([Kamel](https://github.com/Kamel-Media/Kamel))
 - **Kotlin Coroutines and Flows**: Managing asynchronous tasks and sequences for responsive and concurrent programming 
 
+## Demo Video
+
+### Android
+https://github.com/Pablit0x/NationExplorer/assets/76017191/1296eaba-07ce-44d5-898a-c557d4982ae3
+
+
 ## Screenshots
 
 ### iOS
