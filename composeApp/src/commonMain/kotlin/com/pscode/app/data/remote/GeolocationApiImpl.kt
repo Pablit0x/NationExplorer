@@ -1,8 +1,8 @@
 package com.pscode.app.data.remote
 
 import FunApp.composeApp.BuildConfig
-import com.pscode.app.data.model.geo_location.LocationDto
-import com.pscode.app.domain.remote.GeoLocationApi
+import com.pscode.app.data.model.geolocation.LocationDto
+import com.pscode.app.domain.remote.GeolocationApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -14,10 +14,10 @@ import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CancellationException
 
-class GeoLocationApiImpl(val httpClient: HttpClient) : GeoLocationApi {
+class GeolocationApiImpl(val httpClient: HttpClient) : GeolocationApi {
     private val baseUrl = "https://api.opencagedata.com/geocode/v1/"
 
-    override suspend fun getGeoLocationByCountry(
+    override suspend fun getGeolocationByCountry(
         countryName: String
     ): Response<LocationDto> {
         return try {

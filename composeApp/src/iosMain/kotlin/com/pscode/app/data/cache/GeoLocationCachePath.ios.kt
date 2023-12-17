@@ -9,9 +9,9 @@ import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSString
 import platform.Foundation.NSUserDomainMask
 
-actual fun getGeoLocationCachePath(): GeoLocationCachePath = IOSGeoLocationCachePath()
+actual fun getGeolocationCachePath(): GeolocationCachePath = IOSGeolocationCachePath()
 
-class IOSGeoLocationCachePath : GeoLocationCachePath {
+class IOSGeolocationCachePath : GeolocationCachePath {
     @OptIn(BetaInteropApi::class)
     override val path: Path by lazy {
         autoreleasepool {

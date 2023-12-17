@@ -1,4 +1,4 @@
-package com.pscode.app.data.model.geo_location
+package com.pscode.app.data.model.geolocation
 
 
 import kotlinx.serialization.SerialName

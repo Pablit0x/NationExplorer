@@ -3,7 +3,7 @@ package com.pscode.app.presentation.screens.countries.detail
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.WeatherOverview
-import com.pscode.app.domain.repository.GeoLocationRepository
+import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.NetworkConnectivity
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val weatherRepository: WeatherRepository,
-    private val geoLocationRepository: GeoLocationRepository,
+    private val geolocationRepository: GeolocationRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
@@ -32,8 +32,8 @@ class DetailViewModel(
     )
 
 
-    private val _cityWeather = MutableStateFlow<WeatherOverview?>(null)
-    val cityWeather = _cityWeather.asStateFlow()
+    private val _weather = MutableStateFlow<WeatherOverview?>(null)
+    val weather = _weather.asStateFlow()
 
     private val errorChannel = Channel<ErrorEvent>()
     val errorEventsChannelFlow = errorChannel.receiveAsFlow()
@@ -41,21 +41,21 @@ class DetailViewModel(
     private val _showMap = MutableStateFlow(false)
     val showMap = _showMap.asStateFlow()
 
-    private val _geoLocation = MutableStateFlow<LocationOverview?>(null)
-    val geoLocation = _geoLocation.asStateFlow()
+    private val _geolocation = MutableStateFlow<LocationOverview?>(null)
+    val geolocation = _geolocation.asStateFlow()
 
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
 
-    fun getGeoLocation(countryName: String) {
+    fun getGeolocationByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = geoLocationRepository.getGeoLocationByCountry(
+            val result = geolocationRepository.getGeolocationByCountry(
                 countryName = countryName
             )
 
             when (result) {
                 is Response.Success -> {
-                    _geoLocation.update {
+                    _geolocation.update {
                         result.data
                     }
                 }
@@ -75,7 +75,7 @@ class DetailViewModel(
 
                 when (result) {
                     is Response.Success -> {
-                        _cityWeather.update {
+                        _weather.update {
                             result.data
                         }
                     }
@@ -99,8 +99,8 @@ class DetailViewModel(
     fun clear() {
         _showMap.update { false }
         _didFetchFail.update { false }
-        _cityWeather.update { null }
-        _geoLocation.update { null }
+        _weather.update { null }
+        _geolocation.update { null }
     }
 
 }

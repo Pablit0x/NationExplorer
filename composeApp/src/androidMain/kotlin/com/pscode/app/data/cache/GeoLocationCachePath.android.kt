@@ -3,10 +3,10 @@ package com.pscode.app.data.cache
 import okio.Path
 import okio.Path.Companion.toPath
 
-lateinit var geoLocationCachePath: String
+lateinit var geolocationCachePath: String
 
-actual fun getGeoLocationCachePath(): GeoLocationCachePath = AndroidGeoLocationCachePath()
+actual fun getGeolocationCachePath(): GeolocationCachePath = AndroidGeolocationCachePath()
 
-class AndroidGeoLocationCachePath : GeoLocationCachePath {
-    override val path: Path = geoLocationCachePath.toPath()
+class AndroidGeolocationCachePath : GeolocationCachePath {
+    override val path: Path = geolocationCachePath.toPath()
 }

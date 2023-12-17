@@ -10,7 +10,7 @@ val viewModelModule = module {
     single<DetailViewModel> {
         DetailViewModel(
             weatherRepository = get(),
-            geoLocationRepository = get(),
+            geolocationRepository = get(),
             networkConnectivity = get()
         )
     }

@@ -1,20 +1,20 @@
 package com.pscode.app.di
 
 import com.pscode.app.data.cache.CountryCache
-import com.pscode.app.data.cache.GeoLocationCache
+import com.pscode.app.data.cache.GeolocationCache
 import com.pscode.app.data.remote.CountryApiImpl
-import com.pscode.app.data.remote.GeoLocationApiImpl
+import com.pscode.app.data.remote.GeolocationApiImpl
 import com.pscode.app.data.remote.WeatherApiImpl
 import com.pscode.app.data.repository.CountryRepositoryImpl
-import com.pscode.app.data.repository.GeoLocationRepositoryImpl
+import com.pscode.app.data.repository.GeolocationRepositoryImpl
 import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.data.repository.WeatherRepositoryImpl
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.remote.CountryApi
-import com.pscode.app.domain.remote.GeoLocationApi
+import com.pscode.app.domain.remote.GeolocationApi
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.domain.repository.CountryRepository
-import com.pscode.app.domain.repository.GeoLocationRepository
+import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.utils.Constants.APP_ID
@@ -41,7 +41,7 @@ val dataModule = module {
     single<User?> { App.create(APP_ID).currentUser }
     single<CountryApi> { CountryApiImpl(httpClient = get()) }
     single<WeatherApi> { WeatherApiImpl(httpClient = get()) }
-    single<GeoLocationApi> { GeoLocationApiImpl(httpClient = get()) }
+    single<GeolocationApi> { GeolocationApiImpl(httpClient = get()) }
     single<KStore<List<CountryOverview>>> { CountryCache().cache }
     single<Settings> { Settings() }
     single<CountryRepository> {
@@ -49,9 +49,9 @@ val dataModule = module {
             countryApi = get(), countryOverviewCache = get()
         )
     }
-    single<GeoLocationRepository> {
-        GeoLocationRepositoryImpl(
-            geoLocationApi = get(), geoLocationCache = GeoLocationCache().cache
+    single<GeolocationRepository> {
+        GeolocationRepositoryImpl(
+            geolocationApi = get(), geolocationCache = GeolocationCache().cache
         )
     }
     single<WeatherRepository> { WeatherRepositoryImpl(weatherApi = get()) }

@@ -45,9 +45,9 @@ class DetailScreen(
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
-        val weatherOverview by viewModel.cityWeather.collectAsState()
+        val weatherOverview by viewModel.weather.collectAsState()
         val showMap by viewModel.showMap.collectAsState()
-        val geoLocation by viewModel.geoLocation.collectAsState()
+        val geolocation by viewModel.geolocation.collectAsState()
         val errorsChannel = viewModel.errorEventsChannelFlow
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
@@ -66,7 +66,7 @@ class DetailScreen(
         }
 
         LaunchedEffect(Unit) {
-            viewModel.getGeoLocation(countryName = selectedCountry.name)
+            viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
             viewModel.getWeatherByCity(country = selectedCountry)
         }
 
@@ -74,7 +74,7 @@ class DetailScreen(
             if (didFetchFail) {
                 when (networkStatus) {
                     Status.Available -> {
-                        viewModel.getGeoLocation(countryName = selectedCountry.name)
+                        viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
                         viewModel.getWeatherByCity(country = selectedCountry)
                     }
 
@@ -122,7 +122,7 @@ class DetailScreen(
                         )
 
                         AnimatedVisibility(
-                            visible = geoLocation != null, enter = fadeIn(), exit = fadeOut()
+                            visible = geolocation != null, enter = fadeIn(), exit = fadeOut()
                         ) {
 
                             OutlinedButton(onClick = viewModel::showMap) {
@@ -132,7 +132,7 @@ class DetailScreen(
                             if (showMap) {
                                 ModalBottomSheet(sheetState = sheetState,
                                     onDismissRequest = { viewModel.hideMap() }) {
-                                    geoLocation?.let {
+                                    geolocation?.let {
                                         MapView(
                                             modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
                                             countryArea = selectedCountry.area,
