@@ -30,11 +30,9 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**iOS and A
 
 ## Demo Video
 
-### iOS
-https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac
-
-### Android
-https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32
+| iOS | Android |
+| --- | ------- |
+| [![iOS Video](https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac)](https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac) | [![Android Video](https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32)](https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32) |
 
 
 ## Screenshots
