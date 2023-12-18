@@ -25,4 +25,4 @@ Nation Explorer may update this privacy policy. Please check this page periodica
 If you have any questions about this Privacy Policy or the use of your username, please contact us at pabloo.noner@gmail.com
 
 
-This document was last updated on 18.12.2023
+This document was last updated on 18 December 2023
