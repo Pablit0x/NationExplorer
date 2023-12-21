@@ -30,7 +30,6 @@ import org.koin.compose.koinInject
 
 class LeaderboardScreen : Screen {
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
         val viewModel = koinInject<LeaderboardViewModel>()
@@ -46,59 +45,57 @@ class LeaderboardScreen : Screen {
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(16.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
                     .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
             ) {
-                stickyHeader {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .background(color = MaterialTheme.colorScheme.background),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(8.dp),
-                            verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            TopRankItem(
-                                rank = 2,
-                                result = results[1],
-                                borderGradientColors = Gradients.SILVER,
-                                modifier = Modifier.weight(1f).height(165.dp)
-                            )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    TopRankItem(
+                        rank = 2,
+                        result = results[1],
+                        borderGradientColors = Gradients.SILVER,
+                        modifier = Modifier.weight(1f).height(165.dp)
+                    )
 
-                            TopRankItem(
-                                rank = 1,
-                                result = results[0],
-                                borderGradientColors = Gradients.GOLD,
-                                modifier = Modifier.weight(1f).height(180.dp)
-                            )
+                    TopRankItem(
+                        rank = 1,
+                        result = results[0],
+                        borderGradientColors = Gradients.GOLD,
+                        modifier = Modifier.weight(1f).height(180.dp)
+                    )
 
-                            TopRankItem(
-                                rank = 3,
-                                result = results[2],
-                                borderGradientColors = Gradients.BRONZE,
-                                modifier = Modifier.weight(1f).height(150.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        LeaderboardHeader(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
-                                .background(color = MaterialTheme.colorScheme.background)
-                        )
-                    }
+                    TopRankItem(
+                        rank = 3,
+                        result = results[2],
+                        borderGradientColors = Gradients.BRONZE,
+                        modifier = Modifier.weight(1f).height(150.dp)
+                    )
                 }
 
-                itemsIndexed(items = results) { index, result ->
-                    LeaderboardListItem(
-                        rank = index + 1,
-                        result = result,
-                        isCurrentUser = viewModel.currentUser?.id == result.userId,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
-                    )
+                Spacer(modifier = Modifier.height(32.dp))
+
+                LeaderboardHeader(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                        .background(color = MaterialTheme.colorScheme.background)
+                )
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    itemsIndexed(items = results) { index, result ->
+                        LeaderboardListItem(
+                            rank = index + 1,
+                            result = result,
+                            isCurrentUser = viewModel.currentUser?.id == result.userId,
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
+                        )
+                    }
                 }
             }
         }
