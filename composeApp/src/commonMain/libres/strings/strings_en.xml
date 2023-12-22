@@ -51,9 +51,11 @@
     <string name="username_placeholder">Username...</string>
     <string name="time">Time:</string>
     <string name="score">Score:</string>
-    <string name ="leaderboard">Leaderboard</string>
+    <string name="leaderboard">Leaderboard</string>
     <string name="view_leaderboard">View Online Leaderboard</string>
-    <string name="username_tooltip">Your username will appear on the game's leaderboard and cannot be changed later.</string>
+    <string name="username_tooltip">Your username will appear on the game's leaderboard and cannot
+        be changed later.
+    </string>
     <string name="rank_leaderboard">Rank</string>
     <string name="name_leaderboard">Name</string>
     <string name="time_leaderboard">Time</string>

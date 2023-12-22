@@ -15,8 +15,10 @@ class IOSGeolocationCachePath : GeolocationCachePath {
     @OptIn(BetaInteropApi::class)
     override val path: Path by lazy {
         autoreleasepool {
-            val paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, true)
+            val paths =
+                NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, true)
             val cacheDirectory = paths.first() as NSString
             "${cacheDirectory}/geolocation_cache.json".toPath()
         }
-    } }
+    }
+}

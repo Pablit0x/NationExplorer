@@ -103,7 +103,8 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     private fun loginToRealm() {
         viewModelScope.launch(Dispatchers.IO) {
-            App.create(Constants.APP_ID).login(credentials = Credentials.anonymous(reuseExisting = true))
+            App.create(Constants.APP_ID)
+                .login(credentials = Credentials.anonymous(reuseExisting = true))
         }
     }
 }

@@ -42,7 +42,7 @@ fun CountryListItem(
                 modifier = Modifier.size(width = 100.dp, height = 60.dp)
             )
 
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 AutoResizedText(
                     text = countryOverview.name,
                     style = MaterialTheme.typography.headlineMedium,

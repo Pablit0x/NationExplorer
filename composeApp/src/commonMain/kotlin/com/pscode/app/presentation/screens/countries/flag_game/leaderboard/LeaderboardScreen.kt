@@ -1,6 +1,5 @@
 package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

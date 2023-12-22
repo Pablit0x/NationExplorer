@@ -57,8 +57,8 @@ fun UsernameInputDialog(
                 FilledTonalButton(
                     enabled = username.isNotBlank(),
                     onClick = {
-                    onNextClicked(username)
-                }) {
+                        onNextClicked(username)
+                    }) {
                     Text(text = SharedRes.string.next)
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(imageVector = Icons.Default.NavigateNext, contentDescription = "Next")

@@ -17,7 +17,8 @@ actual class NetworkConnectivity {
 
 
     private val androidContext = context as Context
-    private val connectivityManager = androidContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager =
+        androidContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 
     actual fun observeNetworkStatus(): Flow<Status> {

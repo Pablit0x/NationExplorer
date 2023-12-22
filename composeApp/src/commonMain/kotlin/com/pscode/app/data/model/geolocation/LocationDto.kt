@@ -15,7 +15,7 @@ data class LocationDto(
     val totalResults: Int
 )
 
-fun LocationDto.toLocationOverview(countryName: String) : LocationOverview {
+fun LocationDto.toLocationOverview(countryName: String): LocationOverview {
     return LocationOverview(
         name = countryName,
         latitude = results.first().geometry.lat,
