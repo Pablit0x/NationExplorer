@@ -84,7 +84,6 @@ class FlagGameViewModel(
 
 
     fun startNewGame() {
-        resetGameSettings()
         setCurrentGameCountries()
         startRound()
         startStopwatch()
@@ -272,7 +271,7 @@ class FlagGameViewModel(
     }
 
 
-    private fun resetGameSettings() {
+     fun clear() {
         _showUsernameInputDialog.update { false }
         _stopWatchTime.update { DEFAULT_TIME }
         _isNewPersonalBest.update { false }

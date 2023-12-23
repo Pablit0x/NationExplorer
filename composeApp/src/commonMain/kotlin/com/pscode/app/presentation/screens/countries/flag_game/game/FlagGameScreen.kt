@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -62,6 +63,12 @@ class FlagGameScreen : Screen {
         LaunchedEffect(isDataReady) {
             if (isDataReady) {
                 viewModel.startNewGame()
+            }
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.clear()
             }
         }
 
