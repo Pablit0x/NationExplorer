@@ -71,81 +71,72 @@ class OverviewScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            if (isLoading) {
-                CircularProgressIndicator()
+            if (isLoading || isSearching) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             } else {
-                if (isSearching) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    LazyColumn(
+                        state = lazyListState,
+                        modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        LazyColumn(
-                            state = lazyListState,
-                            modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
 
-                            groupedCountries.forEach { (letter, countries) ->
-                                stickyHeader {
-                                    LetterHeader(
-                                        letter,
-                                        modifier = Modifier.fillMaxWidth().height(40.dp)
-                                            .background(color = MaterialTheme.colorScheme.surface)
-                                            .padding(vertical = 4.dp, horizontal = 8.dp)
-                                    )
-                                }
+                        groupedCountries.forEach { (letter, countries) ->
+                            stickyHeader {
+                                LetterHeader(
+                                    letter,
+                                    modifier = Modifier.fillMaxWidth().height(40.dp)
+                                        .background(color = MaterialTheme.colorScheme.surface)
+                                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                                )
+                            }
 
-                                items(items = countries) { country ->
-                                    CountryListItem(
-                                        countryOverview = country,
-                                        onCountryClick = { selectedCountry ->
-                                            viewModel.setSelectedCountryName(countryName = selectedCountry.name)
-                                            navigator.push(
-                                                item = DetailScreen(
-                                                    onShowSnackBar = { errorMsg ->
-                                                        onShowSnackBar(errorMsg)
-                                                    }, selectedCountry = selectedCountry
-                                                )
+                            items(items = countries, key = { it.name }) { country ->
+                                CountryListItem(
+                                    countryOverview = country, onCountryClick = { selectedCountry ->
+                                        viewModel.setSelectedCountryName(countryName = selectedCountry.name)
+                                        navigator.push(
+                                            item = DetailScreen(
+                                                onShowSnackBar = { errorMsg ->
+                                                    onShowSnackBar(errorMsg)
+                                                }, selectedCountry = selectedCountry
                                             )
-                                        },
-                                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                                    )
-                                }
+                                        )
+                                    }, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                                )
                             }
                         }
-
-                        AlphabeticalScroller(
-                            onLetterClick = { clickedLetter ->
-                                val index = getScrollIndex(groupedCountries, clickedLetter)
-                                scope.launch {
-                                    lazyListState.animateScrollToItem(index)
-                                }
-                            },
-                            modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(top = 40.dp)
-                        )
                     }
+
+                    AlphabeticalScroller(
+                        onLetterClick = { clickedLetter ->
+                            val index = getScrollIndex(groupedCountries, clickedLetter)
+                            scope.launch {
+                                lazyListState.animateScrollToItem(index)
+                            }
+                        }, modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(top = 40.dp)
+                    )
                 }
             }
         }
     }
+}
 
-    private fun getScrollIndex(
-        groupedCountries: Map<Char, List<CountryOverview>>, letter: Char
-    ): Int {
-        var index = 0
-        for ((key, value) in groupedCountries) {
-            if (key == letter) {
-                break
-            }
-            index += 1 + value.size
+private fun getScrollIndex(
+    groupedCountries: Map<Char, List<CountryOverview>>, letter: Char
+): Int {
+    var index = 0
+    for ((key, value) in groupedCountries) {
+        if (key == letter) {
+            break
         }
-        return index
+        index += 1 + value.size
     }
-
-
+    return index
 }
