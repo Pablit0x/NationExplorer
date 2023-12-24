@@ -271,7 +271,7 @@ class FlagGameViewModel(
     }
 
 
-     fun clear() {
+    fun clear() {
         _showUsernameInputDialog.update { false }
         _stopWatchTime.update { DEFAULT_TIME }
         _isNewPersonalBest.update { false }
