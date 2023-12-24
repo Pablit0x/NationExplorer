@@ -1,5 +1,6 @@
 package com.pscode.app.presentation.screens.countries.overview
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
@@ -26,7 +27,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _searchText = MutableStateFlow("")
+    private val _searchText = MutableStateFlow(TextFieldValue())
     val searchText = _searchText.asStateFlow()
 
     private val _isSearching = MutableStateFlow(false)
@@ -39,13 +40,13 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     val selectedCountryName = _selectedCountryName.asStateFlow()
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
-    val countries =
-        searchText.onEach { _isSearching.update { true } }.combine(_countries) { text, countries ->
-            if (text.isBlank()) {
+    val countries = searchText.onEach { _isSearching.update { true } }
+        .combine(_countries) { textFieldValue, countries ->
+            if (textFieldValue.text.isBlank()) {
                 countries
             } else {
                 countries.filter {
-                    it.name.startsWith(prefix = text, ignoreCase = true)
+                    it.name.startsWith(prefix = textFieldValue.text, ignoreCase = true)
                 }
             }
         }.onEach { _isSearching.update { false } }.stateIn(
@@ -62,7 +63,11 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
     fun onSearchTextChange(text: String) {
-        _searchText.update { text }
+        _searchText.update {
+            it.copy(
+                text = text
+            )
+        }
     }
 
     fun onSearchWidgetChange(newState: SearchWidgetState) {

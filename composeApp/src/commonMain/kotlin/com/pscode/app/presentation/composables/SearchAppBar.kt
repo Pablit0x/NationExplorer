@@ -19,20 +19,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 
 @Composable
 fun SearchAppBar(
-    text: String,
-    onTextChange: (String) -> Unit,
-    onCloseClicked: () -> Unit,
+    textFieldValue: TextFieldValue, onTextChange: (String) -> Unit, onCloseClicked: () -> Unit
 ) {
 
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
+        if (textFieldValue.text.isBlank()) {
+            focusRequester.requestFocus()
+        }
     }
 
     Surface(
@@ -40,14 +41,14 @@ fun SearchAppBar(
     ) {
 
         OutlinedTextField(
-            value = text,
+            value = textFieldValue.text,
             onValueChange = { onTextChange(it) },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
             },
             trailingIcon = {
                 IconButton(onClick = {
-                    if (text.isNotEmpty()) {
+                    if (textFieldValue.text.isNotEmpty()) {
                         onTextChange("")
                     } else {
                         onCloseClicked()

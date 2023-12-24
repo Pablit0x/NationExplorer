@@ -3,6 +3,7 @@ package com.pscode.app.presentation.composables
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.TextFieldValue
 import cafe.adriel.voyager.navigator.Navigator
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
@@ -13,7 +14,7 @@ fun MainTopAppBar(
     navigator: Navigator,
     scrollBehavior: TopAppBarScrollBehavior,
     searchWidgetState: SearchWidgetState,
-    searchTextState: String,
+    searchTextState: TextFieldValue,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchTriggered: () -> Unit,
@@ -32,9 +33,9 @@ fun MainTopAppBar(
 
             SearchWidgetState.OPENED -> {
                 SearchAppBar(
-                    text = searchTextState,
+                    textFieldValue = searchTextState,
                     onTextChange = onTextChange,
-                    onCloseClicked = onCloseClicked,
+                    onCloseClicked = onCloseClicked
                 )
             }
         }
