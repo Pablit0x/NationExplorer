@@ -15,6 +15,9 @@ with an engaging experience to discover and interact with countries across the g
 - **Offline First**: Use all features offline post the app's first use, excluding live weather
   updates. Once it connects to the internet initially, it operates offline seamlessly.
 
+## Google Play
+Nation Explorer - https://bit.ly/nation-explorer
+
 ## Tech Stack
 
 - **Compose Multiplatform**: UI framework that allows building declarative UIs for multiple
