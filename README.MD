@@ -16,6 +16,7 @@ with an engaging experience to discover and interact with countries across the g
   updates. Once it connects to the internet initially, it operates offline seamlessly.
 
 ## Google Play
+
 Nation Explorer - https://bit.ly/nation-explorer
 
 ## Tech Stack
