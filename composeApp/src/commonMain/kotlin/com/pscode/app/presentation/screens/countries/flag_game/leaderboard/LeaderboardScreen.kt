@@ -45,9 +45,7 @@ class LeaderboardScreen : Screen {
             }
         } else {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                modifier = Modifier.fillMaxSize().padding(16.dp)
                     .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
             ) {
                 Row(
@@ -87,7 +85,9 @@ class LeaderboardScreen : Screen {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(items = results) { index, result ->
+                    itemsIndexed(items = results, key = { _, item ->
+                        item._id
+                    }) { index, result ->
                         LeaderboardListItem(
                             rank = index + 1,
                             result = result,
