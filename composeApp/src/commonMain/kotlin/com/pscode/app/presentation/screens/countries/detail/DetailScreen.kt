@@ -68,6 +68,7 @@ class DetailScreen(
         LaunchedEffect(Unit) {
             viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
             viewModel.getWeatherByCity(country = selectedCountry)
+            viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
         }
 
         LaunchedEffect(networkStatus) {

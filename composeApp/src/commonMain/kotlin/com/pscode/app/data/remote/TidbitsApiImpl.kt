@@ -2,7 +2,8 @@ package com.pscode.app.data.remote
 
 import FunApp.composeApp.BuildConfig
 import com.pscode.app.data.model.geolocation.LocationDto
-import com.pscode.app.domain.remote.GeolocationApi
+import com.pscode.app.data.model.tidbits.TidbitsDto
+import com.pscode.app.domain.remote.TidbitsApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -14,16 +15,15 @@ import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CancellationException
 
-class GeolocationApiImpl(private val httpClient: HttpClient) : GeolocationApi {
-    private val baseUrl = "https://api.opencagedata.com/geocode/v1/"
+class TidbitsApiImpl(private val httpClient: HttpClient) : TidbitsApi {
 
-    override suspend fun getGeolocationByCountry(
-        countryName: String
-    ): Response<LocationDto> {
+    private val baseUrl = "https://pablit0x.github.io/nation_explorer_tidbits_api/"
+
+    override suspend fun getTidbitsByCountryName(countryName: String): Response<TidbitsDto> {
         return try {
             Response.Success(data = httpClient.get {
-                url("${baseUrl}json?q=URI-ENCODED-$countryName&key=${BuildConfig.GEO_LOCATION_API_KEY}")
-            }.body<LocationDto>())
+                url("${baseUrl}/$countryName.json")
+            }.body<TidbitsDto>())
         } catch (e: IOException) {
             Response.Error("Network issue.")
         } catch (e: ClientRequestException) {

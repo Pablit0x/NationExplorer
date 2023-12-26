@@ -11,6 +11,7 @@ val viewModelModule = module {
         DetailViewModel(
             weatherRepository = get(),
             geolocationRepository = get(),
+            tidbitsRepository = get(),
             networkConnectivity = get()
         )
     }

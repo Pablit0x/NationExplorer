@@ -2,8 +2,10 @@ package com.pscode.app.presentation.screens.countries.detail
 
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.repository.GeolocationRepository
+import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.NetworkConnectivity
@@ -24,13 +26,13 @@ import kotlinx.coroutines.launch
 class DetailViewModel(
     private val weatherRepository: WeatherRepository,
     private val geolocationRepository: GeolocationRepository,
+    private val tidbitsRepository: TidbitsRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
     val connectivityStatus = networkConnectivity.observeNetworkStatus().stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = Status.Idle
     )
-
 
     private val _weather = MutableStateFlow<WeatherOverview?>(null)
     val weather = _weather.asStateFlow()
@@ -44,8 +46,25 @@ class DetailViewModel(
     private val _geolocation = MutableStateFlow<LocationOverview?>(null)
     val geolocation = _geolocation.asStateFlow()
 
+    private val _tidbits = MutableStateFlow<List<TidbitOverview>>(emptyList())
+    val tidbits = _tidbits.asStateFlow()
+
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
+
+    fun getTidbitsByCountry(countryName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
+            when(result) {
+                is Response.Success -> {
+                    errorChannel.send(ErrorEvent.ShowSnackbarMessage(message = result.data.toString()))
+                }
+                is Response.Error -> {
+
+                }
+            }
+        }
+    }
 
     fun getGeolocationByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
