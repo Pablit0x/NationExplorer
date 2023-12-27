@@ -32,6 +32,7 @@ import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.DetailCountryOverview
 import com.pscode.app.presentation.composables.MapView
+import com.pscode.app.presentation.composables.TidbitCard
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.ErrorEvent
@@ -48,6 +49,8 @@ class DetailScreen(
         val weatherOverview by viewModel.weather.collectAsState()
         val showMap by viewModel.showMap.collectAsState()
         val geolocation by viewModel.geolocation.collectAsState()
+        val tidbits by viewModel.tidbits.collectAsState()
+        val currentTidbitId by viewModel.currentTidbitId.collectAsState()
         val errorsChannel = viewModel.errorEventsChannelFlow
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
@@ -107,6 +110,15 @@ class DetailScreen(
                         hasCapitalCity = hasCapitalCity,
                         modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
                     )
+
+                    if (tidbits.isNotEmpty()) {
+                        TidbitCard(
+                            currentTidbitId = currentTidbitId,
+                            tidbits = tidbits,
+                            setCurrentTidbitId = { viewModel.setCurrentTidbit(it) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
 
                     if (hasCapitalCity) {
 

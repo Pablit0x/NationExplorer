@@ -8,6 +8,7 @@ import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.utils.Constants
 import com.pscode.app.utils.NetworkConnectivity
 import com.pscode.app.utils.Response
 import com.pscode.app.utils.Status
@@ -49,22 +50,35 @@ class DetailViewModel(
     private val _tidbits = MutableStateFlow<List<TidbitOverview>>(emptyList())
     val tidbits = _tidbits.asStateFlow()
 
+    private val _currentTidbitId = MutableStateFlow(0)
+    val currentTidbitId = _currentTidbitId.asStateFlow()
+
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
 
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
-            when(result) {
+            when (result) {
                 is Response.Success -> {
-                    errorChannel.send(ErrorEvent.ShowSnackbarMessage(message = result.data.toString()))
+                    _tidbits.update {
+                        result.data
+                    }
                 }
+
                 is Response.Error -> {
 
                 }
             }
         }
     }
+
+    fun setCurrentTidbit(id: Int) {
+        _currentTidbitId.update {
+            id
+        }
+    }
+
 
     fun getGeolocationByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
