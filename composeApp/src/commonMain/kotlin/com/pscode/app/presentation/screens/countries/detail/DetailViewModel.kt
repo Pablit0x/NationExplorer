@@ -8,7 +8,6 @@ import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
-import com.pscode.app.utils.Constants
 import com.pscode.app.utils.NetworkConnectivity
 import com.pscode.app.utils.Response
 import com.pscode.app.utils.Status

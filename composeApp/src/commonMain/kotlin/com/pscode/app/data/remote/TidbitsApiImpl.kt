@@ -1,7 +1,5 @@
 package com.pscode.app.data.remote
 
-import FunApp.composeApp.BuildConfig
-import com.pscode.app.data.model.geolocation.LocationDto
 import com.pscode.app.data.model.tidbits.TidbitsDto
 import com.pscode.app.domain.remote.TidbitsApi
 import com.pscode.app.utils.Response
