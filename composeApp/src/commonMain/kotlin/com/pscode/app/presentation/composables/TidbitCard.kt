@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.LightbulbCircle
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,15 +34,18 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.utils.Constants
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TidbitCard(
     currentTidbitId: Int,
@@ -51,13 +56,15 @@ fun TidbitCard(
 
     var isExpended by remember { mutableStateOf(false) }
     val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
-
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(horizontalPagerState.currentPage) {
         setCurrentTidbitId(horizontalPagerState.currentPage)
     }
 
-    ElevatedCard(modifier = modifier) {
+    ElevatedCard(modifier = modifier, onClick = {
+        isExpended = !isExpended
+    }) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
@@ -71,25 +78,33 @@ fun TidbitCard(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.LightbulbCircle,
+                        imageVector = Icons.Default.Lightbulb,
                         contentDescription = "Interesting fact"
                     )
-                    Text(text = "Did you know?", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = SharedRes.string.did_you_know,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
-                IconButton(onClick = { isExpended = !isExpended }) {
-                    if (isExpended) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
-                    } else {
-                        Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
-                    }
+
+                if (isExpended) {
+                    Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
+                } else {
+                    Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
                 }
+
             }
 
             AnimatedVisibility(isExpended) {
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     HorizontalPager(
+                        modifier = Modifier.weight(1f),
                         state = horizontalPagerState, verticalAlignment = Alignment.CenterVertically
-                    ) { currentPageIndex ->
+                    ) {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.Center,
@@ -108,13 +123,18 @@ fun TidbitCard(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
 
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        PageIndicator(
-                            numberOfPages = Constants.NUMBER_OF_TIDBITS,
-                            currentPage = horizontalPagerState.currentPage
-                        )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        PageIndicator(numberOfPages = Constants.NUMBER_OF_TIDBITS,
+                            currentPage = horizontalPagerState.currentPage,
+                            onClick = {
+                                scope.launch {
+                                    horizontalPagerState.animateScrollToPage(it)
+                                }
+                            })
                     }
                 }
             }

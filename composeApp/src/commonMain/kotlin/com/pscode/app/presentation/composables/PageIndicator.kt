@@ -18,7 +18,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PageIndicator(
-    numberOfPages: Int, currentPage: Int, modifier: Modifier = Modifier
+    onClick: (Int) -> Unit,
+    numberOfPages: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
@@ -27,7 +30,8 @@ fun PageIndicator(
     ) {
         repeat(numberOfPages) {
             Indicator(
-                isCurrentlySelected = currentPage == it
+                isCurrentlySelected = currentPage == it,
+                onClick = { onClick(it) }
             )
         }
     }
@@ -35,6 +39,7 @@ fun PageIndicator(
 
 @Composable
 fun Indicator(
+    onClick: () -> Unit,
     isCurrentlySelected: Boolean
 ) {
     val width = animateDpAsState(
@@ -48,5 +53,6 @@ fun Indicator(
             .width(width.value)
             .clip(Shapes().extraLarge)
             .background(if (isCurrentlySelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.scrim)
+            .noRippleClickable { onClick() }
     )
 }
