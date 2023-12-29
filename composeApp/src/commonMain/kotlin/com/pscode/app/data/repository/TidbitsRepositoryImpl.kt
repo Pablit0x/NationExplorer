@@ -10,7 +10,8 @@ class TidbitsRepositoryImpl(private val tidbitsApi: TidbitsApi) : TidbitsReposit
 
     override suspend fun getTidbitsByCountryName(countryName: String): Response<List<TidbitOverview>> {
 
-        val result = tidbitsApi.getTidbitsByCountryName(countryName = countryName.trim())
+        val result =
+            tidbitsApi.getTidbitsByCountryName(countryName = countryName.filterNot { it.isWhitespace() })
 
         return when (result) {
             is Response.Success -> {

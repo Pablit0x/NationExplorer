@@ -133,6 +133,7 @@ class DetailViewModel(
         _didFetchFail.update { false }
         _weather.update { null }
         _geolocation.update { null }
+        _tidbits.update { emptyList() }
     }
 
 }
