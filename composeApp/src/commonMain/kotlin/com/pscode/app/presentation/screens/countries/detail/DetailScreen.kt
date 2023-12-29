@@ -9,7 +9,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -57,6 +58,7 @@ class DetailScreen(
         val networkStatus by viewModel.connectivityStatus.collectAsState()
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         val didFetchFail by viewModel.didFetchFail.collectAsState()
+        val scrollState = rememberScrollState()
 
         LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
@@ -94,70 +96,70 @@ class DetailScreen(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(12.dp)
-                .navigateBackOnDrag(onNavigateBack = { navigator.pop() })
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(12.dp)
+                .verticalScroll(state = scrollState)
+                .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top
-                ) {
 
-                    DetailCountryOverview(
-                        selectedCountry = selectedCountry,
-                        hasCapitalCity = hasCapitalCity,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
-                    )
+            DetailCountryOverview(
+                selectedCountry = selectedCountry,
+                hasCapitalCity = hasCapitalCity,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            )
 
-                    if (tidbits.isNotEmpty()) {
-                        TidbitCard(
-                            currentTidbitId = currentTidbitId,
-                            tidbits = tidbits,
-                            setCurrentTidbitId = { viewModel.setCurrentTidbit(it) },
-                            modifier = Modifier.fillMaxWidth()
+            if(tidbits.isNotEmpty()){
+                TidbitCard(
+                    currentTidbitId = currentTidbitId,
+                    tidbits = tidbits,
+                    setCurrentTidbitId = { viewModel.setCurrentTidbit(it) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            if (hasCapitalCity) {
+
+                AutoResizedText(
+                    text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(vertical = 6.dp, horizontal = 8.dp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                WeatherCard(
+                    weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            AnimatedVisibility(
+                visible = geolocation != null, enter = fadeIn(), exit = fadeOut()
+            ) {
+
+                OutlinedButton(onClick = viewModel::showMap) {
+                    Text(text = SharedRes.string.show_map)
+                }
+            }
+
+            if (showMap) {
+                ModalBottomSheet(
+                    sheetState = sheetState,
+                    onDismissRequest = { viewModel.hideMap() }) {
+                    geolocation?.let {
+                        MapView(
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
+                            countryArea = selectedCountry.area,
+                            locationOverview = it
                         )
-                    }
-
-                    if (hasCapitalCity) {
-
-                        AutoResizedText(
-                            text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                            style = MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(vertical = 6.dp, horizontal = 8.dp),
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-
-                        WeatherCard(
-                            weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth()
-                        )
-
-                        AnimatedVisibility(
-                            visible = geolocation != null, enter = fadeIn(), exit = fadeOut()
-                        ) {
-
-                            OutlinedButton(onClick = viewModel::showMap) {
-                                Text(text = SharedRes.string.show_map)
-                            }
-
-                            if (showMap) {
-                                ModalBottomSheet(sheetState = sheetState,
-                                    onDismissRequest = { viewModel.hideMap() }) {
-                                    geolocation?.let {
-                                        MapView(
-                                            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
-                                            countryArea = selectedCountry.area,
-                                            locationOverview = it
-                                        )
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
+
         }
+
+
     }
 }
