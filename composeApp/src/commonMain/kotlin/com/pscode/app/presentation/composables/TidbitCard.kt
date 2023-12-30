@@ -46,7 +46,7 @@ fun TidbitCard(
     modifier: Modifier
 ) {
 
-    var isExpended by remember { mutableStateOf(false) }
+    var isExpended by remember { mutableStateOf(true) }
     val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
     val scope = rememberCoroutineScope()
 
@@ -73,7 +73,7 @@ fun TidbitCard(
                     )
                     Text(
                         text = SharedRes.string.did_you_know,
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
 

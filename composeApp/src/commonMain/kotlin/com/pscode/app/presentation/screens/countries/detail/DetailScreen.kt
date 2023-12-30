@@ -5,16 +5,21 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -97,9 +102,7 @@ class DetailScreen(
         }
 
         Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(12.dp)
-                .verticalScroll(state = scrollState)
+            modifier = Modifier.fillMaxSize().padding(12.dp).verticalScroll(state = scrollState)
                 .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -111,7 +114,7 @@ class DetailScreen(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
             )
 
-            if(tidbits.isNotEmpty()){
+            if (tidbits.isNotEmpty()) {
                 TidbitCard(
                     currentTidbitId = currentTidbitId,
                     tidbits = tidbits,
@@ -125,8 +128,7 @@ class DetailScreen(
                 AutoResizedText(
                     text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
                     style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(vertical = 6.dp, horizontal = 8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp, horizontal = 8.dp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
@@ -138,9 +140,15 @@ class DetailScreen(
             AnimatedVisibility(
                 visible = geolocation != null, enter = fadeIn(), exit = fadeOut()
             ) {
-
-                OutlinedButton(onClick = viewModel::showMap) {
-                    Text(text = SharedRes.string.show_map)
+                ElevatedButton(
+                    onClick = viewModel::showMap, modifier = Modifier.fillMaxWidth(0.6f)
+                ) {
+                    Icon(imageVector = Icons.Default.Map, contentDescription = "Show on Map")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = SharedRes.string.show_map,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
 
