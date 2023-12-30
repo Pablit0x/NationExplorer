@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -119,7 +120,7 @@ class DetailScreen(
                     currentTidbitId = currentTidbitId,
                     tidbits = tidbits,
                     setCurrentTidbitId = { viewModel.setCurrentTidbit(it) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
             }
 
@@ -127,8 +128,8 @@ class DetailScreen(
 
                 AutoResizedText(
                     text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp, horizontal = 8.dp),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
