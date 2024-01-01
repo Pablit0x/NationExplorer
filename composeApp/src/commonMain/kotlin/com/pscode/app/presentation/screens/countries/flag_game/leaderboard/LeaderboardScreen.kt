@@ -85,9 +85,7 @@ class LeaderboardScreen : Screen {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(items = results, key = { _, item ->
-                        item._id
-                    }) { index, result ->
+                    itemsIndexed(items = results) { index, result ->
                         LeaderboardListItem(
                             rank = index + 1,
                             result = result,
