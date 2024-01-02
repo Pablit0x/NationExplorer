@@ -51,7 +51,7 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4
 
 ### iOS
 
-https://github.com/Pablit0x/NationExplorer/assets/76017191/f65ecae9-d353-4737-ad53-f157cda0fcac
+https://github.com/Pablit0x/NationExplorer/assets/76017191/a045778a-7fe4-462e-bca7-1bb35633cb5a
 
 ## Screenshots
 
