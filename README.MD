@@ -47,7 +47,7 @@ Nation Explorer - https://bit.ly/nation-explorer
 
 ### Android
 
-https://github.com/Pablit0x/NationExplorer/assets/76017191/6f116185-de96-48bc-b4e7-a81d54841a32
+https://github.com/Pablit0x/NationExplorer/assets/76017191/25f785b6-9ceb-4940-ab3e-a7aad8b25b44
 
 ### iOS
 
