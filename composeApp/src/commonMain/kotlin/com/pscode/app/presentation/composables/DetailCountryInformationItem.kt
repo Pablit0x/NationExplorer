@@ -1,7 +1,11 @@
 package com.pscode.app.presentation.composables
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailCountryInformationItem(
     icon: ImageVector,
@@ -22,14 +27,18 @@ fun DetailCountryInformationItem(
     value: String,
     modifier: Modifier = Modifier,
     keyAppendix: String = ": ",
-    valueAppendix: String? = null
+    valueAppendix: String? = null,
+    marqueeEffect: Boolean = false,
 ) {
 
-    val annotatedString = buildAnnotatedString {
+    val annotatedKey = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
             append(key)
             append(keyAppendix)
         }
+    }
+
+    val annotatedValue = buildAnnotatedString {
         withStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold
@@ -44,10 +53,19 @@ fun DetailCountryInformationItem(
 
 
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        modifier = modifier
     ) {
         Icon(imageVector = icon, contentDescription = iconDescription)
-        Text(text = annotatedString)
+        Spacer(modifier = Modifier.width(6.dp))
+        Text(text = annotatedKey)
+        Text(
+            text = annotatedValue, modifier = Modifier.then(
+                if (marqueeEffect) {
+                    Modifier.basicMarquee()
+                } else {
+                    Modifier
+                }
+            )
+        )
     }
 }

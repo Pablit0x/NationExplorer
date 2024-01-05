@@ -109,6 +109,7 @@ fun DetailCountryOverview(
                 DetailCountryInformationItem(
                     icon = Icons.Default.Alarm,
                     iconDescription = "Timezone Icon",
+                    marqueeEffect = true,
                     key = SharedRes.string.timezone.format(number = selectedCountry.timezones.size),
                     value = selectedCountry.timezones.joinToString(separator = ", "),
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
