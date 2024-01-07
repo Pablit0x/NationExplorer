@@ -116,8 +116,6 @@ fun DetailCountryOverview(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                         .padding(vertical = 4.dp, horizontal = 8.dp)
                 )
-
-                Text(text = selectedCountry.continents.toString())
             }
         }
     }
