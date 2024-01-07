@@ -28,6 +28,7 @@ import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.composables.MainTopAppBar
 import com.pscode.app.presentation.composables.isScrollingUp
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
+import com.pscode.app.presentation.screens.countries.overview.FilterWidgetState
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.OverviewViewModel
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
@@ -50,6 +51,7 @@ internal fun App() {
 
         val overviewViewModel = koinInject<OverviewViewModel>()
         val searchWidgetState by overviewViewModel.searchWidgetState.collectAsState()
+        val isFiltering by overviewViewModel.isFiltering.collectAsState()
         val searchText by overviewViewModel.searchText.collectAsState()
         val selectedCountryName by overviewViewModel.selectedCountryName.collectAsState()
 
@@ -75,6 +77,8 @@ internal fun App() {
                         scrollBehavior = scrollBehavior,
                         searchWidgetState = searchWidgetState,
                         searchTextState = searchText,
+                        isFiltering = isFiltering,
+                        onFilterClicked = { overviewViewModel.onFilterWidgetStateChange(FilterWidgetState.OPEN) },
                         onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
                         onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
                         onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })

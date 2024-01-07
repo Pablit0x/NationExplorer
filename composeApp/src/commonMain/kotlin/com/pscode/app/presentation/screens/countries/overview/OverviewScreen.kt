@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +37,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AlphabeticalScroller
+import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
@@ -41,18 +50,22 @@ class OverviewScreen(
     private val lazyListState: LazyListState
 ) : Screen {
 
-    @OptIn(ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val isLoading by viewModel.isLoading.collectAsState()
         val isSearching by viewModel.isSearching.collectAsState()
+        val filterWidgetState by viewModel.filterWidgetState.collectAsState()
         val countries by viewModel.countries.collectAsState()
+        val filterItems by viewModel.filterItems.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
         val errorsChannel = viewModel.errorEventsChannelFlow
 
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
+
+        val sheetState = rememberModalBottomSheetState()
 
 
         LaunchedEffect(errorsChannel) {
@@ -122,6 +135,31 @@ class OverviewScreen(
                             }
                         }, modifier = Modifier.fillMaxHeight().fillMaxWidth().padding(top = 40.dp)
                     )
+                }
+
+                if (filterWidgetState == FilterWidgetState.OPEN) {
+                    ModalBottomSheet(sheetState = sheetState,
+                        onDismissRequest = { viewModel.onFilterWidgetStateChange(newState = FilterWidgetState.CLOSED) }) {
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(count = 3),
+                            contentPadding = PaddingValues(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalItemSpacing = 4.dp,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(filterItems) { continent ->
+                                ElevatedFilterChip(selected = continent.isSelected,
+                                    onClick = { viewModel.updateFilterItemSelected(continent.label) },
+                                    label = {
+                                        AutoResizedText(
+                                            text = continent.label,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            modifier = Modifier.padding(4.dp),
+                                        )
+                                    })
+                            }
+                        }
+                    }
                 }
             }
         }

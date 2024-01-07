@@ -14,6 +14,8 @@ fun MainTopAppBar(
     navigator: Navigator,
     scrollBehavior: TopAppBarScrollBehavior,
     searchWidgetState: SearchWidgetState,
+    isFiltering: Boolean,
+    onFilterClicked: () -> Unit,
     searchTextState: TextFieldValue,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
@@ -26,6 +28,8 @@ fun MainTopAppBar(
                 DefaultTopAppBar(
                     navigator = navigator,
                     onSearchClicked = onSearchTriggered,
+                    onFilterClicked = onFilterClicked,
+                    isFiltering = isFiltering,
                     scrollBehavior = scrollBehavior,
                     selectedCountryName = selectedCountryName
                 )
@@ -43,8 +47,10 @@ fun MainTopAppBar(
         DefaultTopAppBar(
             navigator = navigator,
             onSearchClicked = onSearchTriggered,
+            onFilterClicked = onFilterClicked,
+            isFiltering = isFiltering,
             scrollBehavior = scrollBehavior,
-            selectedCountryName = selectedCountryName
+            selectedCountryName = selectedCountryName,
         )
     }
 }

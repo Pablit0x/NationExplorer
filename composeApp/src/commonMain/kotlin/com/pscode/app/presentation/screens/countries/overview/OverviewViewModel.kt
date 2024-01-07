@@ -5,6 +5,7 @@ import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Constants
+import com.pscode.app.utils.Constants.Continents
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.realm.kotlin.mongodb.App
@@ -24,8 +25,16 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
+    private val _filterItems = MutableStateFlow(Continents.map {
+        FilterItem(label = it, isSelected = false)
+    })
+    val filterItems = _filterItems.asStateFlow()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
+
+    private val _isFiltering = MutableStateFlow(false)
+    val isFiltering = _isFiltering.asStateFlow()
 
     private val _searchText = MutableStateFlow(TextFieldValue())
     val searchText = _searchText.asStateFlow()
@@ -35,6 +44,9 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     private val _searchWidgetState = MutableStateFlow(SearchWidgetState.CLOSED)
     val searchWidgetState = _searchWidgetState.asStateFlow()
+
+    private val _filterWidgetState = MutableStateFlow(FilterWidgetState.CLOSED)
+    val filterWidgetState = _filterWidgetState.asStateFlow()
 
     private val _selectedCountryName = MutableStateFlow<String?>(null)
     val selectedCountryName = _selectedCountryName.asStateFlow()
@@ -74,11 +86,31 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         _searchWidgetState.update { newState }
     }
 
+    fun onFilterWidgetStateChange(newState: FilterWidgetState) {
+        _filterWidgetState.update { newState }
+    }
+
+    fun updateIsFiltering(isFiltering: Boolean) {
+        _isFiltering.update { isFiltering }
+    }
+
     fun setSelectedCountryName(countryName: String?) {
         _selectedCountryName.update {
             countryName
         }
     }
+
+    fun updateFilterItemSelected(label: String) {
+        val updatedList = _filterItems.value.map { filterItem ->
+            if (filterItem.label == label) {
+                filterItem.copy(isSelected = !filterItem.isSelected)
+            } else {
+                filterItem
+            }
+        }
+        _filterItems.value = updatedList
+    }
+
 
     private fun getAllCountries() {
 

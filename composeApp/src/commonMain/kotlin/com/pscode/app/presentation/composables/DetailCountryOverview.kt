@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -115,6 +116,8 @@ fun DetailCountryOverview(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                         .padding(vertical = 4.dp, horizontal = 8.dp)
                 )
+
+                Text(text = selectedCountry.continents.toString())
             }
         }
     }

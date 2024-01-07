@@ -9,5 +9,6 @@ object Constants {
     const val NUMBER_OF_TIDBITS = 3
     const val DEFAULT_TIME = "00:00:000"
     const val DELAY_MILLIS = 50L
+    val Continents = listOf("Asia", "Africa", "Europe", "North America", "South America", "Oceania", "Antarctica")
 
 }

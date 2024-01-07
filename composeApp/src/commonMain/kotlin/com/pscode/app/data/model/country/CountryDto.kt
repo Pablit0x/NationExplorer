@@ -26,6 +26,7 @@ fun CountryDto.toCountry(): CountryOverview {
         capitals = this.capital,
         population = this.population,
         area = this.area,
+        continents = this.continents,
         timezones = this.timezones,
         languages = this.languages.toNonEmptyList(),
         currency = this.currencies.toNonEmptyCurrencyNamesList(),

@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +22,7 @@ import com.pscode.app.SharedRes
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.LeaderboardScreen
+import com.pscode.app.presentation.screens.countries.overview.FilterWidgetState
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +30,8 @@ import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 fun DefaultTopAppBar(
     navigator: Navigator,
     onSearchClicked: () -> Unit,
+    onFilterClicked: () -> Unit,
+    isFiltering: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
     selectedCountryName: String? = null
 ) {
@@ -39,6 +45,16 @@ fun DefaultTopAppBar(
         is OverviewScreen -> {
             topBarTitle = SharedRes.string.countries
             actions = {
+                IconButton(onClick = onFilterClicked) {
+                    BadgedBox(badge = {
+                        if (isFiltering) {
+                            Badge()
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.Tune, contentDescription = "Filter")
+                    }
+                }
+
                 IconButton(onClick = onSearchClicked) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 }
