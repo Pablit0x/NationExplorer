@@ -2,6 +2,7 @@ package com.pscode.app.presentation.composables
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.Search
@@ -47,7 +48,7 @@ fun DefaultTopAppBar(
                 IconButton(onClick = onFilterClicked) {
                     BadgedBox(badge = {
                         if (isFiltering) {
-                            Badge()
+                            Badge(modifier = Modifier.size(3.dp))
                         }
                     }) {
                         Icon(imageVector = Icons.Default.Tune, contentDescription = "Filter")

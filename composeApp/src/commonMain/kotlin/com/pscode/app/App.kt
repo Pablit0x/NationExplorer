@@ -78,7 +78,11 @@ internal fun App() {
                         searchWidgetState = searchWidgetState,
                         searchTextState = searchText,
                         isFiltering = isFiltering,
-                        onFilterClicked = { overviewViewModel.onFilterWidgetStateChange(FilterWidgetState.OPEN) },
+                        onFilterClicked = {
+                            overviewViewModel.onFilterWidgetStateChange(
+                                FilterWidgetState.OPEN
+                            )
+                        },
                         onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
                         onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
                         onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })

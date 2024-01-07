@@ -1,6 +1,8 @@
 package com.pscode.app.presentation.screens.countries.overview
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +28,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -66,6 +68,7 @@ class OverviewScreen(
     override fun Content() {
         val isLoading by viewModel.isLoading.collectAsState()
         val isSearching by viewModel.isSearching.collectAsState()
+        val isFiltering by viewModel.isFiltering.collectAsState()
         val filterWidgetState by viewModel.filterWidgetState.collectAsState()
         val countries by viewModel.countries.collectAsState()
         val filterItems by viewModel.filterItems.collectAsState()
@@ -85,6 +88,8 @@ class OverviewScreen(
                     is ErrorEvent.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -199,23 +204,28 @@ class OverviewScreen(
                             }
                         }
 
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            OutlinedButton(
-                                onClick = { viewModel.clearAllFilters() },
-                                modifier = Modifier.padding(16.dp)
+                            Column(
+                                modifier = Modifier.fillMaxWidth().height(70.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.End
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = "Clear all filters"
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(text = SharedRes.string.clear)
+                                AnimatedVisibility(isFiltering, enter = fadeIn(), exit = fadeOut()){
+                                    ElevatedButton(
+                                        onClick = { viewModel.clearAllFilters() },
+                                        modifier = Modifier.padding(16.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            modifier = Modifier.size(24.dp),
+                                            tint = MaterialTheme.colorScheme.error,
+                                            contentDescription = "Clear all filters"
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(text = SharedRes.string.clear, color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
                             }
                         }
-                    }
                 }
             }
         }
