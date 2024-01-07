@@ -63,12 +63,27 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                 countries
             } else {
                 countries.filter {
-                    it.name.startsWith(prefix = textFieldValue.text, ignoreCase = true)
+                    it.name.startsWith(
+                        prefix = textFieldValue.text, ignoreCase = true
+                    )
                 }
+            }
+        }.combine(_filterItems) { countries, filterItems ->
+            if (filterItems.any { it.isSelected }) {
+                val selectedContinents = filterItems.filter { it.isSelected }.map { it.label }
+
+                countries.filter { country ->
+                    country.continents.any { continent ->
+                        selectedContinents.contains(continent)
+                    }
+                }
+            } else {
+                countries
             }
         }.onEach { _isSearching.update { false } }.stateIn(
             viewModelScope, SharingStarted.WhileSubscribed(5000), _countries.value
         )
+
 
     private val errorChannel = Channel<ErrorEvent>()
     val errorEventsChannelFlow = errorChannel.receiveAsFlow()
