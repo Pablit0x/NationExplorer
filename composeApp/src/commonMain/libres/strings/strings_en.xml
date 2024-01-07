@@ -60,4 +60,5 @@
     <string name="score_leaderboard">Score</string>
     <string name="no_internet">No Internet Connection.</string>
     <string name="did_you_know">Did you know?</string>
+    <string name="filter_results">Filter Results</string>
 </resources>

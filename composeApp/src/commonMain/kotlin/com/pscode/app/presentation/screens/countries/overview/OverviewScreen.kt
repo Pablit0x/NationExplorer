@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.AutoResizedText
@@ -140,6 +142,15 @@ class OverviewScreen(
                 if (filterWidgetState == FilterWidgetState.OPEN) {
                     ModalBottomSheet(sheetState = sheetState,
                         onDismissRequest = { viewModel.onFilterWidgetStateChange(newState = FilterWidgetState.CLOSED) }) {
+
+                        AutoResizedText(
+                            text = SharedRes.string.filter_results,
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
                         LazyVerticalStaggeredGrid(
                             columns = StaggeredGridCells.Fixed(count = 3),
                             contentPadding = PaddingValues(16.dp),
