@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -33,8 +35,10 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _isFiltering = MutableStateFlow(false)
-    val isFiltering = _isFiltering.asStateFlow()
+    val isFiltering = _filterItems.map { filterList ->
+        filterList.any { it.isSelected }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
 
     private val _searchText = MutableStateFlow(TextFieldValue())
     val searchText = _searchText.asStateFlow()
@@ -52,6 +56,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     val selectedCountryName = _selectedCountryName.asStateFlow()
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
+
     val countries = searchText.onEach { _isSearching.update { true } }
         .combine(_countries) { textFieldValue, countries ->
             if (textFieldValue.text.isBlank()) {
@@ -88,10 +93,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     fun onFilterWidgetStateChange(newState: FilterWidgetState) {
         _filterWidgetState.update { newState }
-    }
-
-    fun updateIsFiltering(isFiltering: Boolean) {
-        _isFiltering.update { isFiltering }
     }
 
     fun setSelectedCountryName(countryName: String?) {
