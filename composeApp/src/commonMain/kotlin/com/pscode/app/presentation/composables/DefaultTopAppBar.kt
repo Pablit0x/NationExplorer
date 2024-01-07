@@ -22,7 +22,6 @@ import com.pscode.app.SharedRes
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.LeaderboardScreen
-import com.pscode.app.presentation.screens.countries.overview.FilterWidgetState
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
