@@ -127,6 +127,14 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         _filterItems.value = updatedList
     }
 
+    fun clearAllFilters() {
+        _filterItems.update { items ->
+            items.map { item ->
+                item.copy(isSelected = false)
+            }
+        }
+    }
+
 
     private fun getAllCountries() {
 
