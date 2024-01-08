@@ -54,7 +54,6 @@ class DetailViewModel(
 
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
-
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)

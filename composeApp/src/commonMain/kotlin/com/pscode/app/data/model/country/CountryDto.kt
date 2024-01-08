@@ -16,7 +16,7 @@ data class CountryDto(
     val name: Name,
     val startOfWeek: String,
     val population: Int,
-    val timezones: List<String>,
+    val timezones: List<String>
 )
 
 fun CountryDto.toCountry(): CountryOverview {

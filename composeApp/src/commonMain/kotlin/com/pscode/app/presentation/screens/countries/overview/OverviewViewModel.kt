@@ -51,8 +51,11 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _filterWidgetState = MutableStateFlow(FilterWidgetState.CLOSED)
     val filterWidgetState = _filterWidgetState.asStateFlow()
 
-    private val _selectedCountryName = MutableStateFlow<String?>(null)
-    val selectedCountryName = _selectedCountryName.asStateFlow()
+    private val _selectedCountry = MutableStateFlow<CountryOverview?>(null)
+    val selectedCountry = _selectedCountry.asStateFlow()
+
+    private val _isFavourite = MutableStateFlow(false)
+    val isFavourite = _isFavourite.asStateFlow()
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
 
@@ -101,6 +104,28 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
+    fun setFavourite(isFavourite: Boolean) {
+        _isFavourite.update { isFavourite }
+    }
+
+
+    fun toggleFavourite(countryName: CountryOverview?) {
+        viewModelScope.launch {
+            countryRepository.toggleFavourites(country = countryName).let { response ->
+                when (response) {
+                    is Response.Success -> {
+                        _countries.update { response.data }
+                        _isFavourite.update { !it }
+                    }
+
+                    is Response.Error -> {
+
+                    }
+                }
+            }
+        }
+    }
+
     fun onSearchWidgetChange(newState: SearchWidgetState) {
         _searchWidgetState.update { newState }
     }
@@ -109,9 +134,9 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         _filterWidgetState.update { newState }
     }
 
-    fun setSelectedCountryName(countryName: String?) {
-        _selectedCountryName.update {
-            countryName
+    fun setSelectedCountry(country: CountryOverview?) {
+        _selectedCountry.update {
+            country
         }
     }
 

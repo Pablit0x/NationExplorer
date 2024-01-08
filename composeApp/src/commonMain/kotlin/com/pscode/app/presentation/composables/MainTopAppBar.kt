@@ -5,6 +5,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
 import cafe.adriel.voyager.navigator.Navigator
+import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.screens.countries.overview.SearchWidgetState
 
@@ -15,12 +16,15 @@ fun MainTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     searchWidgetState: SearchWidgetState,
     isFiltering: Boolean,
+    isFavourite: Boolean,
+    setFavourite: () -> Unit,
+    onToggleFavourite: () -> Unit,
     onFilterClicked: () -> Unit,
     searchTextState: TextFieldValue,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchTriggered: () -> Unit,
-    selectedCountryName: String? = null,
+    selectedCountry: CountryOverview? = null,
 ) {
     if (navigator.lastItem is OverviewScreen) {
         when (searchWidgetState) {
@@ -29,9 +33,12 @@ fun MainTopAppBar(
                     navigator = navigator,
                     onSearchClicked = onSearchTriggered,
                     onFilterClicked = onFilterClicked,
+                    onToggleFavourite = onToggleFavourite,
+                    setFavourite = setFavourite,
                     isFiltering = isFiltering,
+                    isFavourite = isFavourite,
                     scrollBehavior = scrollBehavior,
-                    selectedCountryName = selectedCountryName
+                    selectedCountry = selectedCountry
                 )
             }
 
@@ -48,9 +55,12 @@ fun MainTopAppBar(
             navigator = navigator,
             onSearchClicked = onSearchTriggered,
             onFilterClicked = onFilterClicked,
+            onToggleFavourite = onToggleFavourite,
+            setFavourite = setFavourite,
             isFiltering = isFiltering,
+            isFavourite = isFavourite,
             scrollBehavior = scrollBehavior,
-            selectedCountryName = selectedCountryName,
+            selectedCountry = selectedCountry,
         )
     }
 }

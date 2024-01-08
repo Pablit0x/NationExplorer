@@ -52,8 +52,9 @@ internal fun App() {
         val overviewViewModel = koinInject<OverviewViewModel>()
         val searchWidgetState by overviewViewModel.searchWidgetState.collectAsState()
         val isFiltering by overviewViewModel.isFiltering.collectAsState()
+        val isFavourite by overviewViewModel.isFavourite.collectAsState()
         val searchText by overviewViewModel.searchText.collectAsState()
-        val selectedCountryName by overviewViewModel.selectedCountryName.collectAsState()
+        val selectedCountry by overviewViewModel.selectedCountry.collectAsState()
 
         AppTheme {
             Navigator(
@@ -73,19 +74,26 @@ internal fun App() {
                     }
                 ), topBar = {
                     MainTopAppBar(navigator = navigator,
-                        selectedCountryName = selectedCountryName,
+                        selectedCountry = selectedCountry,
                         scrollBehavior = scrollBehavior,
                         searchWidgetState = searchWidgetState,
                         searchTextState = searchText,
                         isFiltering = isFiltering,
+                        isFavourite = isFavourite,
                         onFilterClicked = {
                             overviewViewModel.onFilterWidgetStateChange(
                                 FilterWidgetState.OPEN
                             )
                         },
+                        setFavourite = {
+                            overviewViewModel.setFavourite(
+                                selectedCountry?.isFavourite ?: false
+                            )
+                        },
                         onTextChange = { overviewViewModel.onSearchTextChange(text = it) },
                         onCloseClicked = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.CLOSED) },
-                        onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) })
+                        onSearchTriggered = { overviewViewModel.onSearchWidgetChange(newState = SearchWidgetState.OPENED) },
+                        onToggleFavourite = { overviewViewModel.toggleFavourite(countryName = selectedCountry) })
                 }, floatingActionButton = {
                     if (navigator.lastItem is OverviewScreen) {
                         ExtendedFloatingActionButton(

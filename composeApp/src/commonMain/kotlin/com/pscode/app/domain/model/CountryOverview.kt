@@ -16,5 +16,6 @@ data class CountryOverview(
     val timezones: List<String>,
     val languages: List<String>,
     val currency: List<String>,
-    val startOfWeek: String
+    val startOfWeek: String,
+    val isFavourite: Boolean = false
 )

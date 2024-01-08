@@ -88,8 +88,6 @@ class OverviewScreen(
                     is ErrorEvent.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
                     }
-
-                    else -> {}
                 }
             }
         }
@@ -129,7 +127,7 @@ class OverviewScreen(
                             items(items = countries, key = { it.name }) { country ->
                                 CountryListItem(
                                     countryOverview = country, onCountryClick = { selectedCountry ->
-                                        viewModel.setSelectedCountryName(countryName = selectedCountry.name)
+                                        viewModel.setSelectedCountry(selectedCountry)
                                         navigator.push(
                                             item = DetailScreen(
                                                 onShowSnackBar = { errorMsg ->
@@ -204,28 +202,31 @@ class OverviewScreen(
                             }
                         }
 
-                            Column(
-                                modifier = Modifier.fillMaxWidth().height(70.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                AnimatedVisibility(isFiltering, enter = fadeIn(), exit = fadeOut()){
-                                    ElevatedButton(
-                                        onClick = { viewModel.clearAllFilters() },
-                                        modifier = Modifier.padding(16.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Clear,
-                                            modifier = Modifier.size(24.dp),
-                                            tint = MaterialTheme.colorScheme.error,
-                                            contentDescription = "Clear all filters"
-                                        )
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(text = SharedRes.string.clear, color = MaterialTheme.colorScheme.error)
-                                    }
+                        Column(
+                            modifier = Modifier.fillMaxWidth().height(70.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            AnimatedVisibility(isFiltering, enter = fadeIn(), exit = fadeOut()) {
+                                ElevatedButton(
+                                    onClick = { viewModel.clearAllFilters() },
+                                    modifier = Modifier.padding(16.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        modifier = Modifier.size(24.dp),
+                                        tint = MaterialTheme.colorScheme.error,
+                                        contentDescription = "Clear all filters"
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = SharedRes.string.clear,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
                                 }
                             }
                         }
+                    }
                 }
             }
         }
