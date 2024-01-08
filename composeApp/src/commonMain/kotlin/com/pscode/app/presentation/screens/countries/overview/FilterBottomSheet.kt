@@ -118,7 +118,7 @@ fun FilterBottomSheet(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.End
         ) {
-            AnimatedVisibility(isFiltering, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(isFiltering or favouritesOnly, enter = fadeIn(), exit = fadeOut()) {
                 ElevatedButton(
                     onClick = onClearAllFilters, modifier = Modifier.padding(16.dp)
                 ) {

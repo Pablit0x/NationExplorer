@@ -174,6 +174,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                 item.copy(isSelected = false)
             }
         }
+        _favouritesOnly.update { false }
     }
 
 
