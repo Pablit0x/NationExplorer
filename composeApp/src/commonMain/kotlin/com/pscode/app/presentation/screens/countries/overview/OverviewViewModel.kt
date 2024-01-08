@@ -35,12 +35,18 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    val isFiltering = _filterItems.map { filterList ->
-        filterList.any { it.isSelected }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     private val _favouritesOnly = MutableStateFlow(false)
     val favouritesOnly = _favouritesOnly.asStateFlow()
+
+    val isFiltering = combine(
+        _filterItems.map { filterList ->
+            filterList.any { it.isSelected }
+        },
+        favouritesOnly
+    ) { filterResult, favouritesOnlyValue ->
+        filterResult || favouritesOnlyValue
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
 
     private val _searchText = MutableStateFlow(TextFieldValue())
