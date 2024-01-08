@@ -29,6 +29,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _filterItems = MutableStateFlow(Continents.map {
         FilterItem(label = it, isSelected = false)
     })
+
     val filterItems = _filterItems.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
@@ -37,6 +38,9 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     val isFiltering = _filterItems.map { filterList ->
         filterList.any { it.isSelected }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    private val _favouritesOnly = MutableStateFlow(false)
+    val favouritesOnly = _favouritesOnly.asStateFlow()
 
 
     private val _searchText = MutableStateFlow(TextFieldValue())
@@ -82,6 +86,14 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             } else {
                 countries
             }
+        }.combine(_favouritesOnly) { countries, favouritesOnly ->
+            if (favouritesOnly) {
+                countries.filter { country ->
+                    country.isFavourite
+                }
+            } else {
+                countries
+            }
         }.onEach { _isSearching.update { false } }.stateIn(
             viewModelScope, SharingStarted.WhileSubscribed(5000), _countries.value
         )
@@ -104,8 +116,13 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun setFavourite(isFavourite: Boolean) {
+    fun setIsFavourite(isFavourite: Boolean) {
         _isFavourite.update { isFavourite }
+    }
+
+
+    fun onFavouriteOnlySwitchToggle() {
+        _favouritesOnly.update { !it }
     }
 
 

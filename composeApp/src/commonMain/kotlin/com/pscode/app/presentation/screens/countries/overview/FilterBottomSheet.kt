@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,9 +41,11 @@ import com.pscode.app.presentation.composables.AutoResizedText
 fun FilterBottomSheet(
     filterItems: List<FilterItem>,
     isFiltering: Boolean,
+    favouritesOnly: Boolean,
     sheetState: SheetState,
     onFilterWidgetStateChange: (FilterWidgetState) -> Unit,
     onUpdateSelectedFilterItem: (String) -> Unit,
+    onFavouriteOnlyToggle: () -> Unit,
     onClearAllFilters: () -> Unit
 ) {
     ModalBottomSheet(sheetState = sheetState,
@@ -91,6 +95,22 @@ fun FilterBottomSheet(
                         }
                     })
             }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = SharedRes.string.favourites_only,
+                color = MaterialTheme.colorScheme.outline,
+                style = MaterialTheme.typography.labelLarge
+            )
+            Switch(checked = favouritesOnly, onCheckedChange = { onFavouriteOnlyToggle() })
         }
 
         Column(

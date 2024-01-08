@@ -52,6 +52,7 @@ class OverviewScreen(
         val filterWidgetState by viewModel.filterWidgetState.collectAsState()
         val countries by viewModel.countries.collectAsState()
         val filterItems by viewModel.filterItems.collectAsState()
+        val favouritesOnly by viewModel.favouritesOnly.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
         val errorsChannel = viewModel.errorEventsChannelFlow
@@ -133,10 +134,12 @@ class OverviewScreen(
 
                 if (filterWidgetState == FilterWidgetState.OPEN) {
                     FilterBottomSheet(filterItems = filterItems,
+                        favouritesOnly = favouritesOnly,
                         isFiltering = isFiltering,
                         sheetState = sheetState,
                         onFilterWidgetStateChange = { viewModel.onFilterWidgetStateChange(it) },
                         onUpdateSelectedFilterItem = { viewModel.updateFilterItemSelected(label = it) },
+                        onFavouriteOnlyToggle = { viewModel.onFavouriteOnlySwitchToggle() },
                         onClearAllFilters = { viewModel.clearAllFilters() })
                 }
             }

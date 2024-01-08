@@ -86,7 +86,7 @@ internal fun App() {
                             )
                         },
                         setFavourite = {
-                            overviewViewModel.setFavourite(
+                            overviewViewModel.setIsFavourite(
                                 selectedCountry?.isFavourite ?: false
                             )
                         },
