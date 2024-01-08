@@ -97,7 +97,7 @@ fun FilterBottomSheet(
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
