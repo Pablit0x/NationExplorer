@@ -214,6 +214,12 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             }
         }
         _favouritesOnly.update { false }
+
+        _filterItemsPopulations.update { items ->
+            items.map { item ->
+                item.copy(isSelected = false)
+            }
+        }
     }
 
 
