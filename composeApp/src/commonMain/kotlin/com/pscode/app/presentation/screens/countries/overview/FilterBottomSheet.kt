@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -35,6 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.composables.AutoResizedText
+import com.pscode.app.presentation.composables.formatNumber
+import com.pscode.app.utils.Constants
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,13 +47,18 @@ fun FilterBottomSheet(
     filterItems: List<FilterItem>,
     isFiltering: Boolean,
     favouritesOnly: Boolean,
+    populationSliderPosition: ClosedFloatingPointRange<Float>,
+    onSliderPositionChange: (ClosedFloatingPointRange<Float>) -> Unit,
     sheetState: SheetState,
     onFilterWidgetStateChange: (FilterWidgetState) -> Unit,
     onUpdateSelectedFilterItem: (String) -> Unit,
     onFavouriteOnlyToggle: () -> Unit,
-    onClearAllFilters: () -> Unit
+    onClearAllFilters: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    ModalBottomSheet(sheetState = sheetState,
+    ModalBottomSheet(
+        modifier = modifier,
+        sheetState = sheetState,
         onDismissRequest = { onFilterWidgetStateChange(FilterWidgetState.CLOSED) }) {
 
         AutoResizedText(
@@ -58,6 +68,41 @@ fun FilterBottomSheet(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = SharedRes.string.population,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.fillMaxWidth(0.3f)
+            )
+
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                Text(
+                    text = "${formatNumber(populationSliderPosition.start.roundToInt())} - ${
+                        formatNumber(
+                            populationSliderPosition.endInclusive.roundToInt()
+                        )
+                    }",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        RangeSlider(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            value = populationSliderPosition,
+            onValueChange = { onSliderPositionChange(it) },
+            steps = 1000,
+            valueRange = Constants.POPULATION_RANGE
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = SharedRes.string.continents,
@@ -112,6 +157,7 @@ fun FilterBottomSheet(
             )
             Switch(checked = favouritesOnly, onCheckedChange = { onFavouriteOnlyToggle() })
         }
+
 
         Column(
             modifier = Modifier.fillMaxWidth().height(70.dp),

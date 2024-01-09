@@ -53,6 +53,7 @@ class OverviewScreen(
         val countries by viewModel.countries.collectAsState()
         val filterItems by viewModel.filterItems.collectAsState()
         val favouritesOnly by viewModel.favouritesOnly.collectAsState()
+        val populationSliderPosition by viewModel.populationSliderPosition.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
         val errorsChannel = viewModel.errorEventsChannelFlow
@@ -60,7 +61,9 @@ class OverviewScreen(
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
 
-        val sheetState = rememberModalBottomSheetState()
+        val sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        )
 
 
         LaunchedEffect(errorsChannel) {
@@ -133,14 +136,18 @@ class OverviewScreen(
                 }
 
                 if (filterWidgetState == FilterWidgetState.OPEN) {
-                    FilterBottomSheet(filterItems = filterItems,
+                    FilterBottomSheet(
+                        filterItems = filterItems,
                         favouritesOnly = favouritesOnly,
+                        onSliderPositionChange = { viewModel.onPopulationSliderPositionChange(it) },
+                        populationSliderPosition = populationSliderPosition,
                         isFiltering = isFiltering,
                         sheetState = sheetState,
                         onFilterWidgetStateChange = { viewModel.onFilterWidgetStateChange(it) },
                         onUpdateSelectedFilterItem = { viewModel.updateFilterItemSelected(label = it) },
                         onFavouriteOnlyToggle = { viewModel.onFavouriteOnlySwitchToggle() },
-                        onClearAllFilters = { viewModel.clearAllFilters() })
+                        onClearAllFilters = { viewModel.clearAllFilters() }
+                    )
                 }
             }
         }

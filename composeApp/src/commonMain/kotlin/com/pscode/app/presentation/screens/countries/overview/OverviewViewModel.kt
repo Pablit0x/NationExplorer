@@ -42,8 +42,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     val isFiltering = combine(
         _filterItems.map { filterList ->
             filterList.any { it.isSelected }
-        },
-        favouritesOnly
+        }, favouritesOnly
     ) { filterResult, favouritesOnlyValue ->
         filterResult || favouritesOnlyValue
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
@@ -66,6 +65,9 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     private val _isFavourite = MutableStateFlow(false)
     val isFavourite = _isFavourite.asStateFlow()
+
+    private val _populationSliderPosition = MutableStateFlow(Constants.POPULATION_RANGE)
+    val populationSliderPosition = _populationSliderPosition
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
 
@@ -112,6 +114,10 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     init {
         getAllCountries()
         loginToRealm()
+    }
+
+    fun onPopulationSliderPositionChange(updatedPosition: ClosedFloatingPointRange<Float>) {
+        _populationSliderPosition.update { updatedPosition }
     }
 
     fun onSearchTextChange(text: String) {
