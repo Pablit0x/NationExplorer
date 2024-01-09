@@ -51,9 +51,9 @@ class OverviewScreen(
         val isFiltering by viewModel.isFiltering.collectAsState()
         val filterWidgetState by viewModel.filterWidgetState.collectAsState()
         val countries by viewModel.countries.collectAsState()
-        val filterItems by viewModel.filterItems.collectAsState()
+        val filterContinentItems by viewModel.filterItemsContinents.collectAsState()
+        val filterPopulationItems by viewModel.filterItemsPopulations.collectAsState()
         val favouritesOnly by viewModel.favouritesOnly.collectAsState()
-        val populationSliderPosition by viewModel.populationSliderPosition.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
         val errorsChannel = viewModel.errorEventsChannelFlow
@@ -137,14 +137,14 @@ class OverviewScreen(
 
                 if (filterWidgetState == FilterWidgetState.OPEN) {
                     FilterBottomSheet(
-                        filterItems = filterItems,
+                        continentsFilterItems = filterContinentItems,
+                        populationFilterItems = filterPopulationItems,
                         favouritesOnly = favouritesOnly,
-                        onSliderPositionChange = { viewModel.onPopulationSliderPositionChange(it) },
-                        populationSliderPosition = populationSliderPosition,
                         isFiltering = isFiltering,
                         sheetState = sheetState,
                         onFilterWidgetStateChange = { viewModel.onFilterWidgetStateChange(it) },
-                        onUpdateSelectedFilterItem = { viewModel.updateFilterItemSelected(label = it) },
+                        onUpdateSelectedContinentFilterItem = { viewModel.updateContinentFilterItemSelected(label = it) },
+                        onUpdateSelectedPopulationFilterItem = {viewModel.updatePopulationFilterItemSelected(label = it)},
                         onFavouriteOnlyToggle = { viewModel.onFavouriteOnlySwitchToggle() },
                         onClearAllFilters = { viewModel.clearAllFilters() }
                     )

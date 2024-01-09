@@ -6,6 +6,7 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.ErrorEvent
 import com.pscode.app.utils.Constants
 import com.pscode.app.utils.Constants.Continents
+import com.pscode.app.utils.Constants.Populations
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.realm.kotlin.mongodb.App
@@ -26,11 +27,17 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
-    private val _filterItems = MutableStateFlow(Continents.map {
+    private val _filterItemsContinents = MutableStateFlow(Continents.map {
         FilterItem(label = it, isSelected = false)
     })
 
-    val filterItems = _filterItems.asStateFlow()
+    val filterItemsContinents = _filterItemsContinents.asStateFlow()
+
+    private val _filterItemsPopulations = MutableStateFlow(Populations.map {
+        FilterItem(label = it.toString(), isSelected = false)
+    })
+
+    val filterItemsPopulations = _filterItemsPopulations.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -39,12 +46,12 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _favouritesOnly = MutableStateFlow(false)
     val favouritesOnly = _favouritesOnly.asStateFlow()
 
-    val isFiltering = combine(
-        _filterItems.map { filterList ->
-            filterList.any { it.isSelected }
-        }, favouritesOnly
-    ) { filterResult, favouritesOnlyValue ->
-        filterResult || favouritesOnlyValue
+    val isFiltering = combine(_filterItemsContinents.map { continentFilterItems ->
+        continentFilterItems.any { it.isSelected }
+    }, favouritesOnly, filterItemsPopulations.map { populationFilterItems ->
+        populationFilterItems.any { it.isSelected }
+    }) { continentFilterResult, favouritesOnlyValue, populationFilterResult ->
+        continentFilterResult || favouritesOnlyValue || populationFilterResult
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
 
@@ -66,8 +73,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _isFavourite = MutableStateFlow(false)
     val isFavourite = _isFavourite.asStateFlow()
 
-    private val _populationSliderPosition = MutableStateFlow(Constants.POPULATION_RANGE)
-    val populationSliderPosition = _populationSliderPosition
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
 
@@ -82,7 +87,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                     )
                 }
             }
-        }.combine(_filterItems) { countries, filterItems ->
+        }.combine(_filterItemsContinents) { countries, filterItems ->
             if (filterItems.any { it.isSelected }) {
                 val selectedContinents = filterItems.filter { it.isSelected }.map { it.label }
 
@@ -102,6 +107,15 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             } else {
                 countries
             }
+        }.combine(_filterItemsPopulations) { countries, populationItems ->
+            val selectedPopulation = populationItems.firstOrNull { it.isSelected }
+            if (selectedPopulation != null) {
+                countries.filter {
+                    it.population >= selectedPopulation.label.toInt()
+                }
+            } else {
+                countries
+            }
         }.onEach { _isSearching.update { false } }.stateIn(
             viewModelScope, SharingStarted.WhileSubscribed(5000), _countries.value
         )
@@ -114,10 +128,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     init {
         getAllCountries()
         loginToRealm()
-    }
-
-    fun onPopulationSliderPositionChange(updatedPosition: ClosedFloatingPointRange<Float>) {
-        _populationSliderPosition.update { updatedPosition }
     }
 
     fun onSearchTextChange(text: String) {
@@ -169,19 +179,36 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun updateFilterItemSelected(label: String) {
-        val updatedList = _filterItems.value.map { filterItem ->
+    fun updateContinentFilterItemSelected(label: String) {
+        val updatedList = _filterItemsContinents.value.map { filterItem ->
             if (filterItem.label == label) {
                 filterItem.copy(isSelected = !filterItem.isSelected)
             } else {
                 filterItem
             }
         }
-        _filterItems.value = updatedList
+        _filterItemsContinents.value = updatedList
     }
 
+    fun updatePopulationFilterItemSelected(label: String) {
+        _filterItemsPopulations.update {
+            it.map { populationFilterItem ->
+                if (label != populationFilterItem.label) {
+                    populationFilterItem.copy(
+                        isSelected = false
+                    )
+                } else {
+                    populationFilterItem.copy(
+                        isSelected = !populationFilterItem.isSelected
+                    )
+                }
+            }
+        }
+    }
+
+
     fun clearAllFilters() {
-        _filterItems.update { items ->
+        _filterItemsContinents.update { items ->
             items.map { item ->
                 item.copy(isSelected = false)
             }

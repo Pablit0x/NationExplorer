@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,10 +23,10 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -37,27 +36,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.composables.AutoResizedText
-import com.pscode.app.presentation.composables.formatNumber
-import com.pscode.app.utils.Constants
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
-    filterItems: List<FilterItem>,
+    continentsFilterItems: List<FilterItem>,
+    populationFilterItems: List<FilterItem>,
     isFiltering: Boolean,
     favouritesOnly: Boolean,
-    populationSliderPosition: ClosedFloatingPointRange<Float>,
-    onSliderPositionChange: (ClosedFloatingPointRange<Float>) -> Unit,
     sheetState: SheetState,
     onFilterWidgetStateChange: (FilterWidgetState) -> Unit,
-    onUpdateSelectedFilterItem: (String) -> Unit,
+    onUpdateSelectedContinentFilterItem: (String) -> Unit,
+    onUpdateSelectedPopulationFilterItem: (String) -> Unit,
     onFavouriteOnlyToggle: () -> Unit,
     onClearAllFilters: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ModalBottomSheet(
-        modifier = modifier,
+    ModalBottomSheet(modifier = modifier,
         sheetState = sheetState,
         onDismissRequest = { onFilterWidgetStateChange(FilterWidgetState.CLOSED) }) {
 
@@ -70,37 +65,33 @@ fun FilterBottomSheet(
         Spacer(modifier = Modifier.height(16.dp))
 
 
+        Text(
+            text = SharedRes.string.population,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = SharedRes.string.population,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.fillMaxWidth(0.3f)
-            )
+            populationFilterItems.forEach { populationItem ->
+                FilterChip(
 
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                Text(
-                    text = "${formatNumber(populationSliderPosition.start.roundToInt())} - ${
-                        formatNumber(
-                            populationSliderPosition.endInclusive.roundToInt()
+                    selected = populationItem.isSelected,
+                    label = {
+                        Text(
+                            text = "< " + convertPopulation(populationItem.label.toLong()),
+                            style = MaterialTheme.typography.labelMedium
                         )
-                    }",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    onClick = { onUpdateSelectedPopulationFilterItem(populationItem.label) },
+                    modifier = Modifier.padding(4.dp).weight(1f)
                 )
             }
         }
-
-        RangeSlider(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            value = populationSliderPosition,
-            onValueChange = { onSliderPositionChange(it) },
-            steps = 1000,
-            valueRange = Constants.POPULATION_RANGE
-        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -118,9 +109,9 @@ fun FilterBottomSheet(
             verticalItemSpacing = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(filterItems) { continent ->
+            items(continentsFilterItems) { continent ->
                 ElevatedFilterChip(selected = continent.isSelected,
-                    onClick = { onUpdateSelectedFilterItem(continent.label) },
+                    onClick = { onUpdateSelectedContinentFilterItem(continent.label) },
                     label = {
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(4.dp),
@@ -181,5 +172,14 @@ fun FilterBottomSheet(
                 }
             }
         }
+    }
+}
+
+fun convertPopulation(number: Long): String {
+    return when {
+        number < 1000L -> number.toString()
+        number in 1000L until 1_000_000L -> "${number / 1000L}K"
+        number in 1_000_000L until 1_000_000_000L -> "${number / 1_000_000L}M"
+        else -> "${number / 1_000_000L}M"
     }
 }
