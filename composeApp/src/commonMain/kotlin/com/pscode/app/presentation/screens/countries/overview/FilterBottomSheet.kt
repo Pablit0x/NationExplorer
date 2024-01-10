@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -133,17 +134,22 @@ fun FilterBottomSheet(
             }
         }
 
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+
         Spacer(modifier = Modifier.height(8.dp))
+
 
         Row(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = SharedRes.string.favourites_only,
-                color = MaterialTheme.colorScheme.outline,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.labelLarge
             )
             Switch(checked = showFavouritesOnly, onCheckedChange = { onToggleFavouriteOnly() })
@@ -151,13 +157,17 @@ fun FilterBottomSheet(
 
 
         Column(
-            modifier = Modifier.fillMaxWidth().height(70.dp),
+            modifier = Modifier.fillMaxWidth().height(90.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.End
         ) {
-            AnimatedVisibility(isFiltering or showFavouritesOnly, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(
+                isFiltering or showFavouritesOnly, enter = fadeIn(), exit = fadeOut()
+            ) {
                 ElevatedButton(
-                    onClick = onResetAllFilters, modifier = Modifier.padding(16.dp)
+                    onClick = onResetAllFilters, modifier = Modifier.padding(
+                        top = 32.dp, bottom = 16.dp, start = 32.dp, end = 32.dp
+                    ).fillMaxWidth()
                 ) {
                     Icon(
                         imageVector = Icons.Default.Clear,
@@ -167,7 +177,7 @@ fun FilterBottomSheet(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = SharedRes.string.clear, color = MaterialTheme.colorScheme.error
+                        text = "Reset Filters", color = MaterialTheme.colorScheme.error
                     )
                 }
             }

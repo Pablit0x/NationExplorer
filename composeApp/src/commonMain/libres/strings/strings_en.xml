@@ -63,5 +63,5 @@
     <string name="filter_results">Filter Results</string>
     <string name="clear">Clear</string>
     <string name="continents">Continents</string>
-    <string name="favourites_only">Favourites Only</string>
+    <string name="favourites_only">Show only favorite countries</string>
 </resources>
