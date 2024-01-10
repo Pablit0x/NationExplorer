@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import com.pscode.app.SharedRes
@@ -100,6 +101,7 @@ fun DefaultTopAppBar(
                     if (isFavourite) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
+                            tint = Color.Red,
                             contentDescription = "Remove country from favourites"
                         )
                     } else {
