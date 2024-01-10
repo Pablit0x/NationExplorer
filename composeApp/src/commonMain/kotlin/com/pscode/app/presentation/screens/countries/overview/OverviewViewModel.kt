@@ -121,8 +121,8 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         )
 
 
-    private val _eventChannel = Channel<Event>()
-    val eventChannel = _eventChannel.receiveAsFlow()
+    private val _eventsChannel = Channel<Event>()
+    val eventsChannel = _eventsChannel.receiveAsFlow()
 
 
     init {
@@ -241,7 +241,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                 }
 
                 is Response.Error -> {
-                    _eventChannel.send(Event.ShowSnackbarMessage(message = result.message))
+                    _eventsChannel.send(Event.ShowSnackbarMessage(message = result.message))
 
                     _isLoading.update { false }
                 }

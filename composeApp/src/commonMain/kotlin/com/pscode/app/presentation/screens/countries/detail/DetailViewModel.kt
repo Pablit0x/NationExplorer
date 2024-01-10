@@ -34,20 +34,20 @@ class DetailViewModel(
         viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = Status.Idle
     )
 
-    private val _weather = MutableStateFlow<WeatherOverview?>(null)
-    val weather = _weather.asStateFlow()
+    private val _currentWeather = MutableStateFlow<WeatherOverview?>(null)
+    val currentWeather = _currentWeather.asStateFlow()
 
-    private val _eventChannel = Channel<Event>()
-    val eventChannel = _eventChannel.receiveAsFlow()
+    private val _eventsChannel = Channel<Event>()
+    val eventsChannel = _eventsChannel.receiveAsFlow()
 
-    private val _showMap = MutableStateFlow(false)
-    val showMap = _showMap.asStateFlow()
+    private val _isMapVisible = MutableStateFlow(false)
+    val isMapVisible = _isMapVisible.asStateFlow()
 
-    private val _geolocation = MutableStateFlow<LocationOverview?>(null)
-    val geolocation = _geolocation.asStateFlow()
+    private val _countryGeolocation = MutableStateFlow<LocationOverview?>(null)
+    val countryGeolocation = _countryGeolocation.asStateFlow()
 
-    private val _tidbits = MutableStateFlow<List<TidbitOverview>>(emptyList())
-    val tidbits = _tidbits.asStateFlow()
+    private val _tidbitsList = MutableStateFlow<List<TidbitOverview>>(emptyList())
+    val tidbitsList = _tidbitsList.asStateFlow()
 
     private val _currentTidbitId = MutableStateFlow(0)
     val currentTidbitId = _currentTidbitId.asStateFlow()
@@ -59,7 +59,7 @@ class DetailViewModel(
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
             when (result) {
                 is Response.Success -> {
-                    _tidbits.update {
+                    _tidbitsList.update {
                         result.data
                     }
                 }
@@ -71,7 +71,7 @@ class DetailViewModel(
         }
     }
 
-    fun setCurrentTidbit(id: Int) {
+    fun setCurrentTidbitId(id: Int) {
         _currentTidbitId.update {
             id
         }
@@ -86,7 +86,7 @@ class DetailViewModel(
 
             when (result) {
                 is Response.Success -> {
-                    _geolocation.update {
+                    _countryGeolocation.update {
                         result.data
                     }
                 }
@@ -106,7 +106,7 @@ class DetailViewModel(
 
                 when (result) {
                     is Response.Success -> {
-                        _weather.update {
+                        _currentWeather.update {
                             result.data
                         }
                     }
@@ -120,19 +120,19 @@ class DetailViewModel(
     }
 
     fun showMap() {
-        _showMap.update { true }
+        _isMapVisible.update { true }
     }
 
     fun hideMap() {
-        _showMap.update { false }
+        _isMapVisible.update { false }
     }
 
-    fun clear() {
-        _showMap.update { false }
+    fun resetViewModel() {
+        _isMapVisible.update { false }
         _didFetchFail.update { false }
-        _weather.update { null }
-        _geolocation.update { null }
-        _tidbits.update { emptyList() }
+        _currentWeather.update { null }
+        _countryGeolocation.update { null }
+        _tidbitsList.update { emptyList() }
     }
 
 }

@@ -56,7 +56,7 @@ class OverviewScreen(
         val showFavouritesOnly by viewModel.showFavouritesOnly.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
-        val eventChannel = viewModel.eventChannel
+        val eventsChannel = viewModel.eventsChannel
 
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -66,8 +66,8 @@ class OverviewScreen(
         )
 
 
-        LaunchedEffect(eventChannel) {
-            eventChannel.collect { event ->
+        LaunchedEffect(eventsChannel) {
+            eventsChannel.collect { event ->
                 when (event) {
                     is Event.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)

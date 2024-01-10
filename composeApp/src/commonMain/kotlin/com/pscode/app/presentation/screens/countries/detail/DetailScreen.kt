@@ -52,21 +52,22 @@ class DetailScreen(
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
-        val weatherOverview by viewModel.weather.collectAsState()
-        val showMap by viewModel.showMap.collectAsState()
-        val geolocation by viewModel.geolocation.collectAsState()
-        val tidbits by viewModel.tidbits.collectAsState()
+        val currentWeather by viewModel.currentWeather.collectAsState()
+        val isMapVisible by viewModel.isMapVisible.collectAsState()
+        val countryGeolocation by viewModel.countryGeolocation.collectAsState()
+        val tidbitsList by viewModel.tidbitsList.collectAsState()
         val currentTidbitId by viewModel.currentTidbitId.collectAsState()
-        val errorsChannel = viewModel.eventChannel
-        val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
+        val eventsChannel = viewModel.eventsChannel
+
+        val hasCapital = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
         val networkStatus by viewModel.connectivityStatus.collectAsState()
-        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        val didFetchFail by viewModel.didFetchFail.collectAsState()
+        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val fetchFailure by viewModel.didFetchFail.collectAsState()
         val scrollState = rememberScrollState()
 
-        LaunchedEffect(errorsChannel) {
-            errorsChannel.collect { event ->
+        LaunchedEffect(eventsChannel) {
+            eventsChannel.collect { event ->
                 when (event) {
                     is Event.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
@@ -82,7 +83,7 @@ class DetailScreen(
         }
 
         LaunchedEffect(networkStatus) {
-            if (didFetchFail) {
+            if (fetchFailure) {
                 when (networkStatus) {
                     Status.Available -> {
                         viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
@@ -97,7 +98,7 @@ class DetailScreen(
 
         DisposableEffect(Unit) {
             onDispose {
-                viewModel.clear()
+                viewModel.resetViewModel()
             }
         }
 
@@ -110,20 +111,20 @@ class DetailScreen(
 
             DetailCountryOverview(
                 selectedCountry = selectedCountry,
-                hasCapitalCity = hasCapitalCity,
+                hasCapitalCity = hasCapital,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
             )
 
-            if (tidbits.isNotEmpty()) {
+            if (tidbitsList.isNotEmpty()) {
                 TidbitCard(
                     currentTidbitId = currentTidbitId,
-                    tidbits = tidbits,
-                    setCurrentTidbitId = { viewModel.setCurrentTidbit(it) },
+                    tidbits = tidbitsList,
+                    setCurrentTidbitId = { viewModel.setCurrentTidbitId(it) },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
             }
 
-            if (hasCapitalCity) {
+            if (hasCapital) {
 
                 AutoResizedText(
                     text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
@@ -133,12 +134,12 @@ class DetailScreen(
                 )
 
                 WeatherCard(
-                    weatherInCapital = weatherOverview, modifier = Modifier.fillMaxWidth()
+                    weatherInCapital = currentWeather, modifier = Modifier.fillMaxWidth()
                 )
             }
 
             AnimatedVisibility(
-                visible = geolocation != null, enter = fadeIn(), exit = fadeOut()
+                visible = countryGeolocation != null, enter = fadeIn(), exit = fadeOut()
             ) {
                 ElevatedButton(
                     onClick = viewModel::showMap, modifier = Modifier.fillMaxWidth(0.6f)
@@ -152,11 +153,11 @@ class DetailScreen(
                 }
             }
 
-            if (showMap) {
+            if (isMapVisible) {
                 ModalBottomSheet(
-                    sheetState = sheetState,
+                    sheetState = bottomSheetState,
                     onDismissRequest = { viewModel.hideMap() }) {
-                    geolocation?.let {
+                    countryGeolocation?.let {
                         MapView(
                             modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
                             countryArea = selectedCountry.area,
