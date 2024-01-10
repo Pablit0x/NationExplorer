@@ -34,7 +34,7 @@ import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
-import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.presentation.screens.shared.Event
 import kotlinx.coroutines.launch
 
 class OverviewScreen(
@@ -51,12 +51,12 @@ class OverviewScreen(
         val isFiltering by viewModel.isFiltering.collectAsState()
         val filterWidgetState by viewModel.filterWidgetState.collectAsState()
         val countries by viewModel.countries.collectAsState()
-        val filterContinentItems by viewModel.filterItemsContinents.collectAsState()
-        val filterPopulationItems by viewModel.filterItemsPopulations.collectAsState()
-        val favouritesOnly by viewModel.favouritesOnly.collectAsState()
+        val continentFilterItems by viewModel.continentFilterItems.collectAsState()
+        val populationFilterItems by viewModel.populationFilterItems.collectAsState()
+        val showFavouritesOnly by viewModel.showFavouritesOnly.collectAsState()
 
         val groupedCountries = countries.groupBy { it.name.first() }
-        val errorsChannel = viewModel.errorEventsChannelFlow
+        val eventChannel = viewModel.eventChannel
 
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -66,10 +66,10 @@ class OverviewScreen(
         )
 
 
-        LaunchedEffect(errorsChannel) {
-            errorsChannel.collect { event ->
+        LaunchedEffect(eventChannel) {
+            eventChannel.collect { event ->
                 when (event) {
-                    is ErrorEvent.ShowSnackbarMessage -> {
+                    is Event.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
                     }
                 }
@@ -111,7 +111,7 @@ class OverviewScreen(
                             items(items = countries, key = { it.name }) { country ->
                                 CountryListItem(
                                     countryOverview = country, onCountryClick = { selectedCountry ->
-                                        viewModel.setSelectedCountry(selectedCountry)
+                                        viewModel.setSelectedCountryOverview(selectedCountry)
                                         navigator.push(
                                             item = DetailScreen(
                                                 onShowSnackBar = { errorMsg ->
@@ -137,16 +137,16 @@ class OverviewScreen(
 
                 if (filterWidgetState == FilterWidgetState.OPEN) {
                     FilterBottomSheet(
-                        continentsFilterItems = filterContinentItems,
-                        populationFilterItems = filterPopulationItems,
-                        favouritesOnly = favouritesOnly,
-                        isFiltering = isFiltering,
                         sheetState = sheetState,
-                        onFilterWidgetStateChange = { viewModel.onFilterWidgetStateChange(it) },
-                        onUpdateSelectedContinentFilterItem = { viewModel.updateContinentFilterItemSelected(label = it) },
-                        onUpdateSelectedPopulationFilterItem = {viewModel.updatePopulationFilterItemSelected(label = it)},
-                        onFavouriteOnlyToggle = { viewModel.onFavouriteOnlySwitchToggle() },
-                        onClearAllFilters = { viewModel.clearAllFilters() }
+                        isFiltering = isFiltering,
+                        showFavouritesOnly = showFavouritesOnly,
+                        continentsFilterItems = continentFilterItems,
+                        populationFilterItems = populationFilterItems,
+                        onUpdateFilterWidgetState = { viewModel.updateFilterWidgetState(it) },
+                        onUpdateContinentFilterItem = { viewModel.updateContinentFilterItem(label = it) },
+                        onUpdatePopulationFilterItem = {viewModel.updatePopulationFilterItem(label = it)},
+                        onToggleFavouriteOnly = { viewModel.toggleFavouriteOnly() },
+                        onResetAllFilters = { viewModel.resetAllFilters() }
                     )
                 }
             }

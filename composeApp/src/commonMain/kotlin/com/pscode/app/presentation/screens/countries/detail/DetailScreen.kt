@@ -41,7 +41,7 @@ import com.pscode.app.presentation.composables.MapView
 import com.pscode.app.presentation.composables.TidbitCard
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
-import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Status
 import org.koin.compose.koinInject
 
@@ -57,7 +57,7 @@ class DetailScreen(
         val geolocation by viewModel.geolocation.collectAsState()
         val tidbits by viewModel.tidbits.collectAsState()
         val currentTidbitId by viewModel.currentTidbitId.collectAsState()
-        val errorsChannel = viewModel.errorEventsChannelFlow
+        val errorsChannel = viewModel.eventChannel
         val hasCapitalCity = selectedCountry.capitals.isNotEmpty()
         val navigator = LocalNavigator.currentOrThrow
         val networkStatus by viewModel.connectivityStatus.collectAsState()
@@ -68,7 +68,7 @@ class DetailScreen(
         LaunchedEffect(errorsChannel) {
             errorsChannel.collect { event ->
                 when (event) {
-                    is ErrorEvent.ShowSnackbarMessage -> {
+                    is Event.ShowSnackbarMessage -> {
                         onShowSnackBar(event.message)
                     }
                 }

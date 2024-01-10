@@ -3,7 +3,7 @@ package com.pscode.app.presentation.screens.countries.overview
 import androidx.compose.ui.text.input.TextFieldValue
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.repository.CountryRepository
-import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Constants
 import com.pscode.app.utils.Constants.Continents
 import com.pscode.app.utils.Constants.Populations
@@ -27,28 +27,28 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
-    private val _filterItemsContinents = MutableStateFlow(Continents.map {
+    private val _continentFilterItems = MutableStateFlow(Continents.map {
         FilterItem(label = it, isSelected = false)
     })
 
-    val filterItemsContinents = _filterItemsContinents.asStateFlow()
+    val continentFilterItems = _continentFilterItems.asStateFlow()
 
-    private val _filterItemsPopulations = MutableStateFlow(Populations.map {
+    private val _populationFilterItems = MutableStateFlow(Populations.map {
         FilterItem(label = it.toString(), isSelected = false)
     })
 
-    val filterItemsPopulations = _filterItemsPopulations.asStateFlow()
+    val populationFilterItems = _populationFilterItems.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
 
-    private val _favouritesOnly = MutableStateFlow(false)
-    val favouritesOnly = _favouritesOnly.asStateFlow()
+    private val _showFavouritesOnly = MutableStateFlow(false)
+    val showFavouritesOnly = _showFavouritesOnly.asStateFlow()
 
-    val isFiltering = combine(_filterItemsContinents.map { continentFilterItems ->
+    val isFiltering = combine(_continentFilterItems.map { continentFilterItems ->
         continentFilterItems.any { it.isSelected }
-    }, favouritesOnly, filterItemsPopulations.map { populationFilterItems ->
+    }, showFavouritesOnly, populationFilterItems.map { populationFilterItems ->
         populationFilterItems.any { it.isSelected }
     }) { continentFilterResult, favouritesOnlyValue, populationFilterResult ->
         continentFilterResult || favouritesOnlyValue || populationFilterResult
@@ -67,11 +67,11 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _filterWidgetState = MutableStateFlow(FilterWidgetState.CLOSED)
     val filterWidgetState = _filterWidgetState.asStateFlow()
 
-    private val _selectedCountry = MutableStateFlow<CountryOverview?>(null)
-    val selectedCountry = _selectedCountry.asStateFlow()
+    private val _selectedCountryOverview = MutableStateFlow<CountryOverview?>(null)
+    val selectedCountryOverview = _selectedCountryOverview.asStateFlow()
 
-    private val _isFavourite = MutableStateFlow(false)
-    val isFavourite = _isFavourite.asStateFlow()
+    private val _isCountryFavourite = MutableStateFlow(false)
+    val isCountryFavourite = _isCountryFavourite.asStateFlow()
 
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
@@ -87,7 +87,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                     )
                 }
             }
-        }.combine(_filterItemsContinents) { countries, filterItems ->
+        }.combine(_continentFilterItems) { countries, filterItems ->
             if (filterItems.any { it.isSelected }) {
                 val selectedContinents = filterItems.filter { it.isSelected }.map { it.label }
 
@@ -99,7 +99,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             } else {
                 countries
             }
-        }.combine(_favouritesOnly) { countries, favouritesOnly ->
+        }.combine(_showFavouritesOnly) { countries, favouritesOnly ->
             if (favouritesOnly) {
                 countries.filter { country ->
                     country.isFavourite
@@ -107,7 +107,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             } else {
                 countries
             }
-        }.combine(_filterItemsPopulations) { countries, populationItems ->
+        }.combine(_populationFilterItems) { countries, populationItems ->
             val selectedPopulation = populationItems.firstOrNull { it.isSelected }
             if (selectedPopulation != null) {
                 countries.filter {
@@ -121,8 +121,8 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         )
 
 
-    private val errorChannel = Channel<ErrorEvent>()
-    val errorEventsChannelFlow = errorChannel.receiveAsFlow()
+    private val _eventChannel = Channel<Event>()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
 
     init {
@@ -130,7 +130,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         loginToRealm()
     }
 
-    fun onSearchTextChange(text: String) {
+    fun updateSearchText(text: String) {
         _searchText.update {
             it.copy(
                 text = text
@@ -138,23 +138,23 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun setIsFavourite(isFavourite: Boolean) {
-        _isFavourite.update { isFavourite }
+    fun setFavouriteStatus(isFavourite: Boolean) {
+        _isCountryFavourite.update { isFavourite }
     }
 
 
-    fun onFavouriteOnlySwitchToggle() {
-        _favouritesOnly.update { !it }
+    fun toggleFavouriteOnly() {
+        _showFavouritesOnly.update { !it }
     }
 
 
-    fun toggleFavourite(countryName: CountryOverview?) {
+    fun toggleCountryFavourite(countryName: CountryOverview?) {
         viewModelScope.launch {
             countryRepository.toggleFavourites(country = countryName).let { response ->
                 when (response) {
                     is Response.Success -> {
                         _countries.update { response.data }
-                        _isFavourite.update { !it }
+                        _isCountryFavourite.update { !it }
                     }
 
                     is Response.Error -> {
@@ -165,33 +165,33 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun onSearchWidgetChange(newState: SearchWidgetState) {
+    fun updateSearchWidgetState(newState: SearchWidgetState) {
         _searchWidgetState.update { newState }
     }
 
-    fun onFilterWidgetStateChange(newState: FilterWidgetState) {
+    fun updateFilterWidgetState(newState: FilterWidgetState) {
         _filterWidgetState.update { newState }
     }
 
-    fun setSelectedCountry(country: CountryOverview?) {
-        _selectedCountry.update {
+    fun setSelectedCountryOverview(country: CountryOverview?) {
+        _selectedCountryOverview.update {
             country
         }
     }
 
-    fun updateContinentFilterItemSelected(label: String) {
-        val updatedList = _filterItemsContinents.value.map { filterItem ->
+    fun updateContinentFilterItem(label: String) {
+        val updatedList = _continentFilterItems.value.map { filterItem ->
             if (filterItem.label == label) {
                 filterItem.copy(isSelected = !filterItem.isSelected)
             } else {
                 filterItem
             }
         }
-        _filterItemsContinents.value = updatedList
+        _continentFilterItems.value = updatedList
     }
 
-    fun updatePopulationFilterItemSelected(label: String) {
-        _filterItemsPopulations.update {
+    fun updatePopulationFilterItem(label: String) {
+        _populationFilterItems.update {
             it.map { populationFilterItem ->
                 if (label != populationFilterItem.label) {
                     populationFilterItem.copy(
@@ -207,15 +207,15 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
 
-    fun clearAllFilters() {
-        _filterItemsContinents.update { items ->
+    fun resetAllFilters() {
+        _continentFilterItems.update { items ->
             items.map { item ->
                 item.copy(isSelected = false)
             }
         }
-        _favouritesOnly.update { false }
+        _showFavouritesOnly.update { false }
 
-        _filterItemsPopulations.update { items ->
+        _populationFilterItems.update { items ->
             items.map { item ->
                 item.copy(isSelected = false)
             }
@@ -241,7 +241,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                 }
 
                 is Response.Error -> {
-                    errorChannel.send(ErrorEvent.ShowSnackbarMessage(message = result.message))
+                    _eventChannel.send(Event.ShowSnackbarMessage(message = result.message))
 
                     _isLoading.update { false }
                 }

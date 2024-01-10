@@ -43,18 +43,18 @@ fun FilterBottomSheet(
     continentsFilterItems: List<FilterItem>,
     populationFilterItems: List<FilterItem>,
     isFiltering: Boolean,
-    favouritesOnly: Boolean,
+    showFavouritesOnly: Boolean,
     sheetState: SheetState,
-    onFilterWidgetStateChange: (FilterWidgetState) -> Unit,
-    onUpdateSelectedContinentFilterItem: (String) -> Unit,
-    onUpdateSelectedPopulationFilterItem: (String) -> Unit,
-    onFavouriteOnlyToggle: () -> Unit,
-    onClearAllFilters: () -> Unit,
+    onUpdateFilterWidgetState: (FilterWidgetState) -> Unit,
+    onUpdateContinentFilterItem: (String) -> Unit,
+    onUpdatePopulationFilterItem: (String) -> Unit,
+    onToggleFavouriteOnly: () -> Unit,
+    onResetAllFilters: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(modifier = modifier,
         sheetState = sheetState,
-        onDismissRequest = { onFilterWidgetStateChange(FilterWidgetState.CLOSED) }) {
+        onDismissRequest = { onUpdateFilterWidgetState(FilterWidgetState.CLOSED) }) {
 
         AutoResizedText(
             text = SharedRes.string.filter_results,
@@ -87,7 +87,7 @@ fun FilterBottomSheet(
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
-                    onClick = { onUpdateSelectedPopulationFilterItem(populationItem.label) },
+                    onClick = { onUpdatePopulationFilterItem(populationItem.label) },
                     modifier = Modifier.padding(4.dp).weight(1f)
                 )
             }
@@ -111,7 +111,7 @@ fun FilterBottomSheet(
         ) {
             items(continentsFilterItems) { continent ->
                 ElevatedFilterChip(selected = continent.isSelected,
-                    onClick = { onUpdateSelectedContinentFilterItem(continent.label) },
+                    onClick = { onUpdateContinentFilterItem(continent.label) },
                     label = {
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(4.dp),
@@ -146,7 +146,7 @@ fun FilterBottomSheet(
                 color = MaterialTheme.colorScheme.outline,
                 style = MaterialTheme.typography.labelLarge
             )
-            Switch(checked = favouritesOnly, onCheckedChange = { onFavouriteOnlyToggle() })
+            Switch(checked = showFavouritesOnly, onCheckedChange = { onToggleFavouriteOnly() })
         }
 
 
@@ -155,9 +155,9 @@ fun FilterBottomSheet(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.End
         ) {
-            AnimatedVisibility(isFiltering or favouritesOnly, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(isFiltering or showFavouritesOnly, enter = fadeIn(), exit = fadeOut()) {
                 ElevatedButton(
-                    onClick = onClearAllFilters, modifier = Modifier.padding(16.dp)
+                    onClick = onResetAllFilters, modifier = Modifier.padding(16.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Clear,

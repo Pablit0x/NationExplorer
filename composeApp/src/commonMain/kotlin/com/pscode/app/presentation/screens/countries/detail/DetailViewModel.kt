@@ -7,7 +7,7 @@ import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
-import com.pscode.app.presentation.screens.shared.ErrorEvent
+import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.NetworkConnectivity
 import com.pscode.app.utils.Response
 import com.pscode.app.utils.Status
@@ -37,8 +37,8 @@ class DetailViewModel(
     private val _weather = MutableStateFlow<WeatherOverview?>(null)
     val weather = _weather.asStateFlow()
 
-    private val errorChannel = Channel<ErrorEvent>()
-    val errorEventsChannelFlow = errorChannel.receiveAsFlow()
+    private val _eventChannel = Channel<Event>()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
     private val _showMap = MutableStateFlow(false)
     val showMap = _showMap.asStateFlow()
