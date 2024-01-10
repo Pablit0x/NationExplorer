@@ -61,7 +61,7 @@
     <string name="no_internet">No Internet Connection.</string>
     <string name="did_you_know">Did you know?</string>
     <string name="filter_results">Filter Results</string>
-    <string name="clear">Clear</string>
+    <string name="reset_filters">Reset Filters</string>
     <string name="continents">Continents</string>
     <string name="favourites_only">Show only favorite countries</string>
 </resources>

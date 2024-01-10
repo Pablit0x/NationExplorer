@@ -177,7 +177,7 @@ fun FilterBottomSheet(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Reset Filters", color = MaterialTheme.colorScheme.error
+                        text = SharedRes.string.reset_filters, color = MaterialTheme.colorScheme.error
                     )
                 }
             }
