@@ -1,5 +1,6 @@
 package com.pscode.app.presentation.screens.countries.detail
 
+import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.TidbitOverview
@@ -59,6 +60,8 @@ class DetailViewModel(
 
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
+
+    private val _selectedCountry = MutableStateFlow<CountryOverview?>(null)
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -88,12 +91,25 @@ class DetailViewModel(
     }
 
 
-    fun toggleCountryFavourite(country: CountryOverview?) {
+    fun toggleCountryFavourite(country: CountryOverview) {
         viewModelScope.launch {
             countryRepository.toggleFavourites(country = country).let { response ->
                 when (response) {
                     is Response.Success -> {
-                        _isCountryFavourite.update { !it }
+                        _isCountryFavourite.update { currentFavouriteValue ->
+                            !currentFavouriteValue
+                        }
+                        if (isCountryFavourite.value) {
+                            _eventsChannel.send(
+                                Event.ShowSnackbarMessageWithAction(
+                                    message = SharedRes.string.country_added_to_favourites.format(
+                                        country = country.name
+                                    ),
+                                    actionLabel = SharedRes.string.Undo,
+                                    action = { toggleCountryFavourite(country = country) }
+                                )
+                            )
+                        }
                     }
 
                     is Response.Error -> {

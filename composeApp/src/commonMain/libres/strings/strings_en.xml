@@ -64,4 +64,6 @@
     <string name="reset_filters">Reset Filters</string>
     <string name="continents">Continents</string>
     <string name="favourites_only">Only show favorite countries</string>
+    <string name="country_added_to_favourites">${country} added to favourites!</string>
+    <string name="Undo">Undo</string>
 </resources>

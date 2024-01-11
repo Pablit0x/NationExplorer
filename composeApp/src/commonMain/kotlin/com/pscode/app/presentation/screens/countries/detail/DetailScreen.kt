@@ -21,8 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -81,6 +83,22 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     is Event.ShowSnackbarMessage -> {
                         snackBarHostState.showSnackbar(message = event.message)
                     }
+
+                    is Event.ShowSnackbarMessageWithAction -> {
+                        val result = snackBarHostState.showSnackbar(
+                            message = event.message,
+                            actionLabel = event.actionLabel,
+                            duration = SnackbarDuration.Short
+                        )
+                        when (result) {
+                            SnackbarResult.ActionPerformed -> {
+                                event.action()
+                            }
+
+                            SnackbarResult.Dismissed -> {}
+                        }
+
+                    }
                 }
             }
         }
@@ -126,9 +144,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
+                modifier = Modifier.padding(innerPadding).fillMaxSize()
                     .verticalScroll(state = scrollState)
                     .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
                 verticalArrangement = Arrangement.Top,
@@ -138,9 +154,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 DetailCountryOverview(
                     selectedCountry = selectedCountry,
                     hasCapitalCity = hasCapital,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
                 )
 
                 if (tidbitsList.isNotEmpty()) {

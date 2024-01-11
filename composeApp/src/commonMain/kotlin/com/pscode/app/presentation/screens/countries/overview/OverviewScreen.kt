@@ -102,6 +102,7 @@ class OverviewScreen : Screen {
                             snackBarHostState.showSnackbar(message = event.message)
                         }
                     }
+                    else -> {}
                 }
             }
         }
