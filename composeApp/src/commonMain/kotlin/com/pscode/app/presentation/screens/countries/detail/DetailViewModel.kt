@@ -4,6 +4,7 @@ import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
@@ -27,12 +28,16 @@ class DetailViewModel(
     private val weatherRepository: WeatherRepository,
     private val geolocationRepository: GeolocationRepository,
     private val tidbitsRepository: TidbitsRepository,
+    private val countryRepository: CountryRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
     val connectivityStatus = networkConnectivity.observeNetworkStatus().stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = Status.Idle
     )
+
+    private val _isCountryFavourite = MutableStateFlow(false)
+    val isCountryFavourite = _isCountryFavourite.asStateFlow()
 
     private val _currentWeather = MutableStateFlow<WeatherOverview?>(null)
     val currentWeather = _currentWeather.asStateFlow()
@@ -74,6 +79,28 @@ class DetailViewModel(
     fun setCurrentTidbitId(id: Int) {
         _currentTidbitId.update {
             id
+        }
+    }
+
+
+    fun setFavouriteStatus(isFavourite: Boolean) {
+        _isCountryFavourite.update { isFavourite }
+    }
+
+
+    fun toggleCountryFavourite(country: CountryOverview?) {
+        viewModelScope.launch {
+            countryRepository.toggleFavourites(country = country).let { response ->
+                when (response) {
+                    is Response.Success -> {
+                        _isCountryFavourite.update { !it }
+                    }
+
+                    is Response.Error -> {
+
+                    }
+                }
+            }
         }
     }
 

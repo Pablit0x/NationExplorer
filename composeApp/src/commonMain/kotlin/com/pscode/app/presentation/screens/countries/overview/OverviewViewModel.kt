@@ -67,12 +67,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _filterWidgetState = MutableStateFlow(FilterWidgetState.CLOSED)
     val filterWidgetState = _filterWidgetState.asStateFlow()
 
-    private val _selectedCountryOverview = MutableStateFlow<CountryOverview?>(null)
-    val selectedCountryOverview = _selectedCountryOverview.asStateFlow()
-
-    private val _isCountryFavourite = MutableStateFlow(false)
-    val isCountryFavourite = _isCountryFavourite.asStateFlow()
-
 
     private var _countries = MutableStateFlow(emptyList<CountryOverview>())
 
@@ -126,7 +120,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
 
     init {
-        getAllCountries()
         loginToRealm()
     }
 
@@ -138,31 +131,8 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
         }
     }
 
-    fun setFavouriteStatus(isFavourite: Boolean) {
-        _isCountryFavourite.update { isFavourite }
-    }
-
-
     fun toggleFavouriteOnly() {
         _showFavouritesOnly.update { !it }
-    }
-
-
-    fun toggleCountryFavourite(countryName: CountryOverview?) {
-        viewModelScope.launch {
-            countryRepository.toggleFavourites(country = countryName).let { response ->
-                when (response) {
-                    is Response.Success -> {
-                        _countries.update { response.data }
-                        _isCountryFavourite.update { !it }
-                    }
-
-                    is Response.Error -> {
-
-                    }
-                }
-            }
-        }
     }
 
     fun updateSearchWidgetState(newState: SearchWidgetState) {
@@ -171,12 +141,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
     fun updateFilterWidgetState(newState: FilterWidgetState) {
         _filterWidgetState.update { newState }
-    }
-
-    fun setSelectedCountryOverview(country: CountryOverview?) {
-        _selectedCountryOverview.update {
-            country
-        }
     }
 
     fun updateContinentFilterItem(label: String) {
@@ -223,7 +187,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
 
-    private fun getAllCountries() {
+    fun getAllCountries() {
 
         _isLoading.update {
             true

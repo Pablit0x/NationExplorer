@@ -1,6 +1,7 @@
 package com.pscode.app.presentation.composables
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +36,7 @@ fun ResetFiltersAnimatedButton(
         horizontalAlignment = Alignment.End
     ) {
         AnimatedVisibility(
-            isFiltering or showFavouritesOnly, enter = fadeIn(), exit = fadeOut()
+            isFiltering or showFavouritesOnly, enter = fadeIn(tween(1500)), exit = fadeOut()
         ) {
             ElevatedButton(
                 onClick = onResetAllFilters, modifier = Modifier.padding(16.dp).fillMaxWidth()

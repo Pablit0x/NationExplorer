@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,61 +38,71 @@ class LeaderboardScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
 
-        if (isLoading) {
-            Box(modifier = Modifier.fillMaxSize().navigateBackOnDrag(onNavigateBack = {
-                navigator.popUntilRoot()
-            }), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp)
-                    .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Scaffold(topBar = {
+            LeaderBoardScreenTopBar(navigator = navigator)
+        }) { innerPadding ->
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() }),
+                    contentAlignment = Alignment.Center
                 ) {
-                    TopRankItem(
-                        rank = 2,
-                        result = results[1],
-                        borderGradientColors = Gradients.SILVER,
-                        modifier = Modifier.weight(1f).height(165.dp)
-                    )
-
-                    TopRankItem(
-                        rank = 1,
-                        result = results[0],
-                        borderGradientColors = Gradients.GOLD,
-                        modifier = Modifier.weight(1f).height(180.dp)
-                    )
-
-                    TopRankItem(
-                        rank = 3,
-                        result = results[2],
-                        borderGradientColors = Gradients.BRONZE,
-                        modifier = Modifier.weight(1f).height(150.dp)
-                    )
+                    CircularProgressIndicator()
                 }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                LeaderboardHeader(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
-                        .background(color = MaterialTheme.colorScheme.background)
-                )
-
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
                 ) {
-                    itemsIndexed(items = results) { index, result ->
-                        LeaderboardListItem(
-                            rank = index + 1,
-                            result = result,
-                            isCurrentUser = viewModel.currentUser?.id == result.userId,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        TopRankItem(
+                            rank = 2,
+                            result = results[1],
+                            borderGradientColors = Gradients.SILVER,
+                            modifier = Modifier.weight(1f).height(165.dp)
                         )
+
+                        TopRankItem(
+                            rank = 1,
+                            result = results[0],
+                            borderGradientColors = Gradients.GOLD,
+                            modifier = Modifier.weight(1f).height(180.dp)
+                        )
+
+                        TopRankItem(
+                            rank = 3,
+                            result = results[2],
+                            borderGradientColors = Gradients.BRONZE,
+                            modifier = Modifier.weight(1f).height(150.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    LeaderboardHeader(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                            .background(color = MaterialTheme.colorScheme.background)
+                    )
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        itemsIndexed(items = results) { index, result ->
+                            LeaderboardListItem(
+                                rank = index + 1,
+                                result = result,
+                                isCurrentUser = viewModel.currentUser?.id == result.userId,
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
+                            )
+                        }
                     }
                 }
             }

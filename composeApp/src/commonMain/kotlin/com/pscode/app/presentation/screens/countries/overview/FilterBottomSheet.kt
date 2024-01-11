@@ -74,7 +74,7 @@ fun FilterBottomSheet(
                 isFiltering = isFiltering,
                 showFavouritesOnly = showFavouritesOnly,
                 onResetAllFilters = onResetAllFilters,
-                modifier = Modifier.height(90.dp)
+                modifier = Modifier.height(70.dp)
             )
         }
     }
