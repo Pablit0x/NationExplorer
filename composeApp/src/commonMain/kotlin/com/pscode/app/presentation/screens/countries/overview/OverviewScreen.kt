@@ -141,7 +141,7 @@ class OverviewScreen : Screen {
             modifier = Modifier.nestedScroll(connection = scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

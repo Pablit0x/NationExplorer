@@ -144,7 +144,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier.padding(innerPadding).fillMaxSize()
+                modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
                     .verticalScroll(state = scrollState)
                     .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
                 verticalArrangement = Arrangement.Top,
