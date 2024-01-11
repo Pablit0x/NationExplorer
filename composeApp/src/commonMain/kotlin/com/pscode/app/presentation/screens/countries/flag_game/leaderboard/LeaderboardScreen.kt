@@ -59,9 +59,10 @@ class LeaderboardScreen : Screen {
                         .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         TopRankItem(
                             rank = 2,
@@ -74,14 +75,14 @@ class LeaderboardScreen : Screen {
                             rank = 1,
                             result = results[0],
                             borderGradientColors = Gradients.GOLD,
-                            modifier = Modifier.weight(1f).height(180.dp)
+                            modifier = Modifier.weight(1f).height(175.dp)
                         )
 
                         TopRankItem(
                             rank = 3,
                             result = results[2],
                             borderGradientColors = Gradients.BRONZE,
-                            modifier = Modifier.weight(1f).height(150.dp)
+                            modifier = Modifier.weight(1f).height(155.dp)
                         )
                     }
 
