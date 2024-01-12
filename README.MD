@@ -72,11 +72,8 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/a045778a-7fe4-462e-bc
 
 ### iOS
 
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/3f9b0191-cb77-4199-bfaa-8d259f127d80)
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/6a6e4115-9936-43ad-bfdd-3bac630a4da1)
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/eb17cb64-58d9-4d09-a09c-992637614dda)
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/fd93a498-a395-4f80-a3bf-7eebbfd26665)
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/a1fef6c5-9230-4b67-8e68-958bbdb1c81a)
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/bbe846f6-fec4-4b61-bbdf-7990a559a419)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/39f74495-65de-44f1-bb3c-bdd2438374fe)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/ffacf4bf-089a-4b80-a40d-98fa343585c9)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/14df6335-1f41-4fe2-b3f8-d318b6c17cdf)
 
 Feel free to contribute, report issues, or suggest enhancements!
