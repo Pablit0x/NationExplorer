@@ -32,8 +32,8 @@ Nation Explorer - https://bit.ly/nation-explorer
   responses ([Ktor](https://github.com/ktorio/ktor))
 - **Google Maps & Apple Maps**: Map
   integrations ([Google Maps](https://developers.google.com/maps/documentation/android-sdk/maps-compose), [Apple Maps](https://developer.apple.com/documentation/mapkit/))
-- **Weather, Country, Geolocation and Countries Tidbit APIs**: Data
-  sources([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/), [Tidbits](https://github.com/Pablit0x/nation_explorer_tidbits_api))
+- **Weather, Country, Geolocation and Country Tidbits APIs**: Data
+  sources([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/), [Country Tidbits (https://github.com/Pablit0x/nation_explorer_tidbits_api))
 - **MongoDB Device Sync**: Online leaderboard with live
   updates ([MongoDB Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
 - **MOKO MVVM**: ViewModel sharing ([MOKO MVVM](https://github.com/icerockdev/moko-mvvm))
