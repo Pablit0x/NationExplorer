@@ -63,7 +63,7 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/a045778a-7fe4-462e-bc
 
 ### Android
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/273357fb-3287-4f0c-bde0-8d4331cc8072)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/4c279a34-74b3-4b6d-a868-590d1cce5966)
 
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/2dc487f7-f900-409f-b9f9-9eac6b1899e7)
 
