@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
@@ -56,15 +57,13 @@ fun DetailCountryInformationItem(
     ) {
         Icon(imageVector = icon, contentDescription = iconDescription)
         Spacer(modifier = Modifier.width(6.dp))
-        Text(text = annotatedKey)
-        Text(
-            text = annotatedValue, modifier = Modifier.then(
-                if (marqueeEffect) {
-                    Modifier.basicMarquee()
-                } else {
-                    Modifier
-                }
+        if (marqueeEffect) {
+            Text(text = annotatedKey)
+            Text(
+                text = annotatedValue, modifier = Modifier.basicMarquee()
             )
-        )
+        } else {
+            Text(text = annotatedKey + annotatedValue)
+        }
     }
 }

@@ -24,6 +24,10 @@ class LeaderboardViewModel(
         getAllResults()
     }
 
+    fun isCurrentUser(userId : String) : Boolean {
+        return currentUser?.id == userId
+    }
+
     private fun getAllResults() {
         viewModelScope.launch {
             _isLoading.update { true }

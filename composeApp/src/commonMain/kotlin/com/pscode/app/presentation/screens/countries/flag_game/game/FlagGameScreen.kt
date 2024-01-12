@@ -76,30 +76,7 @@ class FlagGameScreen : Screen {
         Scaffold(topBar = { FlagGameScreenTopBar(navigator = navigator) }) { innerPadding ->
             roundData?.let { currentRound ->
 
-                UsernameInputDialog(
-                    isOpen = showUsernameInputDialog, onNextClicked = viewModel::setUserName
-                )
-
-                GameResultsDialog(score = "$score/${NUMBER_OF_ROUNDS}",
-                    time = stopWatchTime,
-                    pbMessage = if (isNewPersonalBest) {
-                        SharedRes.string.new_personal_best
-                    } else {
-                        SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${NUMBER_OF_ROUNDS}, ${personalBest.second})")
-                    },
-                    isOpen = showScore,
-                    newBest = isNewPersonalBest,
-                    onEndClicked = { navigator.pop() },
-                    onRestartClicked = {
-                        viewModel.startNewGame()
-                    },
-                    navigateToLeaderboard = {
-                        navigator.replace(item = LeaderboardScreen())
-                    })
-
-                AnimatedVisibility(
-                    visible = !showScore, enter = fadeIn(), exit = fadeOut()
-                ) {
+                AnimatedVisibility(visible = !showScore, enter = fadeIn(), exit = fadeOut()) {
 
                     LazyColumn(
                         modifier = Modifier
@@ -164,6 +141,25 @@ class FlagGameScreen : Screen {
                         }
                     }
                 }
+
+                UsernameInputDialog(
+                    isOpen = showUsernameInputDialog, onNextClicked = viewModel::setUserName
+                )
+
+                GameResultsDialog(
+                    score = "$score/${NUMBER_OF_ROUNDS}",
+                    time = stopWatchTime,
+                    pbMessage = if (isNewPersonalBest) {
+                        SharedRes.string.new_personal_best
+                    } else {
+                        SharedRes.string.old_personal_best.format(oldPb = "(${personalBest.first}/${NUMBER_OF_ROUNDS}, ${personalBest.second})")
+                    },
+                    isOpen = showScore,
+                    newBest = isNewPersonalBest,
+                    onEndClicked = { navigator.pop() },
+                    onRestartClicked = { viewModel.startNewGame() },
+                    navigateToLeaderboard = { navigator.replace(item = LeaderboardScreen()) })
+
             }
         }
     }

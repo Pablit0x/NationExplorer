@@ -87,8 +87,8 @@ android {
         targetSdk = 34
 
         applicationId = "com.pscode.app.androidApp"
-        versionCode = 5
-        versionName = "1.1.3"
+        versionCode = 6
+        versionName = "1.1.4"
     }
     sourceSets["main"].apply {
         manifest.srcFile("src/androidMain/AndroidManifest.xml")

@@ -141,7 +141,10 @@ class OverviewScreen : Screen {
             modifier = Modifier.nestedScroll(connection = scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(12.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -158,7 +161,9 @@ class OverviewScreen : Screen {
                     ) {
                         LazyColumn(
                             state = listState,
-                            modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.9f),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
 

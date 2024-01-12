@@ -59,7 +59,8 @@ class LeaderboardScreen : Screen {
                         .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -100,7 +101,7 @@ class LeaderboardScreen : Screen {
                             LeaderboardListItem(
                                 rank = index + 1,
                                 result = result,
-                                isCurrentUser = viewModel.currentUser?.id == result.userId,
+                                isCurrentUser = viewModel.isCurrentUser(userId = result.userId),
                                 modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
                             )
                         }

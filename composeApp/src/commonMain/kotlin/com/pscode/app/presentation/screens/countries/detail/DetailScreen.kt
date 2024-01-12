@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -58,19 +59,23 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
+
         val currentWeather by viewModel.currentWeather.collectAsState()
-        val isMapVisible by viewModel.isMapVisible.collectAsState()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
         val tidbitsList by viewModel.tidbitsList.collectAsState()
         val currentTidbitId by viewModel.currentTidbitId.collectAsState()
-        val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
-        val eventsChannel = viewModel.eventsChannel
-
         val hasCapital = selectedCountry.capitals.isNotEmpty()
-        val navigator = LocalNavigator.currentOrThrow
-        val networkStatus by viewModel.connectivityStatus.collectAsState()
-        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val isMapVisible by viewModel.isMapVisible.collectAsState()
+        val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
         val fetchFailure by viewModel.didFetchFail.collectAsState()
+        val networkStatus by viewModel.connectivityStatus.collectAsState()
+
+        val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
+
+        val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        val eventsChannel = viewModel.eventsChannel
 
         val scrollState = rememberScrollState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -107,19 +112,24 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
             viewModel.getWeatherByCity(country = selectedCountry)
             viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
-            viewModel.setFavouriteStatus(selectedCountry.isFavourite)
+            viewModel.setFavouriteStatus(isFavourite = selectedCountry.isFavourite)
         }
 
         LaunchedEffect(networkStatus) {
-            if (fetchFailure) {
-                when (networkStatus) {
-                    Status.Available -> {
+            when (networkStatus) {
+                Status.Available -> {
+                    if (fetchFailure) {
                         viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
                         viewModel.getWeatherByCity(country = selectedCountry)
+                        viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
                     }
-
-                    else -> {}
                 }
+
+                Status.Unavailable -> {
+                    snackBarHostState.showSnackbar(SharedRes.string.no_internet, withDismissAction = true)
+                }
+
+                else -> {}
             }
         }
 
@@ -130,16 +140,15 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             }
         }
 
-        Scaffold(
-            topBar = {
-                DetailScreenTopBar(
-                    navigator = navigator,
-                    onToggleFavourite = { viewModel.toggleCountryFavourite(country = selectedCountry) },
-                    isCountryFavourite = isCountryFavourite,
-                    title = selectedCountry.name,
-                    scrollBehavior = scrollBehavior
-                )
-            },
+        Scaffold(topBar = {
+            DetailScreenTopBar(
+                navigator = navigator,
+                onToggleFavourite = { viewModel.toggleCountryFavourite(country = selectedCountry) },
+                isCountryFavourite = isCountryFavourite,
+                title = selectedCountry.name,
+                scrollBehavior = scrollBehavior
+            )
+        },
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
@@ -182,7 +191,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 }
 
                 AnimatedVisibility(
-                    visible = countryGeolocation != null, enter = fadeIn(), exit = fadeOut()
+                    visible = displayShowMapButton, enter = fadeIn(), exit = fadeOut()
                 ) {
                     ElevatedButton(
                         onClick = viewModel::showMap, modifier = Modifier.fillMaxWidth(0.6f)
@@ -197,8 +206,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 }
 
                 if (isMapVisible) {
-                    ModalBottomSheet(
-                        sheetState = bottomSheetState,
+                    ModalBottomSheet(sheetState = bottomSheetState,
                         onDismissRequest = { viewModel.hideMap() }) {
                         countryGeolocation?.let { locationOverview ->
                             MapView(
