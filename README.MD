@@ -10,16 +10,13 @@ with an engaging experience to discover and interact with countries across the g
 ## Features
 
 - **Country Details**: Explore comprehensive information about countries, including flags, capital
-  cities, area, languages spoken, currency, population, and timezones.
+  cities, area, languages spoken, currency, population, timezones and intriguing facts.
 - **Interactive Maps**: View countries on maps using Google Maps for Android and Apple Maps for iOS.
 - **Real-time Weather**: Get up-to-date weather updates for each country's capital city.
-- **Engaging Game**: Test your knowledge by matching flags to their respective countries.
-- **Online Leaderboard**: Compete globally and track your progress on the leaderboard.
-- **Offline First**: Use all features offline post the app's first use, excluding live weather
-  updates. Once it connects to the internet initially, it operates offline seamlessly.
+- **Engaging Game**: Have some fun while learning! Test your knowledge by matching flags to their countries. Compete globally and see how you rank on the leaderboard.
+- **Offline First**: Use most features offline post the app's first use. Once it connects to the internet initially, it operates offline seamlessly.
 - **Favorite Countries**: Quickly access your preferred countries by marking them as favorites.
 - **Filter by Continent and Population Size**: Easily find countries based on continents and population size.
-- **Interesting Facts**: Discover three intriguing facts about each country.
 
 ## Google Play
 
