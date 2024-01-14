@@ -45,88 +45,90 @@ fun TidbitCard(
     setCurrentTidbitId: (Int) -> Unit,
     modifier: Modifier
 ) {
+    if (tidbits.isNotEmpty()) {
+        var isExpended by remember { mutableStateOf(true) }
+        val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
+        val scope = rememberCoroutineScope()
 
-    var isExpended by remember { mutableStateOf(true) }
-    val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
-    val scope = rememberCoroutineScope()
+        LaunchedEffect(horizontalPagerState.currentPage) {
+            setCurrentTidbitId(horizontalPagerState.currentPage)
+        }
 
-    LaunchedEffect(horizontalPagerState.currentPage) {
-        setCurrentTidbitId(horizontalPagerState.currentPage)
-    }
-
-    ElevatedCard(modifier = modifier) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().noRippleClickable { isExpended = !isExpended },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        ElevatedCard(modifier = modifier) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    modifier = Modifier.fillMaxWidth()
+                        .noRippleClickable { isExpended = !isExpended },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Lightbulb,
-                        contentDescription = "Interesting fact"
-                    )
-                    Text(
-                        text = SharedRes.string.did_you_know,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-
-                if (isExpended) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
-                } else {
-                    Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
-                }
-
-            }
-
-            AnimatedVisibility(isExpended) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    HorizontalPager(
-                        modifier = Modifier.weight(1f),
-                        state = horizontalPagerState, verticalAlignment = Alignment.CenterVertically
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = tidbits[currentTidbitId].title,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            Text(
-                                text = tidbits[currentTidbitId].description,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Lightbulb,
+                            contentDescription = "Interesting fact"
+                        )
+                        Text(
+                            text = SharedRes.string.did_you_know,
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
 
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                    if (isExpended) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
+                    } else {
+                        Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
+                    }
+
+                }
+
+                AnimatedVisibility(isExpended) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
+                        verticalArrangement = Arrangement.SpaceBetween,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        PageIndicator(numberOfPages = Constants.NUMBER_OF_TIDBITS,
-                            currentPage = horizontalPagerState.currentPage,
-                            onClick = {
-                                scope.launch {
-                                    horizontalPagerState.animateScrollToPage(it)
-                                }
-                            })
+                        HorizontalPager(
+                            modifier = Modifier.weight(1f),
+                            state = horizontalPagerState,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = tidbits[currentTidbitId].title,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Text(
+                                    text = tidbits[currentTidbitId].description,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+                        ) {
+                            PageIndicator(numberOfPages = Constants.NUMBER_OF_TIDBITS,
+                                currentPage = horizontalPagerState.currentPage,
+                                onClick = {
+                                    scope.launch {
+                                        horizontalPagerState.animateScrollToPage(it)
+                                    }
+                                })
+                        }
                     }
                 }
             }

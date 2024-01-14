@@ -3,7 +3,6 @@ package com.pscode.app.presentation.screens.countries.overview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Games
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -44,6 +42,7 @@ import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
+import com.pscode.app.presentation.composables.FullScreenLoadingIndicator
 import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.composables.isScrollingUp
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
@@ -150,9 +149,7 @@ class OverviewScreen : Screen {
             ) {
 
                 if (isLoading || isSearching) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+                    FullScreenLoadingIndicator()
                 } else {
                     Row(
                         modifier = Modifier.fillMaxSize(),

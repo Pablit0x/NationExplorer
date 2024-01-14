@@ -26,7 +26,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-fun DetailCountryOverview(
+fun DetailedCountryOverviewCard(
     selectedCountry: CountryOverview, hasCapitalCity: Boolean, modifier: Modifier = Modifier
 ) {
 

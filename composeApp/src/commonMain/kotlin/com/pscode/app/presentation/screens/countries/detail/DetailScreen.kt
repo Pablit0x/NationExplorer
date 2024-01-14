@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -44,8 +45,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
-import com.pscode.app.presentation.composables.AutoResizedText
-import com.pscode.app.presentation.composables.DetailCountryOverview
+import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
 import com.pscode.app.presentation.composables.MapView
 import com.pscode.app.presentation.composables.TidbitCard
 import com.pscode.app.presentation.composables.WeatherCard
@@ -126,7 +126,9 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 }
 
                 Status.Unavailable -> {
-                    snackBarHostState.showSnackbar(SharedRes.string.no_internet, withDismissAction = true)
+                    snackBarHostState.showSnackbar(
+                        SharedRes.string.no_internet, withDismissAction = true
+                    )
                 }
 
                 else -> {}
@@ -153,40 +155,36 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(12.dp)
+                    .fillMaxSize()
                     .verticalScroll(state = scrollState)
                     .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                DetailCountryOverview(
+                DetailedCountryOverviewCard(
                     selectedCountry = selectedCountry,
                     hasCapitalCity = hasCapital,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                if (tidbitsList.isNotEmpty()) {
-                    TidbitCard(
-                        currentTidbitId = currentTidbitId,
-                        tidbits = tidbitsList,
-                        setCurrentTidbitId = { viewModel.setCurrentTidbitId(it) },
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-                    )
-                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TidbitCard(
+                    currentTidbitId = currentTidbitId,
+                    tidbits = tidbitsList,
+                    setCurrentTidbitId = { viewModel.setCurrentTidbitId(it) },
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
 
                 if (hasCapital) {
-
-                    AutoResizedText(
-                        text = "${SharedRes.string.weather_in} ${selectedCountry.capitals.first()}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(vertical = 8.dp, horizontal = 8.dp),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
                     WeatherCard(
-                        weatherInCapital = currentWeather, modifier = Modifier.fillMaxWidth()
+                        capitalName = selectedCountry.capitals.first(),
+                        weatherInCapital = currentWeather,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                     )
                 }
 
@@ -206,11 +204,14 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 }
 
                 if (isMapVisible) {
-                    ModalBottomSheet(sheetState = bottomSheetState,
+                    ModalBottomSheet(
+                        sheetState = bottomSheetState,
                         onDismissRequest = { viewModel.hideMap() }) {
                         countryGeolocation?.let { locationOverview ->
                             MapView(
-                                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.65f),
                                 countryArea = selectedCountry.area,
                                 locationOverview = locationOverview
                             )
@@ -219,7 +220,5 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 }
             }
         }
-
-
     }
 }
