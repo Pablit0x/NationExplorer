@@ -34,21 +34,21 @@ class FlagGameViewModel(
         getAllCountries()
     }
 
-    private val _isDataReady = MutableStateFlow(false)
-    val isDataReady = _isDataReady.asStateFlow()
+    private val _isGameDataReady = MutableStateFlow(false)
+    val isGameDataReady = _isGameDataReady.asStateFlow()
 
     private val _round = MutableStateFlow(1)
     val round = _round.asStateFlow()
 
-    private val _points = MutableStateFlow(0)
-    val points = _points.asStateFlow()
+    private val _userScore = MutableStateFlow(0)
+    val userScore = _userScore.asStateFlow()
 
     private var allCountries = emptyList<CountryOverview>()
 
     private val _targetCountries = MutableStateFlow(emptyList<CountryOverview>())
 
-    private val _roundData = MutableStateFlow<RoundData?>(null)
-    val roundData = _roundData.asStateFlow()
+    private val _currentRoundData = MutableStateFlow<RoundData?>(null)
+    val currentRoundData = _currentRoundData.asStateFlow()
 
     private val _isSelectionCorrect = MutableStateFlow(false)
     val isSelectionCorrect = _isSelectionCorrect.asStateFlow()
@@ -60,27 +60,27 @@ class FlagGameViewModel(
         MutableStateFlow<QuizButtonState>(QuizButtonState.NEXT(onNextClick = ::nextStage))
     val quizButtonState = _quizButtonState.asStateFlow()
 
-    private val _showScore = MutableStateFlow(false)
-    val showScore = _showScore.asStateFlow()
+    private val _isScoreVisible = MutableStateFlow(false)
+    val isScoreVisible = _isScoreVisible.asStateFlow()
 
-    private val _showQuizButton = MutableStateFlow(false)
-    val showQuizButton = _showQuizButton.asStateFlow()
+    private val _isQuizButtonVisible = MutableStateFlow(false)
+    val isQuizButtonVisible = _isQuizButtonVisible.asStateFlow()
 
-    private val _stopWatchTime = MutableStateFlow(DEFAULT_TIME)
-    val stopWatchTime: StateFlow<String> = _stopWatchTime.asStateFlow()
+    private val _currentStopWatchTime = MutableStateFlow(DEFAULT_TIME)
+    val currentStopWatchTime: StateFlow<String> = _currentStopWatchTime.asStateFlow()
 
     private var stopwatchJob: Job? = null
 
-    private val _personalBest = MutableStateFlow(Pair(0, DEFAULT_TIME))
-    val personalBest = _personalBest.asStateFlow()
+    private val _personalBestScore = MutableStateFlow(Pair(0, DEFAULT_TIME))
+    val personalBestScore = _personalBestScore.asStateFlow()
 
-    private val _isNewPersonalBest = MutableStateFlow(false)
-    val isNewPersonalBest = _isNewPersonalBest.asStateFlow()
+    private val _hasNewPersonalBest = MutableStateFlow(false)
+    val hasNewPersonalBest = _hasNewPersonalBest.asStateFlow()
 
     private val _username = MutableStateFlow("")
 
-    private val _showUsernameInputDialog = MutableStateFlow(false)
-    val showUsernameInputDialog = _showUsernameInputDialog.asStateFlow()
+    private val _isUsernameInputDialogVisible = MutableStateFlow(false)
+    val isUsernameInputDialogVisible = _isUsernameInputDialogVisible.asStateFlow()
 
 
     fun startNewGame() {
@@ -95,19 +95,19 @@ class FlagGameViewModel(
         val pbScore = savedResults.getInt(key = Constants.SCORE_KEY, defaultValue = 0)
         val pbTime = savedResults.getString(key = Constants.TIME_KEY, defaultValue = DEFAULT_TIME)
         val pbResult = Pair(pbScore, pbTime)
-        _personalBest.update { pbResult }
+        _personalBestScore.update { pbResult }
     }
 
 
     fun checkAnswer() {
-        val isAnswerCorrect = selectedFlag.value == roundData.value?.targetCountry?.flagUrl
+        val isAnswerCorrect = selectedFlag.value == currentRoundData.value?.targetCountry?.flagUrl
         _isSelectionCorrect.update { isAnswerCorrect }
         if (isAnswerCorrect) increasePoint()
     }
 
     fun setSelectedFlag(flagUrl: String) {
         _selectedFlag.update { flagUrl }
-        _showQuizButton.update { true }
+        _isQuizButtonVisible.update { true }
     }
 
     private fun getUserName() {
@@ -116,11 +116,11 @@ class FlagGameViewModel(
     }
 
     fun setUserName(username: String) {
-        _username.update { username }
         savedResults.putString(key = Constants.USERNAME_KEY, value = username)
-        _showUsernameInputDialog.update { false }
-        _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
-        _showScore.update { true }
+        _username.update { username }
+        _isUsernameInputDialogVisible.update { false }
+        _hasNewPersonalBest.update { updatePersonalBestIfNeeded() }
+        _isScoreVisible.update { true }
     }
 
 
@@ -131,7 +131,7 @@ class FlagGameViewModel(
             while (isActive) {
                 val elapsed = Clock.System.now() - startTime
                 val formattedTime = formatStopWatchTime(elapsed = elapsed)
-                _stopWatchTime.update { formattedTime }
+                _currentStopWatchTime.update { formattedTime }
                 delay(DELAY_MILLIS)
             }
         }
@@ -180,19 +180,19 @@ class FlagGameViewModel(
     private fun onFinishQuiz() {
         stopStopwatch()
         if (_username.value.isBlank()) {
-            _showUsernameInputDialog.update { true }
+            _isUsernameInputDialogVisible.update { true }
         } else {
-            _isNewPersonalBest.update { updatePersonalBestIfNeeded() }
-            _showScore.update { true }
+            _hasNewPersonalBest.update { updatePersonalBestIfNeeded() }
+            _isScoreVisible.update { true }
         }
     }
 
     private fun updatePersonalBestIfNeeded(): Boolean {
-        val pbScore = personalBest.value.first
-        val pbTime = personalBest.value.second
+        val pbScore = personalBestScore.value.first
+        val pbTime = personalBestScore.value.second
 
-        val newScore = points.value
-        val newTime = stopWatchTime.value
+        val newScore = userScore.value
+        val newTime = currentStopWatchTime.value
 
         if (newScore > pbScore) {
             updatePersonalBest(newScore, newTime)
@@ -211,19 +211,19 @@ class FlagGameViewModel(
     private fun updatePersonalBest(newScore: Int, newTime: String) {
         savedResults.putInt(Constants.SCORE_KEY, newScore)
         savedResults.putString(Constants.TIME_KEY, newTime)
-        _personalBest.update { Pair(newScore, newTime) }
+        _personalBestScore.update { Pair(newScore, newTime) }
         sendPersonalBestToOnlineLeaderboard()
     }
 
 
     private fun increasePoint() {
-        _points.update { it + 1 }
+        _userScore.update { it + 1 }
     }
 
     private fun resetRound() {
         _isSelectionCorrect.update { false }
         _selectedFlag.update { null }
-        _showQuizButton.update { false }
+        _isQuizButtonVisible.update { false }
     }
 
     private fun getAllCountries() {
@@ -233,12 +233,12 @@ class FlagGameViewModel(
             when (result) {
                 is Response.Success -> {
                     allCountries = result.data
-                    _isDataReady.update { true }
+                    _isGameDataReady.update { true }
                 }
 
                 is Response.Error -> {
                     // TODO
-                    _isDataReady.update { false }
+                    _isGameDataReady.update { false }
                 }
             }
         }
@@ -246,9 +246,9 @@ class FlagGameViewModel(
 
     private fun sendPersonalBestToOnlineLeaderboard() {
         val result = Result().apply {
-            score = points.value
-            time = stopWatchTime.value
-            timeMillis = parseTimeToMillis(timeString = stopWatchTime.value)
+            score = userScore.value
+            time = currentStopWatchTime.value
+            timeMillis = parseTimeToMillis(timeString = currentStopWatchTime.value)
             username = _username.value
         }
 
@@ -267,22 +267,22 @@ class FlagGameViewModel(
         val targetCountry = _targetCountries.value[roundIndex]
         val options = allCountries.shuffled().filter { it != targetCountry }.take(3) + targetCountry
         val shuffledOptions = options.shuffled()
-        _roundData.update { RoundData(targetCountry, shuffledOptions) }
+        _currentRoundData.update { RoundData(targetCountry, shuffledOptions) }
     }
 
 
     fun clear() {
-        _showUsernameInputDialog.update { false }
-        _stopWatchTime.update { DEFAULT_TIME }
-        _isNewPersonalBest.update { false }
+        _isUsernameInputDialogVisible.update { false }
+        _currentStopWatchTime.update { DEFAULT_TIME }
+        _hasNewPersonalBest.update { false }
         _round.update { 1 }
-        _points.update { 0 }
+        _userScore.update { 0 }
         _targetCountries.update { emptyList() }
-        _roundData.update { null }
+        _currentRoundData.update { null }
         _isSelectionCorrect.update { false }
         _selectedFlag.update { null }
         _quizButtonState.update { QuizButtonState.NEXT(onNextClick = ::nextStage) }
-        _showScore.update { false }
-        _showQuizButton.update { false }
+        _isScoreVisible.update { false }
+        _isQuizButtonVisible.update { false }
     }
 }

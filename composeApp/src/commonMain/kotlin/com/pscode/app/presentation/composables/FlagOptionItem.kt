@@ -44,7 +44,8 @@ fun FlagGameOption(
             resource = asyncPainterResource(data = flagUrl),
             contentDescription = "Flag option",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .border(width = 5.dp, color = MaterialTheme.colorScheme.outline)
         )
     }

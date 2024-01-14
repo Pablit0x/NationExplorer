@@ -26,14 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
+import com.pscode.app.utils.Constants
 
 
 @Composable
 fun GameResultsDialog(
-    score: String,
-    time: String,
-    pbMessage: String,
-    newBest: Boolean,
+    userScore: Int,
+    currentStopWatchTime: String,
+    oldPersonalBest: Pair<Int, String>,
+    hasNewPersonalBest: Boolean,
     isOpen: Boolean,
     onEndClicked: () -> Unit,
     onRestartClicked: () -> Unit,
@@ -83,7 +84,7 @@ fun GameResultsDialog(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = score,
+                        text = "$userScore/${Constants.NUMBER_OF_ROUNDS}",
                         modifier = Modifier.padding(8.dp),
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold
@@ -110,7 +111,7 @@ fun GameResultsDialog(
                     )
 
                     Text(
-                        text = time,
+                        text = currentStopWatchTime,
                         modifier = Modifier.padding(8.dp),
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold
@@ -118,9 +119,13 @@ fun GameResultsDialog(
                 }
 
                 AutoResizedText(
-                    text = pbMessage,
+                    text = if (hasNewPersonalBest) {
+                        SharedRes.string.new_personal_best
+                    } else {
+                        SharedRes.string.old_personal_best.format(oldPb = "(${oldPersonalBest.first}/${Constants.NUMBER_OF_ROUNDS}, ${oldPersonalBest.second})")
+                    },
                     textAlign = TextAlign.Center,
-                    color = if (newBest) Color.Yellow else MaterialTheme.colorScheme.outline,
+                    color = if (hasNewPersonalBest) Color.Yellow else MaterialTheme.colorScheme.outline,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Medium,
                     ),

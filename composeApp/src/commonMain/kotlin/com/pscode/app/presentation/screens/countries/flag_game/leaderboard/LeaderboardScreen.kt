@@ -45,7 +45,7 @@ class LeaderboardScreen : Screen {
                 ) {
 
                     LeaderboardPodium(
-                        topThreeResults = results.subList(0, 2),
+                        topThreeResults = results.subList(0, 3),
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
