@@ -40,6 +40,8 @@ import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Status
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import org.koin.compose.koinInject
 
 class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
@@ -51,6 +53,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val currentWeather by viewModel.currentWeather.collectAsState()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
         val tidbitsList by viewModel.tidbitsList.collectAsState()
+        val celebritiesList by viewModel.celebritiesList.collectAsState()
         val currentTidbitId by viewModel.currentTidbitId.collectAsState()
         val hasCapital = selectedCountry.capitals.isNotEmpty()
         val isMapVisible by viewModel.isMapVisible.collectAsState()
@@ -100,6 +103,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
             viewModel.getWeatherByCity(country = selectedCountry)
             viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
+            viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
             viewModel.setFavouriteStatus(isFavourite = selectedCountry.isFavourite)
         }
 
@@ -110,6 +114,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                         viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
                         viewModel.getWeatherByCity(country = selectedCountry)
                         viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
+                        viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
                     }
                 }
 
@@ -150,6 +155,13 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+//                if (celebritiesList.isNotEmpty()) {
+//                    KamelImage(
+//                        resource = asyncPainterResource(celebritiesList.first().imageUrl),
+//                        contentDescription = null
+//                    )
+//                }
 
                 DetailedCountryOverviewCard(
                     selectedCountry = selectedCountry,

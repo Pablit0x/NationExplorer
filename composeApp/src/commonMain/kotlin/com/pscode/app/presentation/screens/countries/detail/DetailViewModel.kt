@@ -1,10 +1,12 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import com.pscode.app.SharedRes
+import com.pscode.app.domain.model.CelebrityOverview
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
@@ -30,6 +32,7 @@ class DetailViewModel(
     private val geolocationRepository: GeolocationRepository,
     private val tidbitsRepository: TidbitsRepository,
     private val countryRepository: CountryRepository,
+    private val celebrityRepository: CelebrityRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
@@ -55,6 +58,9 @@ class DetailViewModel(
     private val _tidbitsList = MutableStateFlow<List<TidbitOverview>>(emptyList())
     val tidbitsList = _tidbitsList.asStateFlow()
 
+    private val _celebritiesList = MutableStateFlow<List<CelebrityOverview>>(emptyList())
+    val celebritiesList = _celebritiesList.asStateFlow()
+
     private val _currentTidbitId = MutableStateFlow(0)
     val currentTidbitId = _currentTidbitId.asStateFlow()
 
@@ -67,6 +73,23 @@ class DetailViewModel(
             when (result) {
                 is Response.Success -> {
                     _tidbitsList.update {
+                        result.data
+                    }
+                }
+
+                is Response.Error -> {
+
+                }
+            }
+        }
+    }
+
+    fun getCelebritiesByCountry(countryName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = celebrityRepository.getCelebritiesByCountryName(countryName = countryName)
+            when (result) {
+                is Response.Success -> {
+                    _celebritiesList.update {
                         result.data
                     }
                 }
@@ -175,6 +198,7 @@ class DetailViewModel(
         _currentWeather.update { null }
         _countryGeolocation.update { null }
         _tidbitsList.update { emptyList() }
+        _celebritiesList.update { emptyList() }
     }
 
 }

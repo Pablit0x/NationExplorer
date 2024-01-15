@@ -13,6 +13,7 @@ val viewModelModule = module {
             geolocationRepository = get(),
             tidbitsRepository = get(),
             countryRepository = get(),
+            celebrityRepository = get(),
             networkConnectivity = get()
         )
     }
