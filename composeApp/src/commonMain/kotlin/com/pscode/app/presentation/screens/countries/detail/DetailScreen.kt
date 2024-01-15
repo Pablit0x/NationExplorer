@@ -1,32 +1,19 @@
 package com.pscode.app.presentation.screens.countries.detail
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -46,7 +33,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
-import com.pscode.app.presentation.composables.MapView
+import com.pscode.app.presentation.composables.MapBottomSheet
+import com.pscode.app.presentation.composables.ShowMapButton
 import com.pscode.app.presentation.composables.TidbitCard
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
@@ -142,26 +130,24 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             }
         }
 
-        Scaffold(topBar = {
-            DetailScreenTopBar(
-                navigator = navigator,
-                onToggleFavourite = { viewModel.toggleCountryFavourite(country = selectedCountry) },
-                isCountryFavourite = isCountryFavourite,
-                title = selectedCountry.name,
-                scrollBehavior = scrollBehavior
-            )
-        },
+        Scaffold(
+            topBar = {
+                DetailScreenTopBar(
+                    navigator = navigator,
+                    onToggleFavourite = { viewModel.toggleCountryFavourite(country = selectedCountry) },
+                    isCountryFavourite = isCountryFavourite,
+                    title = selectedCountry.name,
+                    scrollBehavior = scrollBehavior
+                )
+            },
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(12.dp)
-                    .fillMaxSize()
+                modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
                     .verticalScroll(state = scrollState)
                     .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
-                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -171,53 +157,31 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
                 TidbitCard(
                     currentTidbitId = currentTidbitId,
                     tidbits = tidbitsList,
                     setCurrentTidbitId = { viewModel.setCurrentTidbitId(it) },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (hasCapital) {
                     WeatherCard(
                         capitalName = selectedCountry.capitals.first(),
                         weatherInCapital = currentWeather,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
 
-                AnimatedVisibility(
-                    visible = displayShowMapButton, enter = fadeIn(), exit = fadeOut()
-                ) {
-                    ElevatedButton(
-                        onClick = viewModel::showMap, modifier = Modifier.fillMaxWidth(0.6f)
-                    ) {
-                        Icon(imageVector = Icons.Default.Map, contentDescription = "Show on Map")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = SharedRes.string.show_map,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    }
-                }
+                ShowMapButton(visible = displayShowMapButton, onClick = viewModel::showMap)
 
-                if (isMapVisible) {
-                    ModalBottomSheet(
-                        sheetState = bottomSheetState,
-                        onDismissRequest = { viewModel.hideMap() }) {
-                        countryGeolocation?.let { locationOverview ->
-                            MapView(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.65f),
-                                countryArea = selectedCountry.area,
-                                locationOverview = locationOverview
-                            )
-                        }
-                    }
-                }
+                MapBottomSheet(
+                    isMapVisible = isMapVisible,
+                    bottomSheetState = bottomSheetState,
+                    countryArea = selectedCountry.area,
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
+                    locationOverview = countryGeolocation,
+                    hideMap = viewModel::hideMap
+                )
             }
         }
     }

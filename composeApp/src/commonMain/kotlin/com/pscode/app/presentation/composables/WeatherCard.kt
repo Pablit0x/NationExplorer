@@ -85,7 +85,7 @@ fun WeatherCard(
     }
 
     Column(
-        modifier = Modifier,
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -99,7 +99,7 @@ fun WeatherCard(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(count = 2),
-            modifier = modifier.height(190.dp),
+            modifier = modifier.height(180.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {

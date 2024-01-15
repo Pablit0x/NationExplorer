@@ -27,6 +27,7 @@ fun FlagGameOption(
     isSelectionMade: Boolean,
     onClick: (String) -> Unit
 ) {
+
     val borderColor by animateColorAsState(
         targetValue = when {
             isCorrectFlag && isSelectionMade -> Color.Green
@@ -36,16 +37,17 @@ fun FlagGameOption(
     )
 
 
-    OutlinedCard(border = BorderStroke(width = 4.dp, color = borderColor),
-        modifier = Modifier.size(width = 160.dp, height = 130.dp).padding(12.dp).bounceClick {
-            if (!isSelectionMade) onClick(flagUrl)
-        }) {
+    OutlinedCard(border = BorderStroke(
+        width = 4.dp,
+        color = if (isSelectionMade) borderColor else MaterialTheme.colorScheme.outline
+    ), modifier = Modifier.size(width = 160.dp, height = 130.dp).padding(12.dp).bounceClick {
+        if (!isSelectionMade) onClick(flagUrl)
+    }) {
         KamelImage(
             resource = asyncPainterResource(data = flagUrl),
             contentDescription = "Flag option",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
                 .border(width = 5.dp, color = MaterialTheme.colorScheme.outline)
         )
     }

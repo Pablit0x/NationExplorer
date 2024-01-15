@@ -99,15 +99,16 @@ class FlagGameViewModel(
     }
 
 
-    fun checkAnswer() {
+    private fun checkAnswer() {
         val isAnswerCorrect = selectedFlag.value == currentRoundData.value?.targetCountry?.flagUrl
         _isSelectionCorrect.update { isAnswerCorrect }
         if (isAnswerCorrect) increasePoint()
     }
 
-    fun setSelectedFlag(flagUrl: String) {
+    fun selectFlag(flagUrl: String) {
         _selectedFlag.update { flagUrl }
         _isQuizButtonVisible.update { true }
+        checkAnswer()
     }
 
     private fun getUserName() {

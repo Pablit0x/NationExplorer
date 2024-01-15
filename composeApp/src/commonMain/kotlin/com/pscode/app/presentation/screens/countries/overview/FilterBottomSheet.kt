@@ -23,6 +23,7 @@ import com.pscode.app.presentation.composables.ShowOnlyFavouritesFilterSection
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
+    filterWidgetState: FilterWidgetState,
     continentsFilterItems: List<FilterItem>,
     populationFilterItems: List<FilterItem>,
     isFiltering: Boolean,
@@ -35,47 +36,50 @@ fun FilterBottomSheet(
     onResetAllFilters: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ModalBottomSheet(modifier = modifier,
-        sheetState = sheetState,
-        onDismissRequest = { onUpdateFilterWidgetState(FilterWidgetState.CLOSED) }) {
+    if (filterWidgetState == FilterWidgetState.OPEN) {
+        ModalBottomSheet(
+            modifier = modifier,
+            sheetState = sheetState,
+            onDismissRequest = { onUpdateFilterWidgetState(FilterWidgetState.CLOSED) }) {
 
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
 
-            AutoResizedText(
-                text = SharedRes.string.filter_results,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.fillMaxWidth()
-            )
+                AutoResizedText(
+                    text = SharedRes.string.filter_results,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            PopulationFilterSection(
-                populationFilterItems = populationFilterItems,
-                onPopulationFilterItemClick = onUpdatePopulationFilterItem,
-                modifier = Modifier.fillMaxWidth()
-            )
+                PopulationFilterSection(
+                    populationFilterItems = populationFilterItems,
+                    onPopulationFilterItemClick = onUpdatePopulationFilterItem,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            ContinentFilterSection(
-                continentsFilterItems = continentsFilterItems,
-                onContinentFilterItemClick = onUpdateContinentFilterItem,
-                modifier = Modifier.fillMaxWidth()
-            )
+                ContinentFilterSection(
+                    continentsFilterItems = continentsFilterItems,
+                    onContinentFilterItemClick = onUpdateContinentFilterItem,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            Divider()
+                Divider()
 
-            ShowOnlyFavouritesFilterSection(
-                showFavouritesOnly = showFavouritesOnly,
-                onToggleFavouriteOnly = onToggleFavouriteOnly,
-                modifier = Modifier.fillMaxWidth()
-            )
+                ShowOnlyFavouritesFilterSection(
+                    showFavouritesOnly = showFavouritesOnly,
+                    onToggleFavouriteOnly = onToggleFavouriteOnly,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            ResetFiltersAnimatedButton(
-                isFiltering = isFiltering,
-                showFavouritesOnly = showFavouritesOnly,
-                onResetAllFilters = onResetAllFilters,
-                modifier = Modifier.height(70.dp)
-            )
+                ResetFiltersAnimatedButton(
+                    isFiltering = isFiltering,
+                    showFavouritesOnly = showFavouritesOnly,
+                    onResetAllFilters = onResetAllFilters,
+                    modifier = Modifier.height(70.dp)
+                )
+            }
         }
     }
 }

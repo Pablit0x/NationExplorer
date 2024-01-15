@@ -101,6 +101,7 @@ class OverviewScreen : Screen {
                             snackBarHostState.showSnackbar(message = event.message)
                         }
                     }
+
                     else -> {}
                 }
             }
@@ -108,8 +109,7 @@ class OverviewScreen : Screen {
 
         Scaffold(
             topBar = {
-                OverviewScreenMainTopBar(
-                    scrollBehavior = scrollBehavior,
+                OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
                     searchWidgetState = searchWidgetState,
                     searchTextState = searchText,
                     isFiltering = isFiltering,
@@ -140,10 +140,7 @@ class OverviewScreen : Screen {
             modifier = Modifier.nestedScroll(connection = scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(12.dp),
+                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -158,9 +155,7 @@ class OverviewScreen : Screen {
                     ) {
                         LazyColumn(
                             state = listState,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .fillMaxWidth(0.9f),
+                            modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
 
@@ -199,28 +194,28 @@ class OverviewScreen : Screen {
                         )
                     }
 
-                    if (filterWidgetState == FilterWidgetState.OPEN) {
-                        FilterBottomSheet(sheetState = sheetState,
-                            isFiltering = isFiltering,
-                            showFavouritesOnly = showFavouritesOnly,
-                            continentsFilterItems = continentFilterItems,
-                            populationFilterItems = populationFilterItems,
-                            onUpdateFilterWidgetState = { updatedFilterWidgetState ->
-                                viewModel.updateFilterWidgetState(updatedFilterWidgetState)
-                            },
-                            onUpdateContinentFilterItem = { continentItemLabel ->
-                                viewModel.updateContinentFilterItem(
-                                    label = continentItemLabel
-                                )
-                            },
-                            onUpdatePopulationFilterItem = { populationItemLabel ->
-                                viewModel.updatePopulationFilterItem(
-                                    label = populationItemLabel
-                                )
-                            },
-                            onToggleFavouriteOnly = { viewModel.toggleFavouriteOnly() },
-                            onResetAllFilters = { viewModel.resetAllFilters() })
-                    }
+                    FilterBottomSheet(
+                        filterWidgetState = filterWidgetState,
+                        sheetState = sheetState,
+                        isFiltering = isFiltering,
+                        showFavouritesOnly = showFavouritesOnly,
+                        continentsFilterItems = continentFilterItems,
+                        populationFilterItems = populationFilterItems,
+                        onUpdateFilterWidgetState = { updatedFilterWidgetState ->
+                            viewModel.updateFilterWidgetState(updatedFilterWidgetState)
+                        },
+                        onUpdateContinentFilterItem = { continentItemLabel ->
+                            viewModel.updateContinentFilterItem(
+                                label = continentItemLabel
+                            )
+                        },
+                        onUpdatePopulationFilterItem = { populationItemLabel ->
+                            viewModel.updatePopulationFilterItem(
+                                label = populationItemLabel
+                            )
+                        },
+                        onToggleFavouriteOnly = { viewModel.toggleFavouriteOnly() },
+                        onResetAllFilters = { viewModel.resetAllFilters() })
                 }
             }
         }

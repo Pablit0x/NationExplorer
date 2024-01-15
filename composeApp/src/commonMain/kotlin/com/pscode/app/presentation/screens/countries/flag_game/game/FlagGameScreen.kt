@@ -65,6 +65,8 @@ class FlagGameScreen : Screen {
         val isUsernameInputDialogVisible by viewModel.isUsernameInputDialogVisible.collectAsState()
 
         val isGameDisplayed by remember { derivedStateOf { !isScoreVisible || !isUsernameInputDialogVisible } }
+        val isFlagSelectionMade by remember { derivedStateOf { selectedFlag != null } }
+
         val scrollState = rememberScrollState()
 
         LaunchedEffect(isGameDataReady) {
@@ -124,25 +126,22 @@ class FlagGameScreen : Screen {
                                     isCorrectFlag = option.flagUrl == currentRound.targetCountry.flagUrl,
                                     isSelectedFlag = option.flagUrl == selectedFlag,
                                     isCorrectSelection = isCorrectSelection,
-                                    isSelectionMade = selectedFlag != null,
-                                    onClick = { flagUrl ->
-                                        viewModel.setSelectedFlag(flagUrl = flagUrl)
-                                        viewModel.checkAnswer()
-                                    })
+                                    isSelectionMade = isFlagSelectionMade,
+                                    onClick = viewModel::selectFlag
+                                )
                             }
                         }
 
                         QuizButton(
                             showButton = isQuizButtonVisible,
                             quizButtonState = quizButtonState,
-                            modifier = Modifier.fillMaxWidth(0.3f).height(50.dp)
+                            modifier = Modifier.fillMaxWidth(0.3f)
                         )
                     }
                 }
 
                 UsernameInputDialog(
-                    isOpen = isUsernameInputDialogVisible,
-                    onNextClicked = viewModel::setUserName
+                    isOpen = isUsernameInputDialogVisible, onNextClicked = viewModel::setUserName
                 )
 
                 GameResultsDialog(
