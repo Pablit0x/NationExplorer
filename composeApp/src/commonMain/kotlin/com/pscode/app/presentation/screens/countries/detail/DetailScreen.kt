@@ -40,8 +40,6 @@ import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Status
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 import org.koin.compose.koinInject
 
 class DetailScreen(private val selectedCountry: CountryOverview) : Screen {

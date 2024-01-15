@@ -25,7 +25,8 @@ fun DetailScreenTopBar(
     isCountryFavourite: Boolean,
     onToggleFavourite: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-    navigator: Navigator) {
+    navigator: Navigator
+) {
 
     CenterAlignedTopAppBar(
         title = {

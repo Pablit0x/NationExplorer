@@ -229,9 +229,7 @@ class FlagGameViewModel(
 
     private fun getAllCountries() {
         viewModelScope.launch {
-            val result = countryRepository.getAllCountries()
-
-            when (result) {
+            when (val result = countryRepository.getAllCountries()) {
                 is Response.Success -> {
                     allCountries = result.data
                     _isGameDataReady.update { true }

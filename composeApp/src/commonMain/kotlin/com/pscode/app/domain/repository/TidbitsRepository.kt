@@ -5,6 +5,6 @@ import com.pscode.app.utils.Response
 
 interface TidbitsRepository {
 
-    suspend fun getTidbitsByCountryName(countryName: String) : Response<List<TidbitOverview>>
+    suspend fun getTidbitsByCountryName(countryName: String): Response<List<TidbitOverview>>
 
 }

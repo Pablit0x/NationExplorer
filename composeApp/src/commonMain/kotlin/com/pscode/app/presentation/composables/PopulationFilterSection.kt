@@ -21,10 +21,11 @@ import com.pscode.app.presentation.screens.countries.overview.convertPopulation
 @Composable
 fun PopulationFilterSection(
     populationFilterItems: List<FilterItem>,
-    onPopulationFilterItemClick : (String) -> Unit,
-    modifier: Modifier = Modifier) {
+    onPopulationFilterItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
-    Column(modifier = modifier){
+    Column(modifier = modifier) {
         Text(
             text = SharedRes.string.population,
             style = MaterialTheme.typography.labelLarge,

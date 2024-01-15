@@ -12,7 +12,7 @@ data class CountryOverview(
     val capitals: List<String>,
     val population: Int,
     val area: Double,
-    val continents : List<String>,
+    val continents: List<String>,
     val timezones: List<String>,
     val languages: List<String>,
     val currency: List<String>,

@@ -1,7 +1,6 @@
 package com.pscode.app.data.remote
 
 import com.pscode.app.data.model.celebrity.CelebrityDto
-import com.pscode.app.data.model.tidbits.TidbitsDto
 import com.pscode.app.domain.remote.CelebrityApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient

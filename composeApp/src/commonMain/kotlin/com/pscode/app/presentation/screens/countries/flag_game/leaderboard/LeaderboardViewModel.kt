@@ -24,7 +24,7 @@ class LeaderboardViewModel(
         getAllResults()
     }
 
-    fun isCurrentUser(userId : String) : Boolean {
+    fun isCurrentUser(userId: String): Boolean {
         return currentUser?.id == userId
     }
 

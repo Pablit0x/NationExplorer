@@ -1,7 +1,6 @@
 package com.pscode.app.data.repository
 
 import com.pscode.app.data.model.celebrity.toListOfCelebrityOverview
-import com.pscode.app.data.model.tidbits.toListOfTidbitsOverview
 import com.pscode.app.domain.model.CelebrityOverview
 import com.pscode.app.domain.remote.CelebrityApi
 import com.pscode.app.domain.repository.CelebrityRepository

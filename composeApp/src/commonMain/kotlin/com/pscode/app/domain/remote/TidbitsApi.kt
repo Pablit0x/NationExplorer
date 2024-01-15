@@ -5,5 +5,5 @@ import com.pscode.app.utils.Response
 
 interface TidbitsApi {
 
-    suspend fun getTidbitsByCountryName(countryName: String) : Response<TidbitsDto>
+    suspend fun getTidbitsByCountryName(countryName: String): Response<TidbitsDto>
 }

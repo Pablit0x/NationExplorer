@@ -92,7 +92,8 @@ fun DetailedCountryOverviewCard(
                         iconDescription = "Language Icon",
                         key = SharedRes.string.language.format(number = selectedCountry.languages.size),
                         value = selectedCountry.languages.joinToString(separator = ", "),
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp)
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 8.dp)
                     )
                 }
 

@@ -24,13 +24,14 @@ class CountryRepositoryImpl(
         return countryListResponse
     }
 
-    override suspend fun toggleFavourites(country : CountryOverview?): Response<List<CountryOverview>> {
+    override suspend fun toggleFavourites(country: CountryOverview?): Response<List<CountryOverview>> {
 
-        val cachedCountries = countryOverviewCache.get() ?: return Response.Error("Country cache is null")
+        val cachedCountries =
+            countryOverviewCache.get() ?: return Response.Error("Country cache is null")
 
         val updatedList = cachedCountries.let { countries ->
             countries.map { cachedCountry ->
-                if(cachedCountry.name == country?.name){
+                if (cachedCountry.name == country?.name) {
                     cachedCountry.copy(
                         isFavourite = !cachedCountry.isFavourite
                     )

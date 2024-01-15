@@ -1,6 +1,5 @@
 # Nation Explorer - Compose Multiplatform App <img src="https://github.com/Pablit0x/NationExplorer/assets/76017191/27b397b2-ef8e-4ace-a25b-1f6c7888a848" alt="Logo" width="40" height="40">
 
-
 Nation Explorer is a Compose Multiplatform offline-first mobile app (**for both iOS and Android**)
 that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users
 with an engaging experience to discover and interact with countries across the globe.
@@ -13,10 +12,13 @@ with an engaging experience to discover and interact with countries across the g
   cities, area, languages spoken, currency, population, timezones and intriguing facts.
 - **Interactive Maps**: View countries on maps using Google Maps for Android and Apple Maps for iOS.
 - **Real-time Weather**: Get up-to-date weather updates for each country's capital city.
-- **Engaging Game**: Have some fun while learning! Test your knowledge by matching flags to their countries. Compete globally and see how you rank on the leaderboard.
-- **Offline First**: Use most features offline post the app's first use. Once it connects to the internet initially, it operates offline seamlessly.
+- **Engaging Game**: Have some fun while learning! Test your knowledge by matching flags to their
+  countries. Compete globally and see how you rank on the leaderboard.
+- **Offline First**: Use most features offline post the app's first use. Once it connects to the
+  internet initially, it operates offline seamlessly.
 - **Favorite Countries**: Quickly access your preferred countries by marking them as favorites.
-- **Filter by Continent and Population Size**: Easily find countries based on continents and population size.
+- **Filter by Continent and Population Size**: Easily find countries based on continents and
+  population size.
 
 ## Google Play
 
@@ -33,8 +35,8 @@ Nation Explorer - https://bit.ly/nation-explorer
 - **Google Maps & Apple Maps**: Map
   integrations ([Google Maps](https://developers.google.com/maps/documentation/android-sdk/maps-compose), [Apple Maps](https://developer.apple.com/documentation/mapkit/))
 - **Weather, Country, Geolocation and Country Tidbits APIs**: Data
-  sources ([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/), 
-[Country Tidbits](https://github.com/Pablit0x/nation_explorer_tidbits_api))
+  sources ([Weather API](https://api.api-ninjas.com/v1/weather), [Country API](https://restcountries.com/v3.1/all), [Geolocation API](https://api.opencagedata.com/geocode/v1/),
+  [Country Tidbits](https://github.com/Pablit0x/nation_explorer_tidbits_api))
 - **MongoDB Device Sync**: Online leaderboard with live
   updates ([MongoDB Device Sync](https://www.mongodb.com/atlas/app-services/device-sync))
 - **MOKO MVVM**: ViewModel sharing ([MOKO MVVM](https://github.com/icerockdev/moko-mvvm))
@@ -60,7 +62,6 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/11776003-a988-4dba-ba
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/2dc487f7-f900-409f-b9f9-9eac6b1899e7)
 
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/23156731-9a7a-4544-ab36-362b0f0e04d0)
-
 
 ### iOS
 

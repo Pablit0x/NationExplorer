@@ -48,8 +48,6 @@ import com.pscode.app.presentation.composables.isScrollingUp
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
 import com.pscode.app.presentation.screens.shared.Event
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
