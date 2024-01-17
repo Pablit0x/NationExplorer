@@ -98,6 +98,7 @@ fun CelebrityCard(
                             Text(
                                 text = celebrity.description,
                                 style = MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
                     }

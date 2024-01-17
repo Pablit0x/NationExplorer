@@ -57,9 +57,9 @@ fun ExploreAndLearnCards(
         }
 
 
+
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             state = listState
         ) {
