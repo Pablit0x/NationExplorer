@@ -1,6 +1,5 @@
 package com.pscode.app.presentation.composables
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -22,11 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.TidbitOverview
+import com.pscode.app.presentation.screens.countries.detail.CardState
 import com.pscode.app.utils.Constants
 import kotlinx.coroutines.launch
 
@@ -43,10 +40,11 @@ fun TidbitCard(
     currentTidbitId: Int,
     tidbits: List<TidbitOverview>,
     setCurrentTidbitId: (Int) -> Unit,
+    onClick: () -> Unit,
+    cardState: CardState,
     modifier: Modifier
 ) {
     if (tidbits.isNotEmpty()) {
-        var isExpended by remember { mutableStateOf(true) }
         val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
         val scope = rememberCoroutineScope()
 
@@ -54,31 +52,32 @@ fun TidbitCard(
             setCurrentTidbitId(horizontalPagerState.currentPage)
         }
 
-        ElevatedCard(modifier = modifier) {
+        ElevatedCard(modifier = modifier, shape = RoundedCornerShape(10)) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .noRippleClickable { isExpended = !isExpended },
+                        .noRippleClickable { onClick() },
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Lightbulb,
                             contentDescription = "Interesting fact"
                         )
+
                         Text(
                             text = SharedRes.string.did_you_know,
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
 
-                    if (isExpended) {
+                    if (cardState == CardState.EXPENDED) {
                         Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
                     } else {
                         Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
@@ -86,7 +85,7 @@ fun TidbitCard(
 
                 }
 
-                AnimatedVisibility(isExpended) {
+                if (cardState == CardState.EXPENDED) {
                     Column(
                         modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
                         verticalArrangement = Arrangement.SpaceBetween,

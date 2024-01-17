@@ -67,5 +67,7 @@
     <string name="Undo">Undo</string>
     <string name="no_internet">No Internet Connection ⚠️</string>
     <string name="dismiss">Dismiss</string>
+    <string name="most_famous_person">Famous person</string>
+    <string name="explore_and_learn">Explore &amp; Learn</string>
 
 </resources>

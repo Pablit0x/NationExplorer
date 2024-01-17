@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.CurrencyExchange
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,7 +77,7 @@ fun DetailedCountryOverviewCard(
 
                 if (selectedCountry.currency.isNotEmpty()) {
                     DetailCountryInformationItem(
-                        icon = Icons.Default.CurrencyExchange,
+                        icon = Icons.Default.Paid,
                         iconDescription = "Currency Icon",
                         key = SharedRes.string.currency.format(number = selectedCountry.currency.size),
                         value = selectedCountry.currency.joinToString(separator = ", "),
@@ -88,7 +88,7 @@ fun DetailedCountryOverviewCard(
 
                 if (selectedCountry.languages.isNotEmpty()) {
                     DetailCountryInformationItem(
-                        icon = Icons.Default.Language,
+                        icon = Icons.Default.Translate,
                         iconDescription = "Language Icon",
                         key = SharedRes.string.language.format(number = selectedCountry.languages.size),
                         value = selectedCountry.languages.joinToString(separator = ", "),

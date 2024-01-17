@@ -66,8 +66,8 @@ fun WeatherItem(
 
                 Text(
                     text = value,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Normal
                 )
             }
         }

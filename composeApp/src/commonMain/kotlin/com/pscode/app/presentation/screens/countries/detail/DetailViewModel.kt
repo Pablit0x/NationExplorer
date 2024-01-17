@@ -67,6 +67,12 @@ class DetailViewModel(
     private val _didFetchFail = MutableStateFlow(false)
     val didFetchFail = _didFetchFail.asStateFlow()
 
+    private val _tidbitCardState = MutableStateFlow(CardState.COLLAPSED)
+    val tidbitCardState = _tidbitCardState.asStateFlow()
+
+    private val _celebrityCardState = MutableStateFlow(CardState.COLLAPSED)
+    val celebrityCardState = _celebrityCardState.asStateFlow()
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -85,7 +91,7 @@ class DetailViewModel(
     }
 
     fun getCelebritiesByCountry(countryName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = celebrityRepository.getCelebritiesByCountryName(countryName = countryName)
             when (result) {
                 is Response.Success -> {
@@ -140,6 +146,14 @@ class DetailViewModel(
                 }
             }
         }
+    }
+
+    fun updateTidbitCardState(newState: CardState) {
+        _tidbitCardState.update { newState }
+    }
+
+    fun updateCelebrityCardState(newState: CardState) {
+        _celebrityCardState.update { newState }
     }
 
 

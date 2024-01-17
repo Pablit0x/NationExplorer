@@ -33,9 +33,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
+import com.pscode.app.presentation.composables.ExploreAndLearnCards
 import com.pscode.app.presentation.composables.MapBottomSheet
-import com.pscode.app.presentation.composables.ShowMapButton
-import com.pscode.app.presentation.composables.TidbitCard
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.Event
@@ -58,6 +57,8 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
         val fetchFailure by viewModel.didFetchFail.collectAsState()
         val networkStatus by viewModel.connectivityStatus.collectAsState()
+        val tidbitCardState by viewModel.tidbitCardState.collectAsState()
+        val celebrityCardState by viewModel.celebrityCardState.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
@@ -150,16 +151,9 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                 modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
                     .verticalScroll(state = scrollState)
                     .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-//                if (celebritiesList.isNotEmpty()) {
-//                    KamelImage(
-//                        resource = asyncPainterResource(celebritiesList.first().imageUrl),
-//                        contentDescription = null
-//                    )
-//                }
 
                 DetailedCountryOverviewCard(
                     selectedCountry = selectedCountry,
@@ -167,12 +161,21 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                TidbitCard(
+                ExploreAndLearnCards(
                     currentTidbitId = currentTidbitId,
                     tidbits = tidbitsList,
-                    setCurrentTidbitId = { viewModel.setCurrentTidbitId(it) },
+                    celebrity = celebritiesList.firstOrNull(),
+                    displayShowMapCard = displayShowMapButton,
+                    tidbitCardState = tidbitCardState,
+                    celebrityCardState = celebrityCardState,
+                    onShowOnMapCardClicked = viewModel::showMap,
+                    setCurrentTidbitId = viewModel::setCurrentTidbitId,
+                    onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
+                    onUpdateTidbitCardState = viewModel::updateTidbitCardState,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+
 
                 if (hasCapital) {
                     WeatherCard(
@@ -181,8 +184,6 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-
-                ShowMapButton(visible = displayShowMapButton, onClick = viewModel::showMap)
 
                 MapBottomSheet(
                     isMapVisible = isMapVisible,
