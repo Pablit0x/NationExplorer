@@ -37,12 +37,12 @@ fun DetailedCountryOverviewCard(
     ) {
         KamelImage(
             resource = asyncPainterResource(selectedCountry.flagUrl),
-            contentDescription = null,
+            contentDescription = "Country Flag",
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(width = 200.dp, height = 120.dp)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         AnimatedBorderCard(
             modifier = Modifier.fillMaxWidth(),
