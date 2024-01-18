@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -13,8 +14,11 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.pscode.app.domain.model.LocationOverview
 
 @Composable
-actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modifier: Modifier) {
+actual fun MapView(
+    locationOverview: LocationOverview, countryArea: Double, modifier: Modifier
+) {
 
+    var isLoading by remember { mutableStateOf(true) }
     val zoomLevel by remember { mutableFloatStateOf((5f)) }
 
     val cameraPosition by remember {
@@ -29,5 +33,11 @@ actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modi
         position = cameraPosition
     }
 
-    GoogleMap(modifier = modifier, cameraPositionState = cameraPositionState)
+    GoogleMap(modifier = modifier,
+        cameraPositionState = cameraPositionState,
+        onMapLoaded = { isLoading = false })
+
+    if (isLoading) {
+        FullScreenLoadingIndicator()
+    }
 }

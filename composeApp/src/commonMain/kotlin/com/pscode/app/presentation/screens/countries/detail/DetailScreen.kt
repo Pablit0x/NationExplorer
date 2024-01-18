@@ -2,7 +2,6 @@ package com.pscode.app.presentation.screens.countries.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,7 +33,7 @@ import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
 import com.pscode.app.presentation.composables.ExploreAndLearnCards
-import com.pscode.app.presentation.composables.MapBottomSheet
+import com.pscode.app.presentation.composables.FullScreenMapDialog
 import com.pscode.app.presentation.composables.WeatherCard
 import com.pscode.app.presentation.composables.navigateBackOnDrag
 import com.pscode.app.presentation.screens.shared.Event
@@ -147,52 +146,52 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
-                    .verticalScroll(state = scrollState)
-                    .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
 
-                DetailedCountryOverviewCard(
-                    selectedCountry = selectedCountry,
-                    hasCapitalCity = hasCapital,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                ExploreAndLearnCards(
-                    currentTidbitId = currentTidbitId,
-                    tidbits = tidbitsList,
-                    celebrity = celebritiesList.firstOrNull(),
-                    displayShowMapCard = displayShowMapButton,
-                    tidbitCardState = tidbitCardState,
-                    celebrityCardState = celebrityCardState,
-                    onShowOnMapCardClicked = viewModel::showMap,
-                    setCurrentTidbitId = viewModel::setCurrentTidbitId,
-                    onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
-                    onUpdateTidbitCardState = viewModel::updateTidbitCardState,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-
-
-                if (hasCapital) {
-                    WeatherCard(
-                        capitalName = selectedCountry.capitals.first(),
-                        weatherInCapital = currentWeather,
+            if (isMapVisible) {
+                    FullScreenMapDialog(
+                        countryArea = selectedCountry.area,
+                        locationOverview = countryGeolocation,
+                        hideMap = viewModel::hideMap,
+                        modifier = Modifier.fillMaxSize()
+                    )
+            } else {
+                Column(
+                    modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
+                        .verticalScroll(state = scrollState)
+                        .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DetailedCountryOverviewCard(
+                        selectedCountry = selectedCountry,
+                        hasCapitalCity = hasCapital,
                         modifier = Modifier.fillMaxWidth()
                     )
-                }
 
-                MapBottomSheet(
-                    isMapVisible = isMapVisible,
-                    bottomSheetState = bottomSheetState,
-                    countryArea = selectedCountry.area,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.65f),
-                    locationOverview = countryGeolocation,
-                    hideMap = viewModel::hideMap
-                )
+                    ExploreAndLearnCards(
+                        currentTidbitId = currentTidbitId,
+                        tidbits = tidbitsList,
+                        celebrity = celebritiesList.firstOrNull(),
+                        displayShowMapCard = displayShowMapButton,
+                        tidbitCardState = tidbitCardState,
+                        celebrityCardState = celebrityCardState,
+                        onShowOnMapCardClicked = viewModel::showMap,
+                        setCurrentTidbitId = viewModel::setCurrentTidbitId,
+                        onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
+                        onUpdateTidbitCardState = viewModel::updateTidbitCardState,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+
+
+                    if (hasCapital) {
+                        WeatherCard(
+                            capitalName = selectedCountry.capitals.first(),
+                            weatherInCapital = currentWeather,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         }
     }
