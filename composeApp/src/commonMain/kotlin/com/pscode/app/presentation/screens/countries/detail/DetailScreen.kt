@@ -1,20 +1,24 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -25,12 +29,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.carlosgub.kotlinm.charts.ChartAnimation
+import com.carlosgub.kotlinm.charts.bar.BarChart
+import com.carlosgub.kotlinm.charts.bar.BarChartCategory
+import com.carlosgub.kotlinm.charts.bar.BarChartConfig
+import com.carlosgub.kotlinm.charts.bar.BarChartData
+import com.carlosgub.kotlinm.charts.bar.BarChartEntry
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
 import com.pscode.app.presentation.composables.ExploreAndLearnCards
 import com.pscode.app.presentation.composables.FullScreenMapDialog
@@ -58,11 +70,11 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val networkStatus by viewModel.connectivityStatus.collectAsState()
         val tidbitCardState by viewModel.tidbitCardState.collectAsState()
         val celebrityCardState by viewModel.celebrityCardState.collectAsState()
+        val sixMonthsWeatherOverview by viewModel.sixMonthsWeatherOverview.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
         val navigator = LocalNavigator.currentOrThrow
-        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
         val eventsChannel = viewModel.eventsChannel
 
@@ -97,7 +109,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             }
         }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(true) {
             viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
             viewModel.getWeatherByCity(country = selectedCountry)
             viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
@@ -148,12 +160,12 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         ) { innerPadding ->
 
             if (isMapVisible) {
-                    FullScreenMapDialog(
-                        countryArea = selectedCountry.area,
-                        locationOverview = countryGeolocation,
-                        hideMap = viewModel::hideMap,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                FullScreenMapDialog(
+                    countryArea = selectedCountry.area,
+                    locationOverview = countryGeolocation,
+                    hideMap = viewModel::hideMap,
+                    modifier = Modifier.fillMaxSize()
+                )
             } else {
                 Column(
                     modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
@@ -187,12 +199,48 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     if (hasCapital) {
                         WeatherCard(
                             capitalName = selectedCountry.capitals.first(),
+                            sixMonthsWeatherOverview = sixMonthsWeatherOverview,
                             weatherInCapital = currentWeather,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun weatherPlot(sixMonthsWeatherOverview: SixMonthsWeatherOverview, modifier: Modifier = Modifier) {
+
+    if (sixMonthsWeatherOverview.monthAverages.isNotEmpty()) {
+
+        val barChartData =
+            BarChartData(categories = sixMonthsWeatherOverview.monthAverages.flatMap { monthlyAverage ->
+                listOf(
+                    BarChartCategory(
+                        name = monthlyAverage.month.take(3), entries = listOf(
+                            BarChartEntry(
+                                x = "Average Temperature",
+                                y = monthlyAverage.averageTemperature.toFloat(),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        )
+                    )
+                )
+            })
+
+        BarChart(
+            data = barChartData,
+            config = BarChartConfig(
+                thickness = 36.dp, cornerRadius = 7.dp, barsSpacing = 2.dp
+            ),
+            yAxisLabel = { Text(text = "$it℃") },
+            overlayDataEntryLabel = { _, _ -> },
+            modifier = modifier,
+            animation = ChartAnimation.Sequenced(),
+        )
     }
 }

@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.kstore)
             implementation(libs.kstore.file)
             implementation(libs.mongodb.realm)
+            implementation(libs.charts)
 
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) implementation(compose.components.resources)
         }
@@ -69,6 +70,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.google.maps.compose)
             implementation(libs.google.play.services.maps)
+
         }
 
         iosMain.dependencies {

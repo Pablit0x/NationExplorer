@@ -6,6 +6,7 @@ import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
@@ -73,6 +74,11 @@ class DetailViewModel(
     private val _celebrityCardState = MutableStateFlow(CardState.COLLAPSED)
     val celebrityCardState = _celebrityCardState.asStateFlow()
 
+    private val _yearlyWeatherOverview = MutableStateFlow(
+        SixMonthsWeatherOverview(monthAverages = emptyList())
+    )
+    val sixMonthsWeatherOverview = _yearlyWeatherOverview.asStateFlow()
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -129,13 +135,11 @@ class DetailViewModel(
                         }
                         if (isCountryFavourite.value) {
                             _eventsChannel.send(
-                                Event.ShowSnackbarMessageWithAction(
-                                    message = SharedRes.string.country_added_to_favourites.format(
-                                        country = country.name
-                                    ),
+                                Event.ShowSnackbarMessageWithAction(message = SharedRes.string.country_added_to_favourites.format(
+                                    country = country.name
+                                ),
                                     actionLabel = SharedRes.string.Undo,
-                                    action = { toggleCountryFavourite(country = country) }
-                                )
+                                    action = { toggleCountryFavourite(country = country) })
                             )
                         }
                     }
@@ -168,6 +172,9 @@ class DetailViewModel(
                     _countryGeolocation.update {
                         result.data
                     }
+                    _countryGeolocation.value?.let {
+                        getTemperatureRangePastYear(it)
+                    }
                 }
 
                 is Response.Error -> {
@@ -198,6 +205,25 @@ class DetailViewModel(
         }
     }
 
+    private fun getTemperatureRangePastYear(locationOverview: LocationOverview) {
+        viewModelScope.launch {
+            val response =
+                weatherRepository.getTemperatureRangePastSixMonths(locationOverview = locationOverview)
+            when (response) {
+                is Response.Success -> {
+                    _yearlyWeatherOverview.update { response.data }
+                }
+
+                is Response.Error -> {
+                    _eventsChannel.send(
+                        Event.ShowSnackbarMessage(message = response.message)
+                    )
+                }
+            }
+        }
+    }
+
+
     fun showMap() {
         _isMapVisible.update { true }
     }
@@ -213,6 +239,9 @@ class DetailViewModel(
         _countryGeolocation.update { null }
         _tidbitsList.update { emptyList() }
         _celebritiesList.update { emptyList() }
+        _tidbitCardState.update { CardState.COLLAPSED }
+        _celebrityCardState.update { CardState.COLLAPSED }
+        _yearlyWeatherOverview.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
     }
 
 }

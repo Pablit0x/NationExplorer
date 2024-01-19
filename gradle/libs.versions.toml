@@ -1,5 +1,6 @@
 [versions]
 
+charts = "1.0.4"
 kotlin = "1.9.21"
 agp = "8.2.1"
 compose = "1.5.11"
@@ -29,6 +30,7 @@ mongodb-realm = "1.13.0"
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+charts = { module = "com.carlosgub.kotlinm.charts:charts", version.ref = "charts" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
 libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
