@@ -4,8 +4,8 @@ package com.pscode.app.data.repository
 import com.pscode.app.data.model.weather.toWeatherOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.MonthlyAverage
-import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
+import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.utils.Response
@@ -31,13 +31,21 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
 
             is Response.Success -> {
                 val dailyData = result.data.daily
-                val datesGroupedByMonths = dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
+                val datesGroupedByMonths =
+                    dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
 
                 val sixMonthsWeatherOverview = SixMonthsWeatherOverview(
                     monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
-                        val averageTemperature = dailyData.temperature2mMax.zip(dailyData.temperature2mMin) { max, min -> (max + min) / 2 }
-                            .filterIndexed { index, _ -> datesInMonth.contains(LocalDate.parse(dailyData.time[index])) }
-                            .average()
+                        val averageTemperature =
+                            dailyData.temperature2mMax.zip(dailyData.temperature2mMin) { max, min -> (max + min) / 2 }
+                                .filterIndexed { index, _ ->
+                                    datesInMonth.contains(
+                                        LocalDate.parse(
+                                            dailyData.time[index]
+                                        )
+                                    )
+                                }
+                                .average()
                         MonthlyAverage(month = month, averageTemperature = averageTemperature)
                     }
                 )

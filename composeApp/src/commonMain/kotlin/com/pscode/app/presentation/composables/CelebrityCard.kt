@@ -70,9 +70,10 @@ fun CelebrityCard(
 
                 }
 
-                if(cardState == CardState.EXPENDED){
+                if (cardState == CardState.EXPENDED) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp), verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
 
                         KamelImage(

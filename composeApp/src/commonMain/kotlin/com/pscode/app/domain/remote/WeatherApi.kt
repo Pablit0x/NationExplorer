@@ -7,5 +7,5 @@ import com.pscode.app.utils.Response
 
 interface WeatherApi {
     suspend fun getWeatherByCity(cityName: String): Response<WeatherDto>
-    suspend fun getTemperatureRangePastYear(locationOverview: LocationOverview) : Response<WeatherHistoricalDto>
+    suspend fun getTemperatureRangePastYear(locationOverview: LocationOverview): Response<WeatherHistoricalDto>
 }

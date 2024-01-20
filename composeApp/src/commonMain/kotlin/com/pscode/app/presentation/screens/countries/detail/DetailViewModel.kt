@@ -4,9 +4,9 @@ import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CelebrityOverview
 import com.pscode.app.domain.model.CountryOverview
 import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.model.TidbitOverview
 import com.pscode.app.domain.model.WeatherOverview
-import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
