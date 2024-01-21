@@ -66,7 +66,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val eventsChannel = viewModel.eventsChannel
 
         val scrollState = rememberScrollState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         val snackBarHostState = remember { SnackbarHostState() }
 
 
