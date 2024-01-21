@@ -1,5 +1,10 @@
 package com.pscode.app.presentation.composables
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +33,7 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -41,13 +47,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.model.WeatherOverview
-import com.pscode.app.presentation.screens.countries.detail.weatherPlot
 
 data class WeatherItemData(
     val icon: ImageVector, val contentDescription: String, val label: String, val value: String
@@ -68,6 +74,16 @@ fun WeatherCard(
 ) {
     var selectedWeatherTab by remember { mutableIntStateOf(0) }
     var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>>(emptyList()) }
+
+    val transition = rememberInfiniteTransition()
+    val animatedAlpha by transition.animateFloat(
+        initialValue = 0.2f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            tween(durationMillis = 2000), repeatMode = RepeatMode.Reverse
+        )
+    )
+
     val weatherTabItems = listOf(
         WeatherTabItem(
             title = "Live",
@@ -165,7 +181,8 @@ fun WeatherCard(
                             ) {
                                 Icon(
                                     imageVector = if (index == selectedWeatherTab) weatherTabItem.selectedIcon else weatherTabItem.unselectedIcon,
-                                    contentDescription = "Weather Tab Icon"
+                                    contentDescription = "Weather Tab Icon",
+                                    tint = if (index == 0) Color.Red.copy(alpha = animatedAlpha) else LocalContentColor.current
                                 )
                                 Text(text = weatherTabItem.title)
                             }
@@ -200,12 +217,10 @@ fun WeatherCard(
                     }
 
                     1 -> {
-                        if (sixMonthsWeatherOverview.monthAverages.isNotEmpty()) {
-                            weatherPlot(
-                                sixMonthsWeatherOverview = sixMonthsWeatherOverview,
-                                modifier = Modifier.fillMaxSize().padding(8.dp)
-                            )
-                        }
+                        AverageTemperatureBarChart(
+                            sixMonthsWeatherOverview = sixMonthsWeatherOverview,
+                            modifier = Modifier.fillMaxSize().padding(8.dp)
+                        )
                     }
                 }
 
