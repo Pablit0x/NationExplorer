@@ -200,7 +200,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                         false
                     }
                     _countries.update {
-                        result.data
+                        result.data.filterNot { it.name == "Antarctica" }
                     }
                 }
 

@@ -74,10 +74,10 @@ class DetailViewModel(
     private val _celebrityCardState = MutableStateFlow(CardState.COLLAPSED)
     val celebrityCardState = _celebrityCardState.asStateFlow()
 
-    private val _yearlyWeatherOverview = MutableStateFlow(
+    private val _sixMonthsWeatherOverview = MutableStateFlow(
         SixMonthsWeatherOverview(monthAverages = emptyList())
     )
-    val sixMonthsWeatherOverview = _yearlyWeatherOverview.asStateFlow()
+    val sixMonthsWeatherOverview = _sixMonthsWeatherOverview.asStateFlow()
 
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -211,7 +211,7 @@ class DetailViewModel(
                 weatherRepository.getTemperatureRangePastSixMonths(locationOverview = locationOverview)
             when (response) {
                 is Response.Success -> {
-                    _yearlyWeatherOverview.update { response.data }
+                    _sixMonthsWeatherOverview.update { response.data }
                 }
 
                 is Response.Error -> {
@@ -241,7 +241,7 @@ class DetailViewModel(
         _celebritiesList.update { emptyList() }
         _tidbitCardState.update { CardState.COLLAPSED }
         _celebrityCardState.update { CardState.COLLAPSED }
-        _yearlyWeatherOverview.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _sixMonthsWeatherOverview.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
     }
 
 }
