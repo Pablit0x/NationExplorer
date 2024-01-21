@@ -231,12 +231,11 @@ class FlagGameViewModel(
         viewModelScope.launch {
             when (val result = countryRepository.getAllCountries()) {
                 is Response.Success -> {
-                    allCountries = result.data
+                    allCountries = result.data.filterNot { it.name == "Antarctica" }
                     _isGameDataReady.update { true }
                 }
 
                 is Response.Error -> {
-                    // TODO
                     _isGameDataReady.update { false }
                 }
             }
