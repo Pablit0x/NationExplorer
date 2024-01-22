@@ -1,8 +1,7 @@
 package com.pscode.app.data.repository
 
 
-import com.carlosgub.kotlinm.charts.round
-import com.pscode.app.data.model.weather.toWeatherOverview
+import com.pscode.app.data.model.weather.live.toWeatherOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.MonthlyAverage
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
@@ -10,7 +9,6 @@ import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.utils.Response
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 
 class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherRepository {
@@ -123,6 +121,42 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                         val averageDayLightInHours = ((averageDayLightInSeconds / 60) / 60)
 
                         MonthlyAverage(month = month, averageTemperature = averageDayLightInHours)
+                    }
+                )
+                Response.Success(data = sixMonthsWeatherOverview)
+            }
+
+            is Response.Error -> {
+                Response.Error(message = result.message)
+            }
+        }
+    }
+
+    override suspend fun getRainSumRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview> {
+        return when (val result =
+            weatherApi.getRainSumRangePastSixMonths(locationOverview = locationOverview)) {
+
+
+            is Response.Success -> {
+                val dailyData = result.data.daily
+                val datesGroupedByMonths =
+                    dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
+
+
+                val sixMonthsWeatherOverview = SixMonthsWeatherOverview(
+                    monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                        val averageRainSumInMm =
+                            dailyData.rainSum
+                                .filterIndexed { index, _ ->
+                                    datesInMonth.contains(
+                                        LocalDate.parse(
+                                            dailyData.time[index]
+                                        )
+                                    )
+                                }
+                                .average()
+
+                        MonthlyAverage(month = month, averageTemperature = averageRainSumInMm)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)

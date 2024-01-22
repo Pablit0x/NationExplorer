@@ -90,6 +90,10 @@ class DetailViewModel(
 
     val sixMonthDayLightAverageInHours = _sixMonthsDayLightAverageInHours.asStateFlow()
 
+    private val _sixMonthsRainSumInMm =
+        MutableStateFlow(SixMonthsWeatherOverview(monthAverages = emptyList()))
+    val sixMonthsRainSumInMm = _sixMonthsRainSumInMm.asStateFlow()
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -184,9 +188,10 @@ class DetailViewModel(
                         result.data
                     }
                     _countryGeolocation.value?.let { locationOverview ->
-                        getTemperatureRangePastSixMonths(locationOverview)
-                        getWindSpeedRangePastSixMonths(locationOverview)
-                        getDayLightRangePastSixMonths(locationOverview)
+                        getTemperatureRangePastSixMonths(locationOverview = locationOverview)
+                        getWindSpeedRangePastSixMonths(locationOverview = locationOverview)
+                        getDayLightRangePastSixMonths(locationOverview = locationOverview)
+                        getRainSumRangePastSixMonths(locationOverview = locationOverview)
                     }
                 }
 
@@ -243,6 +248,24 @@ class DetailViewModel(
             when (response) {
                 is Response.Success -> {
                     _sixMonthsDayLightAverageInHours.update { response.data }
+                }
+
+                is Response.Error -> {
+                    _eventsChannel.send(
+                        Event.ShowSnackbarMessage(message = response.message)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getRainSumRangePastSixMonths(locationOverview: LocationOverview) {
+        viewModelScope.launch {
+            val response =
+                weatherRepository.getRainSumRangePastSixMonths(locationOverview = locationOverview)
+            when (response) {
+                is Response.Success -> {
+                    _sixMonthsRainSumInMm.update { response.data }
                 }
 
                 is Response.Error -> {

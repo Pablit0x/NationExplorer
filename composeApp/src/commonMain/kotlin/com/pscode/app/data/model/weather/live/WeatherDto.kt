@@ -1,4 +1,4 @@
-package com.pscode.app.data.model.weather
+package com.pscode.app.data.model.weather.live
 
 import com.pscode.app.domain.model.WeatherOverview
 import kotlinx.datetime.Instant

@@ -12,4 +12,6 @@ interface WeatherRepository {
 
     suspend fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) : Response<SixMonthsWeatherOverview>
     suspend fun getDayLightRangePastSixMonths(locationOverview: LocationOverview) : Response<SixMonthsWeatherOverview>
+
+    suspend fun getRainSumRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview>
 }

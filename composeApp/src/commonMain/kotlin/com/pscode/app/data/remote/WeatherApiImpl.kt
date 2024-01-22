@@ -1,10 +1,11 @@
 package com.pscode.app.data.remote
 
 import FunApp.composeApp.BuildConfig
-import com.pscode.app.data.model.weather.WeatherDto
 import com.pscode.app.data.model.weather.historical.day_light.DayLightHistoricalDto
+import com.pscode.app.data.model.weather.historical.rain_sum.RainSumHistoricalDto
 import com.pscode.app.data.model.weather.historical.temperature.TemperatureHistoricalDto
 import com.pscode.app.data.model.weather.historical.wind.WindSpeedHistoricalDto
+import com.pscode.app.data.model.weather.live.WeatherDto
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.utils.Response
@@ -104,6 +105,29 @@ class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
             Response.Success(data = httpClient.get {
                 url("$baseUrlOpenMeteo?latitude=${locationOverview.latitude}&longitude=${locationOverview.longitude}&start_date=$startDate&end_date=$endDate&daily=daylight_duration")
             }.body<DayLightHistoricalDto>())
+        } catch (e: IOException) {
+            Response.Error("Network issue")
+        } catch (e: ClientRequestException) {
+            Response.Error("Invalid request.")
+        } catch (e: ServerResponseException) {
+            Response.Error("Server unavailable.")
+        } catch (e: HttpRequestTimeoutException) {
+            Response.Error("Request timed out.")
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            Response.Error("Unexpected issue occurred.")
+        }
+    }
+
+    override suspend fun getRainSumRangePastSixMonths(locationOverview: LocationOverview): Response<RainSumHistoricalDto> {
+        return try {
+            val timeZone = TimeZone.currentSystemDefault()
+            val dateNow = Clock.System.now().toLocalDateTime(timeZone).date
+            val endDate = dateNow.minus(DatePeriod(days = 5))
+            val startDate = dateNow.minus(DatePeriod(months = 6, days = 5))
+            Response.Success(data = httpClient.get {
+                url("$baseUrlOpenMeteo?latitude=${locationOverview.latitude}&longitude=${locationOverview.longitude}&start_date=$startDate&end_date=$endDate&daily=rain_sum")
+            }.body<RainSumHistoricalDto>())
         } catch (e: IOException) {
             Response.Error("Network issue")
         } catch (e: ClientRequestException) {

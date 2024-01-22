@@ -13,7 +13,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -61,6 +60,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val sixMonthsTemperatureAverage by viewModel.sixMonthsTemperatureAverage.collectAsState()
         val sixMonthsWindSpeedAverage by viewModel.sixMonthsWindSpeedAverage.collectAsState()
         val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
+        val sixMonthsRainSumInMm by viewModel.sixMonthsRainSumInMm.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
