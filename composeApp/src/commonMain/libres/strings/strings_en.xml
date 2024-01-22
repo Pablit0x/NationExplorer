@@ -70,5 +70,8 @@
     <string name="most_famous_person">Famous person</string>
     <string name="explore_and_learn">Explore &amp; Learn</string>
     <string name="average_temperature">Average Temperature in ${month}</string>
+    <string name="average_wind_speed">Average Wind Speed in ${month}</string>
+    <string name="average_day_light">Average Day Light in ${month} per day</string>
+    <string name="average_rain_sum">Average Rain Sum in ${month} per day</string>
 
 </resources>

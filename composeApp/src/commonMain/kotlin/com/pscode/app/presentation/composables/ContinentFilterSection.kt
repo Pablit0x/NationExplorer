@@ -23,12 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.presentation.screens.countries.overview.FilterItem
+import com.pscode.app.presentation.screens.countries.overview.SelectableItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContinentFilterSection(
-    continentsFilterItems: List<FilterItem>,
+    continentsSelectableItems: List<SelectableItem>,
     onContinentFilterItemClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +47,7 @@ fun ContinentFilterSection(
             verticalItemSpacing = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(continentsFilterItems) { continent ->
+            items(continentsSelectableItems) { continent ->
                 ElevatedFilterChip(selected = continent.isSelected,
                     onClick = { onContinentFilterItemClick(continent.label) },
                     label = {

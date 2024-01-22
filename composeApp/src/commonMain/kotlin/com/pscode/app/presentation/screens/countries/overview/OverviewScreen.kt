@@ -199,8 +199,8 @@ class OverviewScreen : Screen {
                         sheetState = sheetState,
                         isFiltering = isFiltering,
                         showFavouritesOnly = showFavouritesOnly,
-                        continentsFilterItems = continentFilterItems,
-                        populationFilterItems = populationFilterItems,
+                        continentsSelectableItems = continentFilterItems,
+                        populationSelectableItems = populationFilterItems,
                         onUpdateFilterWidgetState = { updatedFilterWidgetState ->
                             viewModel.updateFilterWidgetState(updatedFilterWidgetState)
                         },

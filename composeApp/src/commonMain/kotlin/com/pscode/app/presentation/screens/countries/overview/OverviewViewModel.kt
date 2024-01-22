@@ -27,17 +27,17 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
-    private val _continentFilterItems = MutableStateFlow(Continents.map {
-        FilterItem(label = it, isSelected = false)
+    private val _continentSelectableItems = MutableStateFlow(Continents.map {
+        SelectableItem(label = it, isSelected = false)
     })
 
-    val continentFilterItems = _continentFilterItems.asStateFlow()
+    val continentFilterItems = _continentSelectableItems.asStateFlow()
 
-    private val _populationFilterItems = MutableStateFlow(Populations.map {
-        FilterItem(label = it.toString(), isSelected = false)
+    private val _populationSelectableItems = MutableStateFlow(Populations.map {
+        SelectableItem(label = it.toString(), isSelected = false)
     })
 
-    val populationFilterItems = _populationFilterItems.asStateFlow()
+    val populationFilterItems = _populationSelectableItems.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -46,7 +46,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     private val _showFavouritesOnly = MutableStateFlow(false)
     val showFavouritesOnly = _showFavouritesOnly.asStateFlow()
 
-    val isFiltering = combine(_continentFilterItems.map { continentFilterItems ->
+    val isFiltering = combine(_continentSelectableItems.map { continentFilterItems ->
         continentFilterItems.any { it.isSelected }
     }, showFavouritesOnly, populationFilterItems.map { populationFilterItems ->
         populationFilterItems.any { it.isSelected }
@@ -81,7 +81,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                     )
                 }
             }
-        }.combine(_continentFilterItems) { countries, filterItems ->
+        }.combine(_continentSelectableItems) { countries, filterItems ->
             if (filterItems.any { it.isSelected }) {
                 val selectedContinents = filterItems.filter { it.isSelected }.map { it.label }
 
@@ -101,7 +101,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
             } else {
                 countries
             }
-        }.combine(_populationFilterItems) { countries, populationItems ->
+        }.combine(_populationSelectableItems) { countries, populationItems ->
             val selectedPopulation = populationItems.firstOrNull { it.isSelected }
             if (selectedPopulation != null) {
                 countries.filter {
@@ -144,18 +144,18 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
     fun updateContinentFilterItem(label: String) {
-        val updatedList = _continentFilterItems.value.map { filterItem ->
+        val updatedList = _continentSelectableItems.value.map { filterItem ->
             if (filterItem.label == label) {
                 filterItem.copy(isSelected = !filterItem.isSelected)
             } else {
                 filterItem
             }
         }
-        _continentFilterItems.value = updatedList
+        _continentSelectableItems.value = updatedList
     }
 
     fun updatePopulationFilterItem(label: String) {
-        _populationFilterItems.update {
+        _populationSelectableItems.update {
             it.map { populationFilterItem ->
                 if (label != populationFilterItem.label) {
                     populationFilterItem.copy(
@@ -172,14 +172,14 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
 
     fun resetAllFilters() {
-        _continentFilterItems.update { items ->
+        _continentSelectableItems.update { items ->
             items.map { item ->
                 item.copy(isSelected = false)
             }
         }
         _showFavouritesOnly.update { false }
 
-        _populationFilterItems.update { items ->
+        _populationSelectableItems.update { items ->
             items.map { item ->
                 item.copy(isSelected = false)
             }

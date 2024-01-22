@@ -12,7 +12,9 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
+import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
 import com.pscode.app.presentation.screens.shared.Event
+import com.pscode.app.utils.Constants
 import com.pscode.app.utils.NetworkConnectivity
 import com.pscode.app.utils.Response
 import com.pscode.app.utils.Status
@@ -94,6 +96,15 @@ class DetailViewModel(
         MutableStateFlow(SixMonthsWeatherOverview(monthAverages = emptyList()))
     val sixMonthsRainSumInMm = _sixMonthsRainSumInMm.asStateFlow()
 
+    private val _selectedChartData = MutableStateFlow(Constants.chartSelection.map {
+        SelectableItemWithIcon(
+            label = it.key, isSelected = it.key == "Temperature", icon = it.value
+        )
+    })
+
+    val selectedChartData = _selectedChartData.asStateFlow()
+
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -131,6 +142,22 @@ class DetailViewModel(
     fun setCurrentTidbitId(id: Int) {
         _currentTidbitId.update {
             id
+        }
+    }
+
+    fun updateChartDataSelectedItem(label: String) {
+        _selectedChartData.update {
+            it.map { chartDataItem ->
+                if (label != chartDataItem.label) {
+                    chartDataItem.copy(
+                        isSelected = false
+                    )
+                } else {
+                    chartDataItem.copy(
+                        isSelected = !chartDataItem.isSelected
+                    )
+                }
+            }
         }
     }
 

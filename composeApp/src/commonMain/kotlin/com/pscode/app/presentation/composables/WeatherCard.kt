@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
 
 data class WeatherItemData(
     val icon: ImageVector, val contentDescription: String, val label: String, val value: String
@@ -69,7 +70,9 @@ data class WeatherTabItem(
 fun WeatherCard(
     capitalName: String,
     weatherInCapital: WeatherOverview?,
-    sixMonthsWeatherOverview: SixMonthsWeatherOverview,
+    sixMonthsWeatherOverview: List<SixMonthsWeatherOverview>,
+    chartSelectionItems: List<SelectableItemWithIcon>,
+    onChartSelectionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedWeatherTab by remember { mutableIntStateOf(0) }
@@ -77,9 +80,7 @@ fun WeatherCard(
 
     val transition = rememberInfiniteTransition()
     val animatedAlpha by transition.animateFloat(
-        initialValue = 0.2f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
+        initialValue = 0.2f, targetValue = 1f, animationSpec = infiniteRepeatable(
             tween(durationMillis = 2000), repeatMode = RepeatMode.Reverse
         )
     )
@@ -166,7 +167,7 @@ fun WeatherCard(
             )
         }
 
-        ElevatedCard(modifier = Modifier.fillMaxWidth().height(260.dp)) {
+        ElevatedCard(modifier = Modifier.fillMaxWidth().height(300.dp)) {
             TabRow(
                 selectedTabIndex = selectedWeatherTab,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -198,18 +199,23 @@ fun WeatherCard(
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(count = 2),
                             modifier = modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.Center,
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            contentPadding = PaddingValues(8.dp)
+                            contentPadding = PaddingValues(8.dp),
                         ) {
-                            if (listOfWeatherItems.isEmpty()) items(count = 6) { WeatherItemShimmer() }
+                            if (listOfWeatherItems.isEmpty()) items(count = 6) {
+                                WeatherItemShimmer(
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                )
+                            }
                             else {
                                 items(items = listOfWeatherItems) { weatherItem ->
                                     WeatherItem(
                                         iconVector = weatherItem.icon,
                                         contentDescription = weatherItem.contentDescription,
                                         label = weatherItem.label,
-                                        value = weatherItem.value
+                                        value = weatherItem.value,
+                                        modifier = Modifier.padding(vertical = 4.dp)
                                     )
                                 }
                             }
@@ -217,8 +223,10 @@ fun WeatherCard(
                     }
 
                     1 -> {
-                        AverageTemperatureBarChart(
+                        AveragesBarChart(
                             sixMonthsWeatherOverview = sixMonthsWeatherOverview,
+                            chartSelectionItems = chartSelectionItems,
+                            onChartSelectionItemClicked = onChartSelectionItemClicked,
                             modifier = Modifier.fillMaxSize().padding(8.dp)
                         )
                     }

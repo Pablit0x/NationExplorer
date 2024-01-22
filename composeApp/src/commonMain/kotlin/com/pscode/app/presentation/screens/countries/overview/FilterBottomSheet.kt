@@ -24,8 +24,8 @@ import com.pscode.app.presentation.composables.ShowOnlyFavouritesFilterSection
 @Composable
 fun FilterBottomSheet(
     filterWidgetState: FilterWidgetState,
-    continentsFilterItems: List<FilterItem>,
-    populationFilterItems: List<FilterItem>,
+    continentsSelectableItems: List<SelectableItem>,
+    populationSelectableItems: List<SelectableItem>,
     isFiltering: Boolean,
     showFavouritesOnly: Boolean,
     sheetState: SheetState,
@@ -54,13 +54,13 @@ fun FilterBottomSheet(
                 )
 
                 PopulationFilterSection(
-                    populationFilterItems = populationFilterItems,
+                    populationSelectableItems = populationSelectableItems,
                     onPopulationFilterItemClick = onUpdatePopulationFilterItem,
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 ContinentFilterSection(
-                    continentsFilterItems = continentsFilterItems,
+                    continentsSelectableItems = continentsSelectableItems,
                     onContinentFilterItemClick = onUpdateContinentFilterItem,
                     modifier = Modifier.fillMaxWidth()
                 )

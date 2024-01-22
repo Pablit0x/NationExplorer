@@ -46,7 +46,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                                     )
                                 }
                                 .average()
-                        MonthlyAverage(month = month, averageTemperature = averageTemperature)
+                        MonthlyAverage(month = month, averageValue = averageTemperature)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)
@@ -82,7 +82,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                                 }
                                 .average()
 
-                        MonthlyAverage(month = month, averageTemperature = averageWindSpeed)
+                        MonthlyAverage(month = month, averageValue = averageWindSpeed)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)
@@ -120,7 +120,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
 
                         val averageDayLightInHours = ((averageDayLightInSeconds / 60) / 60)
 
-                        MonthlyAverage(month = month, averageTemperature = averageDayLightInHours)
+                        MonthlyAverage(month = month, averageValue = averageDayLightInHours)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)
@@ -156,7 +156,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                                 }
                                 .average()
 
-                        MonthlyAverage(month = month, averageTemperature = averageRainSumInMm)
+                        MonthlyAverage(month = month, averageValue = averageRainSumInMm)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)

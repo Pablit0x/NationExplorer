@@ -61,6 +61,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val sixMonthsWindSpeedAverage by viewModel.sixMonthsWindSpeedAverage.collectAsState()
         val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
         val sixMonthsRainSumInMm by viewModel.sixMonthsRainSumInMm.collectAsState()
+        val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
@@ -189,8 +190,15 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     if (hasCapital) {
                         WeatherCard(
                             capitalName = selectedCountry.capitals.first(),
-                            sixMonthsWeatherOverview = sixMonthsTemperatureAverage,
+                            sixMonthsWeatherOverview = listOf(
+                                sixMonthsTemperatureAverage,
+                                sixMonthsWindSpeedAverage,
+                                sixMonthDayLightAverageInHours,
+                                sixMonthsRainSumInMm
+                            ),
                             weatherInCapital = currentWeather,
+                            chartSelectionItems = selectedChartDataItem,
+                            onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
                             modifier = Modifier.fillMaxWidth()
                         )
                     }

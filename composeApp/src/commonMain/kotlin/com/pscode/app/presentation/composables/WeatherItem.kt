@@ -75,9 +75,9 @@ fun WeatherItem(
 }
 
 @Composable
-fun WeatherItemShimmer() {
+fun WeatherItemShimmer(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.height(48.dp).clip(shape = RoundedCornerShape(percent = 15))
+        modifier = modifier.height(48.dp).clip(shape = RoundedCornerShape(percent = 15))
             .shimmerEffect()
     )
 }

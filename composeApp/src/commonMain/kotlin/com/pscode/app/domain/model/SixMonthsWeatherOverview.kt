@@ -6,5 +6,5 @@ data class SixMonthsWeatherOverview(
 
 data class MonthlyAverage(
     val month: String,
-    val averageTemperature: Double
+    val averageValue: Double
 )
