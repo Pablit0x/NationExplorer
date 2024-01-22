@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -57,7 +58,8 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val networkStatus by viewModel.connectivityStatus.collectAsState()
         val tidbitCardState by viewModel.tidbitCardState.collectAsState()
         val celebrityCardState by viewModel.celebrityCardState.collectAsState()
-        val sixMonthsWeatherOverview by viewModel.sixMonthsWeatherOverview.collectAsState()
+        val sixMonthsTemperatureAverage by viewModel.sixMonthsTemperatureAverage.collectAsState()
+        val sixMonthsWindSpeedAverage by viewModel.sixMonthsWindSpeedAverage.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
@@ -186,12 +188,11 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
                     if (hasCapital) {
                         WeatherCard(
                             capitalName = selectedCountry.capitals.first(),
-                            sixMonthsWeatherOverview = sixMonthsWeatherOverview,
+                            sixMonthsWeatherOverview = sixMonthsTemperatureAverage,
                             weatherInCapital = currentWeather,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-
                 }
             }
         }

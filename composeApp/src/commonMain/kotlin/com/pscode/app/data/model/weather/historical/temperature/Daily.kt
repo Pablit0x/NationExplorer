@@ -1,15 +1,15 @@
-package com.pscode.app.data.model.weather
+package com.pscode.app.data.model.weather.historical.temperature
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DailyUnits(
+data class Daily(
     @SerialName("temperature_2m_max")
-    val temperature2mMax: String,
+    val temperature2mMax: List<Double>,
     @SerialName("temperature_2m_min")
-    val temperature2mMin: String,
+    val temperature2mMin: List<Double>,
     @SerialName("time")
-    val time: String
+    val time: List<String>
 )

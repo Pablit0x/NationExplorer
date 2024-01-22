@@ -9,4 +9,6 @@ interface WeatherRepository {
     suspend fun getWeatherByCity(cityName: String): Response<WeatherOverview>
 
     suspend fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview>
+
+    suspend fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) : Response<SixMonthsWeatherOverview>
 }

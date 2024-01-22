@@ -26,7 +26,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
 
     override suspend fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview> {
         return when (val result =
-            weatherApi.getTemperatureRangePastYear(locationOverview = locationOverview)) {
+            weatherApi.getTemperatureRangePastSixMonths(locationOverview = locationOverview)) {
 
 
             is Response.Success -> {
@@ -46,6 +46,42 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                                     )
                                 }
                                 .average()
+                        MonthlyAverage(month = month, averageTemperature = averageTemperature)
+                    }
+                )
+                Response.Success(data = sixMonthsWeatherOverview)
+            }
+
+            is Response.Error -> {
+                Response.Error(message = result.message)
+            }
+        }
+    }
+
+    override suspend fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview> {
+        return when (val result =
+            weatherApi.getWindSpeedRangePastSixMonths(locationOverview = locationOverview)) {
+
+
+            is Response.Success -> {
+                val dailyData = result.data.daily
+                val datesGroupedByMonths =
+                    dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
+
+
+                val sixMonthsWeatherOverview = SixMonthsWeatherOverview(
+                    monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                        val averageTemperature =
+                            dailyData.windSpeed10mMax
+                                .filterIndexed { index, _ ->
+                                    datesInMonth.contains(
+                                        LocalDate.parse(
+                                            dailyData.time[index]
+                                        )
+                                    )
+                                }
+                                .average()
+
                         MonthlyAverage(month = month, averageTemperature = averageTemperature)
                     }
                 )

@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,7 @@ fun AverageTemperatureBarChart(
             BarChart(
                 data = barChartData,
                 config = BarChartConfig(
-                    thickness = 36.dp
+                    thickness = 36.dp,
                 ),
                 yAxisLabel = {
 
@@ -79,7 +80,8 @@ fun AverageTemperatureBarChart(
                         text = "$temperature °C",
                         fontSize = MaterialTheme.typography.labelMedium.fontSize,
                         textAlign = TextAlign.Start,
-                        fontFamily = FontFamily.Monospace
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 xAxisLabel = {
@@ -88,7 +90,8 @@ fun AverageTemperatureBarChart(
                         text = xLabel,
                         fontFamily = FontFamily.Monospace,
                         fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 overlayDataEntryLabel = { month, value ->

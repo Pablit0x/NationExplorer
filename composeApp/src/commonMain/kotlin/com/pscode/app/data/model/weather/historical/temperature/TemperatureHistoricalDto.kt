@@ -1,11 +1,11 @@
-package com.pscode.app.data.model.weather
+package com.pscode.app.data.model.weather.historical.temperature
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WeatherHistoricalDto(
+data class TemperatureHistoricalDto(
     @SerialName("daily")
     val daily: Daily,
     @SerialName("daily_units")

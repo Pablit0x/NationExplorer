@@ -74,11 +74,15 @@ class DetailViewModel(
     private val _celebrityCardState = MutableStateFlow(CardState.COLLAPSED)
     val celebrityCardState = _celebrityCardState.asStateFlow()
 
-    private val _sixMonthsWeatherOverview = MutableStateFlow(
+    private val _sixMonthsTemperatureAverage = MutableStateFlow(
         SixMonthsWeatherOverview(monthAverages = emptyList())
     )
-    val sixMonthsWeatherOverview = _sixMonthsWeatherOverview.asStateFlow()
+    val sixMonthsTemperatureAverage = _sixMonthsTemperatureAverage.asStateFlow()
 
+    private val _sixMonthsWindSpeedAverage = MutableStateFlow(
+        SixMonthsWeatherOverview(monthAverages = emptyList())
+    )
+    val sixMonthsWindSpeedAverage = _sixMonthsWindSpeedAverage.asStateFlow()
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -173,7 +177,8 @@ class DetailViewModel(
                         result.data
                     }
                     _countryGeolocation.value?.let {
-                        getTemperatureRangePastYear(it)
+                        getTemperatureRangePastSixMonths(it)
+                        getWindSpeedRangePastSixMonths(it)
                     }
                 }
 
@@ -205,13 +210,31 @@ class DetailViewModel(
         }
     }
 
-    private fun getTemperatureRangePastYear(locationOverview: LocationOverview) {
+    private fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview) {
         viewModelScope.launch {
             val response =
                 weatherRepository.getTemperatureRangePastSixMonths(locationOverview = locationOverview)
             when (response) {
                 is Response.Success -> {
-                    _sixMonthsWeatherOverview.update { response.data }
+                    _sixMonthsTemperatureAverage.update { response.data }
+                }
+
+                is Response.Error -> {
+                    _eventsChannel.send(
+                        Event.ShowSnackbarMessage(message = response.message)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) {
+        viewModelScope.launch {
+            val response =
+                weatherRepository.getWindSpeedRangePastSixMonths(locationOverview = locationOverview)
+            when (response) {
+                is Response.Success -> {
+                    _sixMonthsWindSpeedAverage.update { response.data }
                 }
 
                 is Response.Error -> {
@@ -241,7 +264,7 @@ class DetailViewModel(
         _celebritiesList.update { emptyList() }
         _tidbitCardState.update { CardState.COLLAPSED }
         _celebrityCardState.update { CardState.COLLAPSED }
-        _sixMonthsWeatherOverview.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _sixMonthsTemperatureAverage.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
     }
 
 }
