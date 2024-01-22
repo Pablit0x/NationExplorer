@@ -154,7 +154,7 @@ class DetailViewModel(
                     )
                 } else {
                     chartDataItem.copy(
-                        isSelected = !chartDataItem.isSelected
+                        isSelected = true
                     )
                 }
             }
