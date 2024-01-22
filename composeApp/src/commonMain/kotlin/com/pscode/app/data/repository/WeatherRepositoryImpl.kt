@@ -1,6 +1,7 @@
 package com.pscode.app.data.repository
 
 
+import com.carlosgub.kotlinm.charts.round
 import com.pscode.app.data.model.weather.toWeatherOverview
 import com.pscode.app.domain.model.LocationOverview
 import com.pscode.app.domain.model.MonthlyAverage
@@ -9,6 +10,7 @@ import com.pscode.app.domain.model.WeatherOverview
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.utils.Response
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 
 class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherRepository {
@@ -71,7 +73,7 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
 
                 val sixMonthsWeatherOverview = SixMonthsWeatherOverview(
                     monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
-                        val averageTemperature =
+                        val averageWindSpeed =
                             dailyData.windSpeed10mMax
                                 .filterIndexed { index, _ ->
                                     datesInMonth.contains(
@@ -82,7 +84,45 @@ class WeatherRepositoryImpl(private val weatherApi: WeatherApi) : WeatherReposit
                                 }
                                 .average()
 
-                        MonthlyAverage(month = month, averageTemperature = averageTemperature)
+                        MonthlyAverage(month = month, averageTemperature = averageWindSpeed)
+                    }
+                )
+                Response.Success(data = sixMonthsWeatherOverview)
+            }
+
+            is Response.Error -> {
+                Response.Error(message = result.message)
+            }
+        }
+    }
+
+    override suspend fun getDayLightRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview> {
+        return when (val result =
+            weatherApi.getDayLightDurationRangePastSixMonths(locationOverview = locationOverview)) {
+
+
+            is Response.Success -> {
+                val dailyData = result.data.daily
+                val datesGroupedByMonths =
+                    dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
+
+
+                val sixMonthsWeatherOverview = SixMonthsWeatherOverview(
+                    monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                        val averageDayLightInSeconds =
+                            dailyData.daylightDuration
+                                .filterIndexed { index, _ ->
+                                    datesInMonth.contains(
+                                        LocalDate.parse(
+                                            dailyData.time[index]
+                                        )
+                                    )
+                                }
+                                .average()
+
+                        val averageDayLightInHours = ((averageDayLightInSeconds / 60) / 60)
+
+                        MonthlyAverage(month = month, averageTemperature = averageDayLightInHours)
                     }
                 )
                 Response.Success(data = sixMonthsWeatherOverview)

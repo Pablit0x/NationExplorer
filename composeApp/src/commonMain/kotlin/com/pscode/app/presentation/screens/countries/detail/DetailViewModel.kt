@@ -83,6 +83,13 @@ class DetailViewModel(
         SixMonthsWeatherOverview(monthAverages = emptyList())
     )
     val sixMonthsWindSpeedAverage = _sixMonthsWindSpeedAverage.asStateFlow()
+
+    private val _sixMonthsDayLightAverageInHours = MutableStateFlow(
+        SixMonthsWeatherOverview(monthAverages = emptyList())
+    )
+
+    val sixMonthDayLightAverageInHours = _sixMonthsDayLightAverageInHours.asStateFlow()
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -176,9 +183,10 @@ class DetailViewModel(
                     _countryGeolocation.update {
                         result.data
                     }
-                    _countryGeolocation.value?.let {
-                        getTemperatureRangePastSixMonths(it)
-                        getWindSpeedRangePastSixMonths(it)
+                    _countryGeolocation.value?.let { locationOverview ->
+                        getTemperatureRangePastSixMonths(locationOverview)
+                        getWindSpeedRangePastSixMonths(locationOverview)
+                        getDayLightRangePastSixMonths(locationOverview)
                     }
                 }
 
@@ -217,6 +225,24 @@ class DetailViewModel(
             when (response) {
                 is Response.Success -> {
                     _sixMonthsTemperatureAverage.update { response.data }
+                }
+
+                is Response.Error -> {
+                    _eventsChannel.send(
+                        Event.ShowSnackbarMessage(message = response.message)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getDayLightRangePastSixMonths(locationOverview: LocationOverview) {
+        viewModelScope.launch {
+            val response =
+                weatherRepository.getDayLightRangePastSixMonths(locationOverview = locationOverview)
+            when (response) {
+                is Response.Success -> {
+                    _sixMonthsDayLightAverageInHours.update { response.data }
                 }
 
                 is Response.Error -> {

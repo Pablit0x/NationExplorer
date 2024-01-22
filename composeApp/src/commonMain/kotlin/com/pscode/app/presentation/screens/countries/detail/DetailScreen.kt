@@ -60,6 +60,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val celebrityCardState by viewModel.celebrityCardState.collectAsState()
         val sixMonthsTemperatureAverage by viewModel.sixMonthsTemperatureAverage.collectAsState()
         val sixMonthsWindSpeedAverage by viewModel.sixMonthsWindSpeedAverage.collectAsState()
+        val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
