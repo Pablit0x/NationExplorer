@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +48,8 @@ fun WeatherItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ElevatedCard(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 7.dp)
             ) {
                 Icon(
                     imageVector = iconVector,

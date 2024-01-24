@@ -29,7 +29,6 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -189,9 +188,9 @@ fun WeatherCard(
                                 Icon(
                                     imageVector = if (index == selectedWeatherTab) weatherTabItem.selectedIcon else weatherTabItem.unselectedIcon,
                                     contentDescription = "Weather Tab Icon",
-                                    tint = if (index == 0) Color.Red.copy(alpha = animatedAlpha) else LocalContentColor.current
+                                    tint = if (index == 0) Color.Red.copy(alpha = animatedAlpha) else MaterialTheme.colorScheme.onBackground
                                 )
-                                Text(text = weatherTabItem.title)
+                                Text(text = weatherTabItem.title, color = MaterialTheme.colorScheme.onBackground)
                             }
                         })
                 }

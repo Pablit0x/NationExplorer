@@ -50,7 +50,7 @@ fun DetailedLiveWeatherCard(
                 resource = asyncPainterResource(weatherConditions.image),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(100.dp).padding(12.dp)
+                modifier = Modifier.size(110.dp)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -110,7 +110,7 @@ fun DetailedLiveWeatherLoadingSkeletonCard(modifier: Modifier = Modifier) {
         ) {
 
             Box(
-                modifier = Modifier.size(100.dp).clip(shape = RoundedCornerShape(10))
+                modifier = Modifier.size(110.dp).clip(shape = RoundedCornerShape(10))
                     .shimmerEffect()
             )
 
