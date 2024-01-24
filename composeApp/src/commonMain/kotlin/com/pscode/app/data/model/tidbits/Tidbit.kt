@@ -1,17 +1,15 @@
-package com.pscode.app.data.model.celebrity
+package com.pscode.app.data.model.tidbits
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CelebrityDto(
+data class Tidbit(
     @SerialName("description")
     val description: String,
     @SerialName("id")
     val id: Int,
-    @SerialName("image")
-    val image: String,
-    @SerialName("name")
-    val name: String
+    @SerialName("title")
+    val title: String
 )

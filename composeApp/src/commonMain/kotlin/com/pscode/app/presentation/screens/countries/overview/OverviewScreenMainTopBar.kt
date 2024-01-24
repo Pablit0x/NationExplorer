@@ -31,13 +31,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.composables.AutoResizedText
-import com.pscode.app.presentation.screens.countries.overview.states.SearchWidgetState
+import com.pscode.app.presentation.screens.countries.overview.states.WidgetState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreenMainTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    searchWidgetState: SearchWidgetState,
+    searchWidgetState: WidgetState,
     isFiltering: Boolean,
     onFilterClicked: () -> Unit,
     searchTextState: TextFieldValue,
@@ -46,7 +46,7 @@ fun OverviewScreenMainTopBar(
     onSearchTriggered: () -> Unit,
 ) {
     when (searchWidgetState) {
-        SearchWidgetState.CLOSED -> {
+        WidgetState.CLOSED -> {
             OverviewScreenDefaultTopBar(
                 onSearchClicked = onSearchTriggered,
                 onFilterClicked = onFilterClicked,
@@ -55,7 +55,7 @@ fun OverviewScreenMainTopBar(
             )
         }
 
-        SearchWidgetState.OPENED -> {
+        WidgetState.OPEN -> {
             OverviewScreenSearchTopBar(
                 textFieldValue = searchTextState,
                 onTextChange = onSearchTextChange,

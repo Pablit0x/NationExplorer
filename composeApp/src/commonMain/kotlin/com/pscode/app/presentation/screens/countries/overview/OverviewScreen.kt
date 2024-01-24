@@ -47,8 +47,7 @@ import com.pscode.app.presentation.composables.LetterHeader
 import com.pscode.app.presentation.composables.isScrollingUp
 import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
-import com.pscode.app.presentation.screens.countries.overview.states.FilterWidgetState
-import com.pscode.app.presentation.screens.countries.overview.states.SearchWidgetState
+import com.pscode.app.presentation.screens.countries.overview.states.WidgetState
 import com.pscode.app.presentation.screens.shared.Event
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -61,19 +60,12 @@ class OverviewScreen : Screen {
         val viewModel = koinInject<OverviewViewModel>()
 
         val isLoading by viewModel.isLoading.collectAsState()
-        val isSearching by viewModel.isSearching.collectAsState()
-        val isFiltering by viewModel.isFiltering.collectAsState()
-
-        val filterWidgetState by viewModel.filterWidgetState.collectAsState()
-        val searchWidgetState by viewModel.searchWidgetState.collectAsState()
 
         val searchText by viewModel.searchText.collectAsState()
 
         val countries by viewModel.countries.collectAsState()
-
-        val continentFilterItems by viewModel.continentFilterItems.collectAsState()
-        val populationFilterItems by viewModel.populationFilterItems.collectAsState()
-        val showFavouritesOnly by viewModel.showFavouritesOnly.collectAsState()
+        val filterState by viewModel.filterState.collectAsState()
+        val searchState by viewModel.searchState.collectAsState()
 
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val listState = rememberLazyListState()
@@ -112,12 +104,12 @@ class OverviewScreen : Screen {
         Scaffold(
             topBar = {
                 OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
-                    searchWidgetState = searchWidgetState,
+                    searchWidgetState = searchState.widgetState,
                     searchTextState = searchText,
-                    isFiltering = isFiltering,
-                    onFilterClicked = { viewModel.updateFilterWidgetState(newState = FilterWidgetState.OPEN) },
-                    onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = SearchWidgetState.CLOSED) },
-                    onSearchTriggered = { viewModel.updateSearchWidgetState(newState = SearchWidgetState.OPENED) },
+                    isFiltering = filterState.isFiltering,
+                    onFilterClicked = { viewModel.updateFilterWidgetState(newState = WidgetState.OPEN) },
+                    onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = WidgetState.CLOSED) },
+                    onSearchTriggered = { viewModel.updateSearchWidgetState(newState = WidgetState.OPEN) },
                     onSearchTextChange = { updatedSearchText -> viewModel.updateSearchText(text = updatedSearchText) })
             },
             floatingActionButton = {
@@ -147,7 +139,7 @@ class OverviewScreen : Screen {
                 verticalArrangement = Arrangement.Center
             ) {
 
-                if (isLoading || isSearching) {
+                if (isLoading || searchState.isSearching) {
                     FullScreenLoadingIndicator()
                 } else {
                     Row(
@@ -197,12 +189,8 @@ class OverviewScreen : Screen {
                     }
 
                     FilterBottomSheet(
-                        filterWidgetState = filterWidgetState,
                         sheetState = sheetState,
-                        isFiltering = isFiltering,
-                        showFavouritesOnly = showFavouritesOnly,
-                        continentsSelectableItems = continentFilterItems,
-                        populationSelectableItems = populationFilterItems,
+                        filterState = filterState,
                         onUpdateFilterWidgetState = { updatedFilterWidgetState ->
                             viewModel.updateFilterWidgetState(updatedFilterWidgetState)
                         },

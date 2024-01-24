@@ -1,6 +1,6 @@
 package com.pscode.app.domain.model
 
-data class Tidbit(
+data class TidbitInfo(
     val id: Int,
     val countryName: String,
     val title: String,
@@ -8,5 +8,5 @@ data class Tidbit(
 )
 
 data class TidbitData(
-    val data: List<Tidbit> = emptyList()
+    val data: List<TidbitInfo> = emptyList()
 )

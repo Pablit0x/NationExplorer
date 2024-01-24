@@ -1,6 +1,6 @@
 package com.pscode.app.domain.model
 
-data class Celebrity(
+data class CelebrityInfo(
     val id: Int,
     val countryName: String,
     val name: String,
@@ -9,5 +9,5 @@ data class Celebrity(
 )
 
 data class CelebrityData(
-    val data: List<Celebrity> = emptyList()
+    val data: List<CelebrityInfo> = emptyList()
 )

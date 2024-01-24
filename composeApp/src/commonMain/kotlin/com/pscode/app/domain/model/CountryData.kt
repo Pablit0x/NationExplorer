@@ -19,3 +19,7 @@ data class CountryData(
     val startOfWeek: String,
     val isFavourite: Boolean = false
 )
+
+data class CountriesData(
+    val data: List<CountryData> = emptyList()
+)

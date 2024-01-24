@@ -26,7 +26,6 @@ import com.pscode.app.SharedRes
 @Composable
 fun ResetFiltersAnimatedButton(
     isFiltering: Boolean,
-    showFavouritesOnly: Boolean,
     onResetAllFilters: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -36,7 +35,7 @@ fun ResetFiltersAnimatedButton(
         horizontalAlignment = Alignment.End
     ) {
         AnimatedVisibility(
-            isFiltering or showFavouritesOnly, enter = fadeIn(tween(1500)), exit = fadeOut()
+            isFiltering, enter = fadeIn(tween(1500)), exit = fadeOut()
         ) {
             ElevatedButton(
                 onClick = onResetAllFilters, modifier = Modifier.padding(16.dp).fillMaxWidth()

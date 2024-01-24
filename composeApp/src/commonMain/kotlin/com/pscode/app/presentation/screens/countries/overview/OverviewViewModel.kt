@@ -2,14 +2,12 @@ package com.pscode.app.presentation.screens.countries.overview
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.pscode.app.domain.model.CountryData
-import com.pscode.app.domain.model.SelectableItem
 import com.pscode.app.domain.repository.CountryRepository
-import com.pscode.app.presentation.screens.countries.overview.states.FilterWidgetState
-import com.pscode.app.presentation.screens.countries.overview.states.SearchWidgetState
+import com.pscode.app.presentation.screens.countries.overview.states.FilterState
+import com.pscode.app.presentation.screens.countries.overview.states.SearchState
+import com.pscode.app.presentation.screens.countries.overview.states.WidgetState
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Constants
-import com.pscode.app.utils.Constants.Continents
-import com.pscode.app.utils.Constants.Populations
 import com.pscode.app.utils.Response
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.realm.kotlin.mongodb.App
@@ -30,92 +28,83 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(private val countryRepository: CountryRepository) : ViewModel() {
 
-    private val _continentSelectableItems = MutableStateFlow(Continents.map {
-        SelectableItem(label = it, isSelected = false)
-    })
-
-    val continentFilterItems = _continentSelectableItems.asStateFlow()
-
-    private val _populationSelectableItems = MutableStateFlow(Populations.map {
-        SelectableItem(label = it.toString(), isSelected = false)
-    })
-
-    val populationFilterItems = _populationSelectableItems.asStateFlow()
-
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _filterState = MutableStateFlow(FilterState())
 
-    private val _showFavouritesOnly = MutableStateFlow(false)
-    val showFavouritesOnly = _showFavouritesOnly.asStateFlow()
+    val filterState = _filterState.map { state ->
+        FilterState(populationItems = state.populationItems,
+            continentItems = state.continentItems,
+            showFavouritesOnly = state.showFavouritesOnly,
+            widgetState = state.widgetState,
+            isFiltering = state.showFavouritesOnly || state.continentItems.any { it.isSelected } || state.populationItems.any { it.isSelected })
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _filterState.value)
 
-    val isFiltering = combine(_continentSelectableItems.map { continentFilterItems ->
-        continentFilterItems.any { it.isSelected }
-    }, showFavouritesOnly, populationFilterItems.map { populationFilterItems ->
-        populationFilterItems.any { it.isSelected }
-    }) { continentFilterResult, favouritesOnlyValue, populationFilterResult ->
-        continentFilterResult || favouritesOnlyValue || populationFilterResult
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    private val _searchState = MutableStateFlow(SearchState())
+    val searchState = _searchState.asStateFlow()
 
 
     private val _searchText = MutableStateFlow(TextFieldValue())
     val searchText = _searchText.asStateFlow()
 
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching = _isSearching.asStateFlow()
-
-    private val _searchWidgetState = MutableStateFlow(SearchWidgetState.CLOSED)
-    val searchWidgetState = _searchWidgetState.asStateFlow()
-
-    private val _filterWidgetState = MutableStateFlow(FilterWidgetState.CLOSED)
-    val filterWidgetState = _filterWidgetState.asStateFlow()
-
 
     private var _countries = MutableStateFlow(emptyList<CountryData>())
 
-    val countries = searchText.onEach { _isSearching.update { true } }
-        .combine(_countries) { textFieldValue, countries ->
-            if (textFieldValue.text.isBlank()) {
-                countries
-            } else {
-                countries.filter {
-                    it.name.startsWith(
-                        prefix = textFieldValue.text, ignoreCase = true
-                    )
-                }
+    val countries = searchText.onEach {
+        _searchState.update {
+            it.copy(
+                isSearching = true
+            )
+        }
+    }.combine(_countries) { textFieldValue, countries ->
+        if (textFieldValue.text.isBlank()) {
+            countries
+        } else {
+            countries.filter {
+                it.name.startsWith(
+                    prefix = textFieldValue.text, ignoreCase = true
+                )
             }
-        }.combine(_continentSelectableItems) { countries, filterItems ->
-            if (filterItems.any { it.isSelected }) {
-                val selectedContinents = filterItems.filter { it.isSelected }.map { it.label }
+        }
+    }.combine(_filterState) { countries, state ->
+        if (state.continentItems.any { it.isSelected }) {
+            val selectedContinents = state.continentItems.filter { it.isSelected }.map { it.label }
 
-                countries.filter { country ->
-                    country.continents.any { continent ->
-                        selectedContinents.contains(continent)
-                    }
+            countries.filter { country ->
+                country.continents.any { continent ->
+                    selectedContinents.contains(continent)
                 }
-            } else {
-                countries
             }
-        }.combine(_showFavouritesOnly) { countries, favouritesOnly ->
-            if (favouritesOnly) {
-                countries.filter { country ->
-                    country.isFavourite
-                }
-            } else {
-                countries
+        } else {
+            countries
+        }
+    }.combine(_filterState) { countries, state ->
+        if (state.showFavouritesOnly) {
+            countries.filter { country ->
+                country.isFavourite
             }
-        }.combine(_populationSelectableItems) { countries, populationItems ->
-            val selectedPopulation = populationItems.firstOrNull { it.isSelected }
-            if (selectedPopulation != null) {
-                countries.filter {
-                    it.population >= selectedPopulation.label.toInt()
-                }
-            } else {
-                countries
+        } else {
+            countries
+        }
+    }.combine(_filterState) { countries, state ->
+        val selectedPopulation = state.populationItems.firstOrNull { it.isSelected }
+        if (selectedPopulation != null) {
+            countries.filter {
+                it.population >= selectedPopulation.label.toInt()
             }
-        }.onEach { _isSearching.update { false } }.stateIn(
-            viewModelScope, SharingStarted.WhileSubscribed(5000), _countries.value
-        )
+        } else {
+            countries
+        }
+    }.onEach {
+        _searchState.update {
+            it.copy(
+                isSearching = false
+            )
+        }
+    }.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000), _countries.value
+    )
 
 
     private val _eventsChannel = Channel<Event>()
@@ -135,31 +124,44 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     }
 
     fun toggleFavouriteOnly() {
-        _showFavouritesOnly.update { !it }
+        _filterState.update {
+            it.copy(
+                showFavouritesOnly = !it.showFavouritesOnly
+            )
+        }
     }
 
-    fun updateSearchWidgetState(newState: SearchWidgetState) {
-        _searchWidgetState.update { newState }
+    fun updateSearchWidgetState(newState: WidgetState) {
+        _searchState.update {
+            it.copy(
+                widgetState = newState
+            )
+        }
     }
 
-    fun updateFilterWidgetState(newState: FilterWidgetState) {
-        _filterWidgetState.update { newState }
+    fun updateFilterWidgetState(newState: WidgetState) {
+        _filterState.update {
+            it.copy(
+                widgetState = newState
+            )
+        }
     }
 
     fun updateContinentFilterItem(label: String) {
-        val updatedList = _continentSelectableItems.value.map { filterItem ->
-            if (filterItem.label == label) {
-                filterItem.copy(isSelected = !filterItem.isSelected)
-            } else {
-                filterItem
-            }
+        _filterState.update {
+            it.copy(continentItems = it.continentItems.map { continent ->
+                if (continent.label == label) {
+                    continent.copy(isSelected = !continent.isSelected)
+                } else {
+                    continent
+                }
+            })
         }
-        _continentSelectableItems.value = updatedList
     }
 
     fun updatePopulationFilterItem(label: String) {
-        _populationSelectableItems.update {
-            it.map { populationFilterItem ->
+        _filterState.update {
+            it.copy(populationItems = it.populationItems.map { populationFilterItem ->
                 if (label != populationFilterItem.label) {
                     populationFilterItem.copy(
                         isSelected = false
@@ -169,23 +171,15 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
                         isSelected = !populationFilterItem.isSelected
                     )
                 }
-            }
+
+            })
         }
     }
 
 
     fun resetAllFilters() {
-        _continentSelectableItems.update { items ->
-            items.map { item ->
-                item.copy(isSelected = false)
-            }
-        }
-        _showFavouritesOnly.update { false }
-
-        _populationSelectableItems.update { items ->
-            items.map { item ->
-                item.copy(isSelected = false)
-            }
+        _filterState.update {
+            FilterState()
         }
     }
 
@@ -209,7 +203,6 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
 
                 is Response.Error -> {
                     _eventsChannel.send(Event.ShowSnackbarMessage(message = result.message))
-
                     _isLoading.update { false }
                 }
             }
