@@ -39,7 +39,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import com.pscode.app.presentation.composables.AlphabeticalScroller
 import com.pscode.app.presentation.composables.CountryListItem
 import com.pscode.app.presentation.composables.FullScreenLoadingIndicator
@@ -171,7 +171,7 @@ class OverviewScreen : Screen {
 
                                 items(items = countries, key = { it.name }) { country ->
                                     CountryListItem(
-                                        countryOverview = country,
+                                        countryData = country,
                                         onCountryClick = { selectedCountry ->
                                             navigator.push(
                                                 item = DetailScreen(selectedCountry = selectedCountry)
@@ -223,7 +223,7 @@ class OverviewScreen : Screen {
 }
 
 private fun getScrollIndex(
-    groupedCountries: Map<Char, List<CountryOverview>>, letter: Char
+    groupedCountries: Map<Char, List<CountryData>>, letter: Char
 ): Int {
     var index = 0
     for ((key, value) in groupedCountries) {

@@ -1,6 +1,6 @@
 package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 
-import com.pscode.app.domain.model.Result
+import com.pscode.app.domain.model.ResultData
 import com.pscode.app.domain.repository.MongoRepository
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.realm.kotlin.mongodb.User
@@ -14,7 +14,7 @@ class LeaderboardViewModel(
     private val mongoRepository: MongoRepository, val currentUser: User?
 ) : ViewModel() {
 
-    private val _results = MutableStateFlow<List<Result>>(emptyList())
+    private val _results = MutableStateFlow<List<ResultData>>(emptyList())
     val results = _results.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)

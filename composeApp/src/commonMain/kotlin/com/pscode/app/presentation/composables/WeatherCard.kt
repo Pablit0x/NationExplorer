@@ -9,26 +9,22 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.RadioButtonChecked
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbCloudy
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material3.ElevatedCard
@@ -51,13 +47,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.carlosgub.kotlinm.charts.round
 import com.pscode.app.SharedRes
+import com.pscode.app.domain.model.CurrentWeatherData
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
-import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
+import kotlin.math.roundToInt
 
 data class WeatherItemData(
-    val icon: ImageVector, val contentDescription: String, val label: String, val value: String
+    val icon: ImageVector,
+    val contentDescription: String,
+    val label: String,
+    val value: String,
+    val unit: String
 )
 
 data class WeatherTabItem(
@@ -68,34 +71,39 @@ data class WeatherTabItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeatherCard(
-    capitalName: String,
-    weatherInCapital: WeatherOverview?,
+    countryName: String,
+    weatherInfo: WeatherInfo?,
+    weatherInCapital: CurrentWeatherData?,
     sixMonthsWeatherOverview: List<SixMonthsWeatherOverview>,
     chartSelectionItems: List<SelectableItemWithIcon>,
     onChartSelectionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedWeatherTab by remember { mutableIntStateOf(0) }
-    var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>>(emptyList()) }
+    var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>?>(null) }
 
     val transition = rememberInfiniteTransition()
+
     val animatedAlpha by transition.animateFloat(
         initialValue = 0.2f, targetValue = 1f, animationSpec = infiniteRepeatable(
             tween(durationMillis = 2000), repeatMode = RepeatMode.Reverse
         )
     )
 
-    val weatherTabItems = listOf(
-        WeatherTabItem(
-            title = "Live",
-            unselectedIcon = Icons.Outlined.RadioButtonChecked,
-            selectedIcon = Icons.Filled.RadioButtonChecked
-        ), WeatherTabItem(
-            title = "Averages",
-            unselectedIcon = Icons.Outlined.BarChart,
-            selectedIcon = Icons.Filled.BarChart
-        )
+    val liveWeatherTabItem = WeatherTabItem(
+        title = "Live",
+        unselectedIcon = Icons.Outlined.RadioButtonChecked,
+        selectedIcon = Icons.Filled.RadioButtonChecked
     )
+
+    val averagesWeatherTabItem = WeatherTabItem(
+        title = "Averages",
+        unselectedIcon = Icons.Outlined.BarChart,
+        selectedIcon = Icons.Filled.BarChart
+    )
+
+    val weatherTabItems = listOf(liveWeatherTabItem, averagesWeatherTabItem)
+
     val pagerState = rememberPagerState(pageCount = { weatherTabItems.size })
 
     LaunchedEffect(selectedWeatherTab) {
@@ -106,47 +114,47 @@ fun WeatherCard(
         selectedWeatherTab = pagerState.currentPage
     }
 
-    LaunchedEffect(weatherInCapital) {
-        if (weatherInCapital == null) {
-            listOfWeatherItems = emptyList()
-        } else {
+    LaunchedEffect(weatherInfo?.currentWeatherData) {
+        weatherInfo?.currentWeatherData?.let { currentWeatherData ->
             listOfWeatherItems = listOf(
                 WeatherItemData(
                     icon = Icons.Default.Thermostat,
-                    contentDescription = "Temperature",
-                    label = SharedRes.string.temperature,
-                    value = weatherInCapital.currentTemperature
-                ),
-                WeatherItemData(
+                    contentDescription = "Feels Like",
+                    label = SharedRes.string.feels_like,
+                    value = currentWeatherData.feelsLike.round(1),
+                    unit = "°C"
+                ), WeatherItemData(
                     icon = Icons.Default.WbCloudy,
                     contentDescription = "Cloudiness",
                     label = SharedRes.string.cloudiness,
-                    value = weatherInCapital.cloudCoverPercent
-                ),
-                WeatherItemData(
+                    value = currentWeatherData.cloudiness.toString(),
+                    unit = "%"
+                ), WeatherItemData(
                     icon = Icons.Default.WaterDrop,
                     contentDescription = "Humidity",
                     label = SharedRes.string.humidity,
-                    value = weatherInCapital.humidity
-                ),
-                WeatherItemData(
+                    value = currentWeatherData.humidity.toString(),
+                    unit = "%"
+                ), WeatherItemData(
                     icon = Icons.Default.Air,
                     contentDescription = "Wind Speed",
                     label = SharedRes.string.wind_speed,
-                    value = weatherInCapital.windSpeed
-                ),
-                WeatherItemData(
-                    icon = Icons.Default.WbSunny,
-                    contentDescription = "Sunrise",
-                    label = SharedRes.string.sunrise,
-                    value = weatherInCapital.sunriseTime
-                ),
-                WeatherItemData(
-                    icon = Icons.Default.WbTwilight,
-                    contentDescription = "Sunset",
-                    label = SharedRes.string.sunset,
-                    value = weatherInCapital.sunsetTime
-                ),
+                    value = currentWeatherData.windSpeed.round(1),
+                    unit = "km/h"
+                ), WeatherItemData(
+                    icon = Icons.Default.Speed,
+                    contentDescription = "Pressure",
+                    label = SharedRes.string.pressure,
+                    value = currentWeatherData.hPa.round(1),
+                    unit = "hPa"
+                ), WeatherItemData(
+                    icon = Icons.Default.Visibility,
+                    contentDescription = "Visibility",
+                    label = SharedRes.string.visibility,
+                    value = currentWeatherData.visibility.roundToInt().toString(),
+                    unit = "m"
+
+                )
             )
         }
     }
@@ -160,14 +168,14 @@ fun WeatherCard(
             modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                text = SharedRes.string.weather_in.format(capital = capitalName),
+                text = SharedRes.string.weather_in.format(capital = countryName),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
             )
         }
 
-        ElevatedCard(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+        ElevatedCard(modifier = Modifier.fillMaxWidth().height(390.dp)) {
             TabRow(
                 selectedTabIndex = selectedWeatherTab,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -192,37 +200,18 @@ fun WeatherCard(
             }
 
             HorizontalPager(
-                state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)
+                state = pagerState, modifier = Modifier.fillMaxWidth()
             ) { index ->
                 when (index) {
-                    0 -> {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(count = 2),
-                            modifier = modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            contentPadding = PaddingValues(8.dp),
-                        ) {
-                            if (listOfWeatherItems.isEmpty()) items(count = 6) {
-                                WeatherItemShimmer(
-                                    modifier = Modifier.padding(vertical = 4.dp)
-                                )
-                            }
-                            else {
-                                items(items = listOfWeatherItems) { weatherItem ->
-                                    WeatherItem(
-                                        iconVector = weatherItem.icon,
-                                        contentDescription = weatherItem.contentDescription,
-                                        label = weatherItem.label,
-                                        value = weatherItem.value,
-                                        modifier = Modifier.padding(vertical = 4.dp)
-                                    )
-                                }
-                            }
-                        }
+                    weatherTabItems.indexOf(liveWeatherTabItem) -> {
+                        DetailedLiveWeatherCard(
+                            weatherData = weatherInfo?.currentWeatherData,
+                            listOfWeatherItems = listOfWeatherItems,
+                            modifier = Modifier.fillMaxSize().padding(8.dp)
+                        )
                     }
 
-                    1 -> {
+                    weatherTabItems.indexOf(averagesWeatherTabItem) -> {
                         AveragesBarChart(
                             sixMonthsWeatherOverview = sixMonthsWeatherOverview,
                             chartSelectionItems = chartSelectionItems,
@@ -230,6 +219,7 @@ fun WeatherCard(
                             modifier = Modifier.fillMaxSize().padding(8.dp)
                         )
                     }
+
                 }
 
             }

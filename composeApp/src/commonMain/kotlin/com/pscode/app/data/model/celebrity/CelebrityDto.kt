@@ -1,7 +1,7 @@
 package com.pscode.app.data.model.celebrity
 
 
-import com.pscode.app.domain.model.CelebrityOverview
+import com.pscode.app.domain.model.CelebrityData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,9 +11,9 @@ data class CelebrityDto(
     @SerialName("country") val country: String
 )
 
-fun CelebrityDto.toListOfCelebrityOverview(): List<CelebrityOverview> {
+fun CelebrityDto.toListOfCelebrityOverview(): List<CelebrityData> {
     return celebrities.map { celebrity ->
-        CelebrityOverview(
+        CelebrityData(
             id = celebrity.id,
             countryName = country,
             name = celebrity.name,

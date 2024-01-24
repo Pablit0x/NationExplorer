@@ -1,17 +1,22 @@
 package com.pscode.app.domain.repository
 
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.CurrentWeatherData
+import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
-import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.model.WeatherConditions
+import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.utils.Response
 
 interface WeatherRepository {
-    suspend fun getWeatherByCity(cityName: String): Response<WeatherOverview>
+    suspend fun getWeatherByCity(cityName: String): Response<CurrentWeatherData>
 
-    suspend fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview>
+    suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview>
 
-    suspend fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) : Response<SixMonthsWeatherOverview>
-    suspend fun getDayLightRangePastSixMonths(locationOverview: LocationOverview) : Response<SixMonthsWeatherOverview>
+    suspend fun getWindSpeedRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview>
+    suspend fun getDayLightRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview>
 
-    suspend fun getRainSumRangePastSixMonths(locationOverview: LocationOverview): Response<SixMonthsWeatherOverview>
+    suspend fun getRainSumRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview>
+    suspend fun getWeatherIcons(): Response<List<WeatherConditions>>
+
+    suspend fun getWeatherData(locationData: LocationData): Response<WeatherInfo>
 }

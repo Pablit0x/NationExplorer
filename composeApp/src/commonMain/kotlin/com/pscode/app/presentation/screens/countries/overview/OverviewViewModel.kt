@@ -1,7 +1,7 @@
 package com.pscode.app.presentation.screens.countries.overview
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Constants
@@ -68,7 +68,7 @@ class OverviewViewModel(private val countryRepository: CountryRepository) : View
     val filterWidgetState = _filterWidgetState.asStateFlow()
 
 
-    private var _countries = MutableStateFlow(emptyList<CountryOverview>())
+    private var _countries = MutableStateFlow(emptyList<CountryData>())
 
     val countries = searchText.onEach { _isSearching.update { true } }
         .combine(_countries) { textFieldValue, countries ->

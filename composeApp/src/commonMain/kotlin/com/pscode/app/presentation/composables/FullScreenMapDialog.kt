@@ -14,23 +14,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.LocationData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullScreenMapDialog(
     countryArea: Double,
     hideMap: () -> Unit,
-    locationOverview: LocationOverview?,
+    locationData: LocationData?,
     modifier: Modifier = Modifier
 ) {
-    locationOverview?.let {
+    locationData?.let {
         Dialog(
             onDismissRequest = hideMap,
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Scaffold(modifier = modifier, topBar = {
-                CenterAlignedTopAppBar(title = { Text(text = locationOverview.name) }, actions = {
+                CenterAlignedTopAppBar(title = { Text(text = locationData.name) }, actions = {
                     IconButton(onClick = hideMap) {
                         Icon(
                             imageVector = Icons.Default.Close, contentDescription = "Close Map"
@@ -44,7 +44,7 @@ fun FullScreenMapDialog(
                         .fillMaxSize()
                         .padding(innerPadding),
                     countryArea = countryArea,
-                    locationOverview = it
+                    locationData = it
                 )
             }
         }

@@ -11,10 +11,10 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.LocationData
 
 @Composable
-actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modifier: Modifier) {
+actual fun MapView(locationData: LocationData, countryArea: Double, modifier: Modifier) {
 
     var isLoading by remember { mutableStateOf(true) }
     val zoomLevel by remember { mutableFloatStateOf((5f)) }
@@ -22,7 +22,7 @@ actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modi
     val cameraPosition by remember {
         mutableStateOf(
             CameraPosition.fromLatLngZoom(
-                LatLng(locationOverview.latitude, locationOverview.longitude), zoomLevel
+                LatLng(locationData.latitude, locationData.longitude), zoomLevel
             )
         )
     }

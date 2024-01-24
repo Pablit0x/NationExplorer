@@ -26,14 +26,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityOverview
+import com.pscode.app.domain.model.CelebrityData
 import com.pscode.app.presentation.screens.countries.detail.CardState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
 fun CelebrityCard(
-    celebrity: CelebrityOverview?, onClick: () -> Unit, cardState: CardState, modifier: Modifier
+    celebrity: CelebrityData?, onClick: () -> Unit, cardState: CardState, modifier: Modifier
 ) {
     if (celebrity != null) {
 

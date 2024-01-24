@@ -29,7 +29,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
 import com.pscode.app.presentation.composables.ExploreAndLearnCards
 import com.pscode.app.presentation.composables.FullScreenMapDialog
@@ -39,12 +39,11 @@ import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Status
 import org.koin.compose.koinInject
 
-class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
+class DetailScreen(private val selectedCountry: CountryData) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
-
         val currentWeather by viewModel.currentWeather.collectAsState()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
         val tidbitsList by viewModel.tidbitsList.collectAsState()
@@ -62,6 +61,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
         val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
         val sixMonthsRainSumInMm by viewModel.sixMonthsRainSumInMm.collectAsState()
         val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
+        val weatherInfo by viewModel.weatherInfo.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
@@ -153,7 +153,7 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
             if (isMapVisible) {
                 FullScreenMapDialog(
                     countryArea = selectedCountry.area,
-                    locationOverview = countryGeolocation,
+                    locationData = countryGeolocation,
                     hideMap = viewModel::hideMap,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -189,13 +189,14 @@ class DetailScreen(private val selectedCountry: CountryOverview) : Screen {
 
                     if (hasCapital) {
                         WeatherCard(
-                            capitalName = selectedCountry.capitals.first(),
+                            countryName = selectedCountry.name,
                             sixMonthsWeatherOverview = listOf(
                                 sixMonthsTemperatureAverage,
                                 sixMonthsWindSpeedAverage,
                                 sixMonthDayLightAverageInHours,
                                 sixMonthsRainSumInMm
                             ),
+                            weatherInfo = weatherInfo,
                             weatherInCapital = currentWeather,
                             chartSelectionItems = selectedChartDataItem,
                             onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },

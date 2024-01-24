@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
 fun DetailedCountryOverviewCard(
-    selectedCountry: CountryOverview, hasCapitalCity: Boolean, modifier: Modifier = Modifier
+    selectedCountry: CountryData, hasCapitalCity: Boolean, modifier: Modifier = Modifier
 ) {
 
     Column(

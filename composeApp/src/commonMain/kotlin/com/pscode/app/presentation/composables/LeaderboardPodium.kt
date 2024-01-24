@@ -7,19 +7,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pscode.app.domain.model.Result
+import com.pscode.app.domain.model.ResultData
 import com.pscode.app.presentation.screens.countries.flag_game.leaderboard.TopRankItem
 import com.pscode.app.presentation.theme.Gradients
 
 @Composable
 fun LeaderboardPodium(
-    topThreeResults: List<Result>,
+    topThreeResultData: List<ResultData>,
     modifier: Modifier = Modifier
 ) {
 
-    val firstPlace = topThreeResults[0]
-    val secondPlace = topThreeResults[1]
-    val thirdPlace = topThreeResults[2]
+    val firstPlace = topThreeResultData[0]
+    val secondPlace = topThreeResultData[1]
+    val thirdPlace = topThreeResultData[2]
 
 
     Row(
@@ -29,21 +29,21 @@ fun LeaderboardPodium(
     ) {
         TopRankItem(
             rank = 2,
-            result = secondPlace,
+            resultData = secondPlace,
             borderGradientColors = Gradients.SILVER,
             modifier = Modifier.weight(1f).height(165.dp)
         )
 
         TopRankItem(
             rank = 1,
-            result = firstPlace,
+            resultData = firstPlace,
             borderGradientColors = Gradients.GOLD,
             modifier = Modifier.weight(1f).height(175.dp)
         )
 
         TopRankItem(
             rank = 3,
-            result = thirdPlace,
+            resultData = thirdPlace,
             borderGradientColors = Gradients.BRONZE,
             modifier = Modifier.weight(1f).height(155.dp)
         )

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.interop.UIKitView
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.LocationData
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.MapKit.MKMapView
@@ -14,9 +14,9 @@ import platform.MapKit.MKMapView
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun MapView(locationOverview: LocationOverview, countryArea: Double, modifier: Modifier) {
+actual fun MapView(locationData: LocationData, countryArea: Double, modifier: Modifier) {
     val location = CLLocationCoordinate2DMake(
-        latitude = locationOverview.latitude, longitude = locationOverview.longitude,
+        latitude = locationData.latitude, longitude = locationData.longitude,
     )
 
     val mkMapView by remember {

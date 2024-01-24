@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityOverview
-import com.pscode.app.domain.model.TidbitOverview
+import com.pscode.app.domain.model.CelebrityData
+import com.pscode.app.domain.model.TidbitData
 import com.pscode.app.presentation.screens.countries.detail.CardState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,11 +25,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun ExploreAndLearnCards(
     currentTidbitId: Int,
-    tidbits: List<TidbitOverview>,
+    tidbits: List<TidbitData>,
     setCurrentTidbitId: (Int) -> Unit,
     displayShowMapCard: Boolean,
     onShowOnMapCardClicked: () -> Unit,
-    celebrity: CelebrityOverview?,
+    celebrity: CelebrityData?,
     celebrityCardState: CardState,
     tidbitCardState: CardState,
     onUpdateTidbitCardState: (CardState) -> Unit,

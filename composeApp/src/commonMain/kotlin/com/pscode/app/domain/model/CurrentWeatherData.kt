@@ -1,6 +1,6 @@
 package com.pscode.app.domain.model
 
-data class WeatherOverview(
+data class CurrentWeatherData(
     val cloudCoverPercent: String,
     val perceptibleTemperature: String,
     val humidity: String,

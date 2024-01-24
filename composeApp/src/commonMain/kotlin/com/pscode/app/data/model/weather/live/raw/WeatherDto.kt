@@ -1,6 +1,6 @@
-package com.pscode.app.data.model.weather.live
+package com.pscode.app.data.model.weather.live.raw
 
-import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.model.CurrentWeatherData
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -21,8 +21,8 @@ data class WeatherDto(
     val wind_speed: Double
 )
 
-fun WeatherDto.toWeatherOverview(): WeatherOverview {
-    return WeatherOverview(
+fun WeatherDto.toWeatherOverview(): CurrentWeatherData {
+    return CurrentWeatherData(
         cloudCoverPercent = formatPercentageNumber(number = this.cloud_pct),
         perceptibleTemperature = formatCelsius(degrees = this.feels_like),
         humidity = formatPercentageNumber(number = this.humidity),

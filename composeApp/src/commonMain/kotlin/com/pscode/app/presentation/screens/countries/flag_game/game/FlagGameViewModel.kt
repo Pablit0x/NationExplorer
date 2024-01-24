@@ -1,7 +1,7 @@
 package com.pscode.app.presentation.screens.countries.flag_game.game
 
-import com.pscode.app.domain.model.CountryOverview
-import com.pscode.app.domain.model.Result
+import com.pscode.app.domain.model.CountryData
+import com.pscode.app.domain.model.ResultData
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.utils.Constants
@@ -43,9 +43,9 @@ class FlagGameViewModel(
     private val _userScore = MutableStateFlow(0)
     val userScore = _userScore.asStateFlow()
 
-    private var allCountries = emptyList<CountryOverview>()
+    private var allCountries = emptyList<CountryData>()
 
-    private val _targetCountries = MutableStateFlow(emptyList<CountryOverview>())
+    private val _targetCountries = MutableStateFlow(emptyList<CountryData>())
 
     private val _currentRoundData = MutableStateFlow<RoundData?>(null)
     val currentRoundData = _currentRoundData.asStateFlow()
@@ -243,7 +243,7 @@ class FlagGameViewModel(
     }
 
     private fun sendPersonalBestToOnlineLeaderboard() {
-        val result = Result().apply {
+        val resultData = ResultData().apply {
             score = userScore.value
             time = currentStopWatchTime.value
             timeMillis = parseTimeToMillis(timeString = currentStopWatchTime.value)
@@ -251,7 +251,7 @@ class FlagGameViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            mongoRepository.upsertResult(result)
+            mongoRepository.upsertResult(resultData)
         }
     }
 

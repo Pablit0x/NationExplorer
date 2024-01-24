@@ -1,7 +1,7 @@
 package com.pscode.app.data.model.tidbits
 
 
-import com.pscode.app.domain.model.TidbitOverview
+import com.pscode.app.domain.model.TidbitData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,9 +13,9 @@ data class TidbitsDto(
     val tidbits: List<Tidbit>
 )
 
-fun TidbitsDto.toListOfTidbitsOverview(): List<TidbitOverview> {
+fun TidbitsDto.toListOfTidbitsOverview(): List<TidbitData> {
     return tidbits.map { tidbit ->
-        TidbitOverview(
+        TidbitData(
             countryName = this.name,
             id = tidbit.id,
             title = tidbit.title,

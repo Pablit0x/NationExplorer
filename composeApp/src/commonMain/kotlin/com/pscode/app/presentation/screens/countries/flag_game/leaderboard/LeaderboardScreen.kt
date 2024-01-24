@@ -45,7 +45,7 @@ class LeaderboardScreen : Screen {
                 ) {
 
                     LeaderboardPodium(
-                        topThreeResults = results.subList(0, 3),
+                        topThreeResultData = results.subList(0, 3),
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -63,7 +63,7 @@ class LeaderboardScreen : Screen {
                         itemsIndexed(items = results) { index, result ->
                             LeaderboardListItem(
                                 rank = index + 1,
-                                result = result,
+                                resultData = result,
                                 isCurrentUser = viewModel.isCurrentUser(userId = result.userId),
                                 modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
                             )

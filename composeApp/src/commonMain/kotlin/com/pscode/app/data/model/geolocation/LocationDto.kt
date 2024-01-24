@@ -1,7 +1,7 @@
 package com.pscode.app.data.model.geolocation
 
 
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.LocationData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,8 +15,8 @@ data class LocationDto(
     val totalResults: Int
 )
 
-fun LocationDto.toLocationOverview(countryName: String): LocationOverview {
-    return LocationOverview(
+fun LocationDto.toLocationOverview(countryName: String): LocationData {
+    return LocationData(
         name = countryName,
         latitude = results.first().geometry.lat,
         longitude = results.first().geometry.lng

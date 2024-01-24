@@ -1,12 +1,13 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityOverview
-import com.pscode.app.domain.model.CountryOverview
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.CelebrityData
+import com.pscode.app.domain.model.CountryData
+import com.pscode.app.domain.model.CurrentWeatherData
+import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
-import com.pscode.app.domain.model.TidbitOverview
-import com.pscode.app.domain.model.WeatherOverview
+import com.pscode.app.domain.model.TidbitData
+import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
@@ -46,7 +47,7 @@ class DetailViewModel(
     private val _isCountryFavourite = MutableStateFlow(false)
     val isCountryFavourite = _isCountryFavourite.asStateFlow()
 
-    private val _currentWeather = MutableStateFlow<WeatherOverview?>(null)
+    private val _currentWeather = MutableStateFlow<CurrentWeatherData?>(null)
     val currentWeather = _currentWeather.asStateFlow()
 
     private val _eventsChannel = Channel<Event>()
@@ -55,13 +56,13 @@ class DetailViewModel(
     private val _isMapVisible = MutableStateFlow(false)
     val isMapVisible = _isMapVisible.asStateFlow()
 
-    private val _countryGeolocation = MutableStateFlow<LocationOverview?>(null)
+    private val _countryGeolocation = MutableStateFlow<LocationData?>(null)
     val countryGeolocation = _countryGeolocation.asStateFlow()
 
-    private val _tidbitsList = MutableStateFlow<List<TidbitOverview>>(emptyList())
+    private val _tidbitsList = MutableStateFlow<List<TidbitData>>(emptyList())
     val tidbitsList = _tidbitsList.asStateFlow()
 
-    private val _celebritiesList = MutableStateFlow<List<CelebrityOverview>>(emptyList())
+    private val _celebritiesList = MutableStateFlow<List<CelebrityData>>(emptyList())
     val celebritiesList = _celebritiesList.asStateFlow()
 
     private val _currentTidbitId = MutableStateFlow(0)
@@ -105,6 +106,9 @@ class DetailViewModel(
     val selectedChartData = _selectedChartData.asStateFlow()
 
 
+    private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
+    val weatherInfo = _weatherInfo.asStateFlow()
+
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
@@ -117,6 +121,25 @@ class DetailViewModel(
 
                 is Response.Error -> {
 
+                }
+            }
+        }
+    }
+
+    private fun getPrettyLiveWeather(locationData: LocationData) {
+        viewModelScope.launch {
+            val result =
+                weatherRepository.getWeatherData(locationData = locationData)
+            when (result) {
+
+                is Response.Success -> {
+                    _weatherInfo.update {
+                        result.data
+                    }
+                }
+
+                is Response.Error -> {
+                    _eventsChannel.send(Event.ShowSnackbarMessage(result.message))
                 }
             }
         }
@@ -167,7 +190,7 @@ class DetailViewModel(
     }
 
 
-    fun toggleCountryFavourite(country: CountryOverview) {
+    fun toggleCountryFavourite(country: CountryData) {
         viewModelScope.launch {
             countryRepository.toggleFavourites(country = country).let { response ->
                 when (response) {
@@ -215,10 +238,11 @@ class DetailViewModel(
                         result.data
                     }
                     _countryGeolocation.value?.let { locationOverview ->
-                        getTemperatureRangePastSixMonths(locationOverview = locationOverview)
-                        getWindSpeedRangePastSixMonths(locationOverview = locationOverview)
-                        getDayLightRangePastSixMonths(locationOverview = locationOverview)
-                        getRainSumRangePastSixMonths(locationOverview = locationOverview)
+                        getPrettyLiveWeather(locationData = locationOverview)
+                        getTemperatureRangePastSixMonths(locationData = locationOverview)
+                        getWindSpeedRangePastSixMonths(locationData = locationOverview)
+                        getDayLightRangePastSixMonths(locationData = locationOverview)
+                        getRainSumRangePastSixMonths(locationData = locationOverview)
                     }
                 }
 
@@ -229,10 +253,10 @@ class DetailViewModel(
         }
     }
 
-    fun getWeatherByCity(country: CountryOverview) {
+    fun getWeatherByCity(country: CountryData) {
         country.capitals.firstOrNull()?.let { countryName ->
             viewModelScope.launch(Dispatchers.IO) {
-                val result: Response<WeatherOverview> =
+                val result: Response<CurrentWeatherData> =
                     weatherRepository.getWeatherByCity(cityName = countryName)
 
                 when (result) {
@@ -250,10 +274,10 @@ class DetailViewModel(
         }
     }
 
-    private fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview) {
+    private fun getTemperatureRangePastSixMonths(locationData: LocationData) {
         viewModelScope.launch {
             val response =
-                weatherRepository.getTemperatureRangePastSixMonths(locationOverview = locationOverview)
+                weatherRepository.getTemperatureRangePastSixMonths(locationData = locationData)
             when (response) {
                 is Response.Success -> {
                     _sixMonthsTemperatureAverage.update { response.data }
@@ -268,10 +292,10 @@ class DetailViewModel(
         }
     }
 
-    private fun getDayLightRangePastSixMonths(locationOverview: LocationOverview) {
+    private fun getDayLightRangePastSixMonths(locationData: LocationData) {
         viewModelScope.launch {
             val response =
-                weatherRepository.getDayLightRangePastSixMonths(locationOverview = locationOverview)
+                weatherRepository.getDayLightRangePastSixMonths(locationData = locationData)
             when (response) {
                 is Response.Success -> {
                     _sixMonthsDayLightAverageInHours.update { response.data }
@@ -286,10 +310,10 @@ class DetailViewModel(
         }
     }
 
-    private fun getRainSumRangePastSixMonths(locationOverview: LocationOverview) {
+    private fun getRainSumRangePastSixMonths(locationData: LocationData) {
         viewModelScope.launch {
             val response =
-                weatherRepository.getRainSumRangePastSixMonths(locationOverview = locationOverview)
+                weatherRepository.getRainSumRangePastSixMonths(locationData = locationData)
             when (response) {
                 is Response.Success -> {
                     _sixMonthsRainSumInMm.update { response.data }
@@ -304,10 +328,10 @@ class DetailViewModel(
         }
     }
 
-    private fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) {
+    private fun getWindSpeedRangePastSixMonths(locationData: LocationData) {
         viewModelScope.launch {
             val response =
-                weatherRepository.getWindSpeedRangePastSixMonths(locationOverview = locationOverview)
+                weatherRepository.getWindSpeedRangePastSixMonths(locationData = locationData)
             when (response) {
                 is Response.Success -> {
                     _sixMonthsWindSpeedAverage.update { response.data }
@@ -335,6 +359,7 @@ class DetailViewModel(
         _isMapVisible.update { false }
         _didFetchFail.update { false }
         _currentWeather.update { null }
+        _weatherInfo.update { null }
         _countryGeolocation.update { null }
         _tidbitsList.update { emptyList() }
         _celebritiesList.update { emptyList() }

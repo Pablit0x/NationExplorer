@@ -1,6 +1,6 @@
 package com.pscode.app.data.repository
 
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.remote.CountryApi
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.utils.Response
@@ -8,10 +8,10 @@ import io.github.xxfast.kstore.KStore
 
 class CountryRepositoryImpl(
     private val countryApi: CountryApi,
-    private val countryOverviewCache: KStore<List<CountryOverview>>
+    private val countryDataCache: KStore<List<CountryData>>
 ) : CountryRepository {
-    override suspend fun getAllCountries(): Response<List<CountryOverview>> {
-        val cachedCountries = countryOverviewCache.get()
+    override suspend fun getAllCountries(): Response<List<CountryData>> {
+        val cachedCountries = countryDataCache.get()
 
         if (cachedCountries != null) {
             return Response.Success(data = cachedCountries)
@@ -19,15 +19,15 @@ class CountryRepositoryImpl(
 
         val countryListResponse = countryApi.getAllCountries()
 
-        if (countryListResponse is Response.Success) countryOverviewCache.set(countryListResponse.data)
+        if (countryListResponse is Response.Success) countryDataCache.set(countryListResponse.data)
 
         return countryListResponse
     }
 
-    override suspend fun toggleFavourites(country: CountryOverview?): Response<List<CountryOverview>> {
+    override suspend fun toggleFavourites(country: CountryData?): Response<List<CountryData>> {
 
         val cachedCountries =
-            countryOverviewCache.get() ?: return Response.Error("Country cache is null")
+            countryDataCache.get() ?: return Response.Error("Country cache is null")
 
         val updatedList = cachedCountries.let { countries ->
             countries.map { cachedCountry ->
@@ -41,7 +41,7 @@ class CountryRepositoryImpl(
             }
         }
 
-        countryOverviewCache.update { updatedList }
+        countryDataCache.update { updatedList }
 
         return Response.Success(data = updatedList)
     }

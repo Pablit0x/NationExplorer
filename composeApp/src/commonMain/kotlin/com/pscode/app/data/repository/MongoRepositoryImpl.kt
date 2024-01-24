@@ -1,6 +1,6 @@
 package com.pscode.app.data.repository
 
-import com.pscode.app.domain.model.Result
+import com.pscode.app.domain.model.ResultData
 import com.pscode.app.domain.repository.MongoRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -24,36 +24,36 @@ class MongoRepositoryImpl(
     override fun configureRealm() {
         if (user != null) {
             val config = SyncConfiguration.Builder(
-                user, setOf(Result::class)
+                user, setOf(ResultData::class)
             ).initialSubscriptions { sub ->
-                add(query = sub.query<Result>("_id != $0", ObjectId()))
+                add(query = sub.query<ResultData>("_id != $0", ObjectId()))
             }.log(LogLevel.ALL).build()
             realm = Realm.open(config)
         }
     }
 
-    override fun getResults(): Flow<List<Result>> {
-        return realm.query<Result>().asFlow().map { listOfResults ->
+    override fun getResults(): Flow<List<ResultData>> {
+        return realm.query<ResultData>().asFlow().map { listOfResults ->
             listOfResults.list.sortedWith(
                 compareBy({ -it.score }, { it.timeMillis })
             )
         }
     }
 
-    override suspend fun upsertResult(result: Result) {
+    override suspend fun upsertResult(resultData: ResultData) {
         if (user != null) {
             realm.write {
-                val queriedResult =
-                    query<Result>(query = "userId == $0", user.id).find().firstOrNull()
-                if (queriedResult == null) {
-                    copyToRealm(result.apply {
+                val queriedResultData =
+                    query<ResultData>(query = "userId == $0", user.id).find().firstOrNull()
+                if (queriedResultData == null) {
+                    copyToRealm(resultData.apply {
                         userId = user.id
                     })
                 } else {
                     run {
-                        queriedResult.score = result.score
-                        queriedResult.time = result.time
-                        queriedResult.timeMillis = result.timeMillis
+                        queriedResultData.score = resultData.score
+                        queriedResultData.time = resultData.time
+                        queriedResultData.timeMillis = resultData.timeMillis
                     }
                 }
             }

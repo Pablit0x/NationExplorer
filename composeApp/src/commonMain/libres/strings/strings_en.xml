@@ -42,10 +42,13 @@
     </plurals>
     <string name="humidity">Humidity</string>
     <string name="wind_speed">Wind Speed</string>
+    <string name="pressure">Pressure</string>
+    <string name="visibility">Visibility</string>
+    <string name="feels_like">Feels Like</string>
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="temperature">Temperature</string>
-    <string name="cloudiness">Cloudiness</string>
+    <string name="cloudiness">Cloud Cover</string>
     <string name="show_map">Show on Map</string>
     <string name="enter_username">Enter Username</string>
     <string name="username_placeholder">Username...</string>

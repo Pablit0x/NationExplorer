@@ -19,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -28,6 +30,10 @@ fun WeatherItem(
     contentDescription: String,
     label: String,
     value: String,
+    unit: String,
+    labelStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+    valueStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    iconSize: Dp = 36.dp,
     modifier: Modifier = Modifier
 ) {
 
@@ -46,28 +52,26 @@ fun WeatherItem(
                 Icon(
                     imageVector = iconVector,
                     contentDescription = contentDescription,
-                    modifier = Modifier.size(36.dp).padding(4.dp),
+                    modifier = Modifier.size(iconSize).padding(4.dp),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.End
             ) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = labelStyle,
                 )
 
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = value,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Normal
+                    text = "$value $unit",
+                    style = valueStyle
                 )
             }
         }

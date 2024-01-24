@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable
-data class CountryOverview(
+data class CountryData(
     val name: String,
     val flagUrl: String,
     val capitals: List<String>,

@@ -13,7 +13,7 @@ import com.pscode.app.data.repository.GeolocationRepositoryImpl
 import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.data.repository.TidbitsRepositoryImpl
 import com.pscode.app.data.repository.WeatherRepositoryImpl
-import com.pscode.app.domain.model.CountryOverview
+import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.remote.CelebrityApi
 import com.pscode.app.domain.remote.CountryApi
 import com.pscode.app.domain.remote.GeolocationApi
@@ -50,11 +50,11 @@ val dataModule = module {
     single<CountryApi> { CountryApiImpl(httpClient = get()) }
     single<WeatherApi> { WeatherApiImpl(httpClient = get()) }
     single<GeolocationApi> { GeolocationApiImpl(httpClient = get()) }
-    single<KStore<List<CountryOverview>>> { CountryCache().cache }
+    single<KStore<List<CountryData>>> { CountryCache().cache }
     single<Settings> { Settings() }
     single<CountryRepository> {
         CountryRepositoryImpl(
-            countryApi = get(), countryOverviewCache = get()
+            countryApi = get(), countryDataCache = get()
         )
     }
     single<GeolocationRepository> {

@@ -22,14 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.Result
+import com.pscode.app.domain.model.ResultData
 import com.pscode.app.presentation.composables.AnimatedBorderCard
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.utils.Constants
 
 @Composable
 fun TopRankItem(
-    rank: Int, result: Result, borderGradientColors: List<Color>, modifier: Modifier = Modifier
+    rank: Int,
+    resultData: ResultData,
+    borderGradientColors: List<Color>,
+    modifier: Modifier = Modifier
 ) {
 
     AnimatedBorderCard(
@@ -61,7 +64,7 @@ fun TopRankItem(
             Spacer(modifier = Modifier.height(8.dp))
 
             AutoResizedText(
-                text = result.username,
+                text = resultData.username,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(4.dp)
@@ -80,7 +83,7 @@ fun TopRankItem(
                     fontWeight = FontWeight.Light
                 )
                 Text(
-                    text = "${result.score}/${Constants.NUMBER_OF_ROUNDS}",
+                    text = "${resultData.score}/${Constants.NUMBER_OF_ROUNDS}",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -97,7 +100,7 @@ fun TopRankItem(
                     fontWeight = FontWeight.Light
                 )
                 Text(
-                    text = result.time,
+                    text = resultData.time,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold
                 )

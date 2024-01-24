@@ -1,7 +1,7 @@
 package com.pscode.app.data.repository
 
 import com.pscode.app.data.model.geolocation.toLocationOverview
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.remote.GeolocationApi
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.utils.Response
@@ -9,9 +9,9 @@ import io.github.xxfast.kstore.KStore
 
 class GeolocationRepositoryImpl(
     private val geolocationApi: GeolocationApi,
-    private val geolocationCache: KStore<List<LocationOverview>>
+    private val geolocationCache: KStore<List<LocationData>>
 ) : GeolocationRepository {
-    override suspend fun getGeolocationByCountry(countryName: String): Response<LocationOverview> {
+    override suspend fun getGeolocationByCountry(countryName: String): Response<LocationData> {
 
         val geolocationCacheList = geolocationCache.get()
         val cachedLocationOverview = geolocationCacheList?.find { it.name == countryName }

@@ -4,17 +4,23 @@ import com.pscode.app.data.model.weather.historical.day_light.DayLightHistorical
 import com.pscode.app.data.model.weather.historical.rain_sum.RainSumHistoricalDto
 import com.pscode.app.data.model.weather.historical.temperature.TemperatureHistoricalDto
 import com.pscode.app.data.model.weather.historical.wind.WindSpeedHistoricalDto
-import com.pscode.app.data.model.weather.live.WeatherDto
-import com.pscode.app.domain.model.LocationOverview
+import com.pscode.app.data.model.weather.live.icons.WeatherIconsDto
+import com.pscode.app.data.model.weather.live.pretty.WeatherDataDto
+import com.pscode.app.data.model.weather.live.raw.WeatherDto
+import com.pscode.app.domain.model.LocationData
 import com.pscode.app.utils.Response
 
 interface WeatherApi {
     suspend fun getWeatherByCity(cityName: String): Response<WeatherDto>
-    suspend fun getTemperatureRangePastSixMonths(locationOverview: LocationOverview): Response<TemperatureHistoricalDto>
+    suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<TemperatureHistoricalDto>
 
-    suspend fun getWindSpeedRangePastSixMonths(locationOverview: LocationOverview) : Response<WindSpeedHistoricalDto>
+    suspend fun getWindSpeedRangePastSixMonths(locationData: LocationData): Response<WindSpeedHistoricalDto>
 
-    suspend fun getDayLightDurationRangePastSixMonths(locationOverview: LocationOverview) : Response<DayLightHistoricalDto>
+    suspend fun getDayLightDurationRangePastSixMonths(locationData: LocationData): Response<DayLightHistoricalDto>
 
-    suspend fun getRainSumRangePastSixMonths(locationOverview: LocationOverview): Response<RainSumHistoricalDto>
+    suspend fun getRainSumRangePastSixMonths(locationData: LocationData): Response<RainSumHistoricalDto>
+
+    suspend fun getLiveWeatherIcons(): Response<WeatherIconsDto>
+
+    suspend fun getPrettyLiveWeatherByCity(locationData: LocationData): Response<WeatherDataDto>
 }
