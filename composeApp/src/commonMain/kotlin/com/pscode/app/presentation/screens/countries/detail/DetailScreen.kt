@@ -44,7 +44,6 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
-        val currentWeather by viewModel.currentWeather.collectAsState()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
         val tidbitsList by viewModel.tidbitsList.collectAsState()
         val celebritiesList by viewModel.celebritiesList.collectAsState()
@@ -61,7 +60,7 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
         val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
         val sixMonthsRainSumInMm by viewModel.sixMonthsRainSumInMm.collectAsState()
         val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
-        val weatherInfo by viewModel.weatherInfo.collectAsState()
+        val weatherState by viewModel.weatherInfo.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
 
@@ -102,7 +101,6 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
 
         LaunchedEffect(true) {
             viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
-            viewModel.getWeatherByCity(country = selectedCountry)
             viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
             viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
             viewModel.setFavouriteStatus(isFavourite = selectedCountry.isFavourite)
@@ -113,7 +111,6 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                 Status.Available -> {
                     if (fetchFailure) {
                         viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
-                        viewModel.getWeatherByCity(country = selectedCountry)
                         viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
                         viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
                     }
@@ -196,8 +193,7 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                                 sixMonthDayLightAverageInHours,
                                 sixMonthsRainSumInMm
                             ),
-                            weatherInfo = weatherInfo,
-                            weatherInCapital = currentWeather,
+                            weatherInfo = weatherState,
                             chartSelectionItems = selectedChartDataItem,
                             onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
                             modifier = Modifier.fillMaxWidth()

@@ -1,27 +1,27 @@
-package com.pscode.app.data.model.weather.live.pretty
+package com.pscode.app.data.model.weather.live.weather
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HourlyUnits(
+data class Hourly(
     @SerialName("pressure_msl")
-    val pressureMsl: String,
+    val pressureMsl: List<Double>,
     @SerialName("relativehumidity_2m")
-    val relativehumidity2m: String,
+    val relativehumidity2m: List<Int>,
     @SerialName("temperature_2m")
-    val temperature2m: String,
+    val temperature2m: List<Double>,
     @SerialName("time")
-    val time: String,
+    val time: List<String>,
     @SerialName("weathercode")
-    val weathercode: String,
+    val weathercode: List<Int>,
     @SerialName("windspeed_10m")
-    val windspeed10m: String,
+    val windspeed10m: List<Double>,
     @SerialName("visibility")
-    val visibility : String,
+    val visibility : List<Double>,
     @SerialName("apparent_temperature")
-    val feelsLike : String,
+    val feelsLike : List<Double>,
     @SerialName("cloud_cover")
-    val cloudiness: String
+    val cloudiness: List<Int>
 )

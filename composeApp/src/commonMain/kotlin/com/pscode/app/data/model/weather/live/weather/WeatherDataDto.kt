@@ -1,4 +1,4 @@
-package com.pscode.app.data.model.weather.live.pretty
+package com.pscode.app.data.model.weather.live.weather
 
 
 import kotlinx.serialization.SerialName

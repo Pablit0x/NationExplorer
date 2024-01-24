@@ -3,7 +3,6 @@ package com.pscode.app.presentation.screens.countries.detail
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CelebrityData
 import com.pscode.app.domain.model.CountryData
-import com.pscode.app.domain.model.CurrentWeatherData
 import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.model.TidbitData
@@ -46,9 +45,6 @@ class DetailViewModel(
 
     private val _isCountryFavourite = MutableStateFlow(false)
     val isCountryFavourite = _isCountryFavourite.asStateFlow()
-
-    private val _currentWeather = MutableStateFlow<CurrentWeatherData?>(null)
-    val currentWeather = _currentWeather.asStateFlow()
 
     private val _eventsChannel = Channel<Event>()
     val eventsChannel = _eventsChannel.receiveAsFlow()
@@ -107,6 +103,7 @@ class DetailViewModel(
 
 
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
+
     val weatherInfo = _weatherInfo.asStateFlow()
 
     fun getTidbitsByCountry(countryName: String) {
@@ -126,11 +123,9 @@ class DetailViewModel(
         }
     }
 
-    private fun getPrettyLiveWeather(locationData: LocationData) {
+    private fun getCurrentWeather(locationData: LocationData) {
         viewModelScope.launch {
-            val result =
-                weatherRepository.getWeatherData(locationData = locationData)
-            when (result) {
+            when (val result = weatherRepository.getWeatherData(locationData = locationData)) {
 
                 is Response.Success -> {
                     _weatherInfo.update {
@@ -238,7 +233,7 @@ class DetailViewModel(
                         result.data
                     }
                     _countryGeolocation.value?.let { locationOverview ->
-                        getPrettyLiveWeather(locationData = locationOverview)
+                        getCurrentWeather(locationData = locationOverview)
                         getTemperatureRangePastSixMonths(locationData = locationOverview)
                         getWindSpeedRangePastSixMonths(locationData = locationOverview)
                         getDayLightRangePastSixMonths(locationData = locationOverview)
@@ -248,27 +243,6 @@ class DetailViewModel(
 
                 is Response.Error -> {
                     _didFetchFail.update { true }
-                }
-            }
-        }
-    }
-
-    fun getWeatherByCity(country: CountryData) {
-        country.capitals.firstOrNull()?.let { countryName ->
-            viewModelScope.launch(Dispatchers.IO) {
-                val result: Response<CurrentWeatherData> =
-                    weatherRepository.getWeatherByCity(cityName = countryName)
-
-                when (result) {
-                    is Response.Success -> {
-                        _currentWeather.update {
-                            result.data
-                        }
-                    }
-
-                    is Response.Error -> {
-                        _didFetchFail.update { true }
-                    }
                 }
             }
         }
@@ -358,7 +332,6 @@ class DetailViewModel(
     fun resetViewModel() {
         _isMapVisible.update { false }
         _didFetchFail.update { false }
-        _currentWeather.update { null }
         _weatherInfo.update { null }
         _countryGeolocation.update { null }
         _tidbitsList.update { emptyList() }

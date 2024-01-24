@@ -1,6 +1,6 @@
 package com.pscode.app.domain.model
 
-import com.pscode.app.data.model.weather.live.pretty.WeatherDataDto
+import com.pscode.app.data.model.weather.live.weather.WeatherDataDto
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -67,7 +67,7 @@ fun WeatherDataDto.toWeatherInfo(weatherConditions: List<WeatherConditions>): We
 
 
 fun Int.toWeatherConditions(weatherConditions: List<WeatherConditions>): WeatherConditions? {
-    return when (this) {
+    val result = when (this) {
         0 -> weatherConditions.find { it.name == "ClearSky" }
         1 -> weatherConditions.find { it.name == "MainlyClear" }
         2 -> weatherConditions.find { it.name == "PartlyCloudy" }
@@ -98,4 +98,6 @@ fun Int.toWeatherConditions(weatherConditions: List<WeatherConditions>): Weather
         99 -> weatherConditions.find { it.name == "HeavyHailThunderstorm" }
         else -> weatherConditions.find { it.name == "ClearSky" }
     }
+
+    return result
 }

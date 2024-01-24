@@ -1,13 +1,11 @@
 package com.pscode.app.data.remote
 
-import FunApp.composeApp.BuildConfig
 import com.pscode.app.data.model.weather.historical.day_light.DayLightHistoricalDto
 import com.pscode.app.data.model.weather.historical.rain_sum.RainSumHistoricalDto
 import com.pscode.app.data.model.weather.historical.temperature.TemperatureHistoricalDto
 import com.pscode.app.data.model.weather.historical.wind.WindSpeedHistoricalDto
 import com.pscode.app.data.model.weather.live.icons.WeatherIconsDto
-import com.pscode.app.data.model.weather.live.pretty.WeatherDataDto
-import com.pscode.app.data.model.weather.live.raw.WeatherDto
+import com.pscode.app.data.model.weather.live.weather.WeatherDataDto
 import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.remote.WeatherApi
 import com.pscode.app.utils.Response
@@ -17,7 +15,6 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.CancellationException
@@ -29,30 +26,9 @@ import kotlinx.datetime.toLocalDateTime
 
 class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
 
-    private val baseUrlNinjasWeather = "https://api.api-ninjas.com/v1/weather"
     private val baseUrlOpenMeteoHistorical = "https://archive-api.open-meteo.com/v1/archive"
     private val baseUrlOpenMeteoLive = "https://api.open-meteo.com/v1/"
     private val baseUrlIcons = "https://pablit0x.github.io/nation_explorer_weather_icons/"
-
-    override suspend fun getWeatherByCity(cityName: String): Response<WeatherDto> {
-        return try {
-            Response.Success(data = httpClient.get {
-                url("$baseUrlNinjasWeather?city=$cityName")
-                header("X-Api-Key", BuildConfig.WEATHER_API_KEY)
-            }.body<WeatherDto>())
-        } catch (e: IOException) {
-            Response.Error("Network issue")
-        } catch (e: ClientRequestException) {
-            Response.Error("Invalid request.")
-        } catch (e: ServerResponseException) {
-            Response.Error("Server unavailable.")
-        } catch (e: HttpRequestTimeoutException) {
-            Response.Error("Request timed out.")
-        } catch (e: Exception) {
-            if (e is CancellationException) throw e
-            Response.Error("Unexpected issue occurred.")
-        }
-    }
 
     override suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<TemperatureHistoricalDto> {
         return try {
@@ -165,7 +141,7 @@ class WeatherApiImpl(private val httpClient: HttpClient) : WeatherApi {
         }
     }
 
-    override suspend fun getPrettyLiveWeatherByCity(locationData: LocationData): Response<WeatherDataDto> {
+    override suspend fun getWeatherData(locationData: LocationData): Response<WeatherDataDto> {
         return try {
             Response.Success(data = httpClient.get {
                 url("${baseUrlOpenMeteoLive}forecast?latitude=${locationData.latitude}&longitude=${locationData.longitude}&hourly=temperature_2m,weathercode,relativehumidity_2m,windspeed_10m,pressure_msl,visibility,cloud_cover,apparent_temperature")

@@ -49,7 +49,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.carlosgub.kotlinm.charts.round
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CurrentWeatherData
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
 import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
@@ -73,14 +72,13 @@ data class WeatherTabItem(
 fun WeatherCard(
     countryName: String,
     weatherInfo: WeatherInfo?,
-    weatherInCapital: CurrentWeatherData?,
     sixMonthsWeatherOverview: List<SixMonthsWeatherOverview>,
     chartSelectionItems: List<SelectableItemWithIcon>,
     onChartSelectionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedWeatherTab by remember { mutableIntStateOf(0) }
-    var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>?>(null) }
+    var listOfWeatherItems by remember { mutableStateOf<List<WeatherItemData>>(emptyList()) }
 
     val transition = rememberInfiniteTransition()
 
@@ -114,7 +112,7 @@ fun WeatherCard(
         selectedWeatherTab = pagerState.currentPage
     }
 
-    LaunchedEffect(weatherInfo?.currentWeatherData) {
+    LaunchedEffect(weatherInfo) {
         weatherInfo?.currentWeatherData?.let { currentWeatherData ->
             listOfWeatherItems = listOf(
                 WeatherItemData(
@@ -204,11 +202,18 @@ fun WeatherCard(
             ) { index ->
                 when (index) {
                     weatherTabItems.indexOf(liveWeatherTabItem) -> {
-                        DetailedLiveWeatherCard(
-                            weatherData = weatherInfo?.currentWeatherData,
-                            listOfWeatherItems = listOfWeatherItems,
-                            modifier = Modifier.fillMaxSize().padding(8.dp)
-                        )
+                        if (weatherInfo?.currentWeatherData == null || listOfWeatherItems.isEmpty() || weatherInfo.currentWeatherData.weatherConditions == null) {
+                            DetailedLiveWeatherLoadingSkeletonCard(
+                                modifier = Modifier.fillMaxSize().padding(8.dp)
+                            )
+                        } else {
+                            DetailedLiveWeatherCard(
+                                weatherData = weatherInfo.currentWeatherData,
+                                weatherConditions = weatherInfo.currentWeatherData.weatherConditions,
+                                listOfWeatherItems = listOfWeatherItems,
+                                modifier = Modifier.fillMaxSize().padding(8.dp)
+                            )
+                        }
                     }
 
                     weatherTabItems.indexOf(averagesWeatherTabItem) -> {
@@ -223,10 +228,6 @@ fun WeatherCard(
                 }
 
             }
-
-
         }
-
-
     }
 }

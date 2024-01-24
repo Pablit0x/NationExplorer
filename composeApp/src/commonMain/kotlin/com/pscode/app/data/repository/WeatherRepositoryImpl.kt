@@ -1,8 +1,6 @@
 package com.pscode.app.data.repository
 
 
-import com.pscode.app.data.model.weather.live.raw.toWeatherOverview
-import com.pscode.app.domain.model.CurrentWeatherData
 import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.MonthlyAverage
 import com.pscode.app.domain.model.SixMonthsWeatherOverview
@@ -18,18 +16,6 @@ import kotlinx.datetime.LocalDate
 class WeatherRepositoryImpl(
     private val weatherApi: WeatherApi
 ) : WeatherRepository {
-    override suspend fun getWeatherByCity(cityName: String): Response<CurrentWeatherData> {
-        return when (val result = weatherApi.getWeatherByCity(cityName = cityName)) {
-            is Response.Success -> {
-                Response.Success(data = result.data.toWeatherOverview())
-            }
-
-            is Response.Error -> {
-                Response.Error(message = result.message)
-            }
-        }
-    }
-
     override suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview> {
         return when (val result =
             weatherApi.getTemperatureRangePastSixMonths(locationData = locationData)) {
@@ -184,7 +170,7 @@ class WeatherRepositoryImpl(
                     it.toWeatherConditions()
                 }
                 val weatherResult =
-                    weatherApi.getPrettyLiveWeatherByCity(locationData = locationData)
+                    weatherApi.getWeatherData(locationData = locationData)
                 return when (weatherResult) {
 
                     is Response.Success -> {
