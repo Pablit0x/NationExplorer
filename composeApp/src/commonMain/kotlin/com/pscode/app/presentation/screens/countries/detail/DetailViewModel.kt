@@ -1,18 +1,19 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityData
 import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.model.LocationData
-import com.pscode.app.domain.model.SixMonthsWeatherOverview
-import com.pscode.app.domain.model.TidbitData
+import com.pscode.app.domain.model.SelectableItemWithIcon
+import com.pscode.app.domain.model.SixMonthsWeatherData
 import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
-import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
+import com.pscode.app.presentation.screens.countries.detail.states.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
+import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Constants
 import com.pscode.app.utils.NetworkConnectivity
@@ -25,6 +26,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -55,40 +57,25 @@ class DetailViewModel(
     private val _countryGeolocation = MutableStateFlow<LocationData?>(null)
     val countryGeolocation = _countryGeolocation.asStateFlow()
 
-    private val _tidbitsList = MutableStateFlow<List<TidbitData>>(emptyList())
-    val tidbitsList = _tidbitsList.asStateFlow()
+    private val _tidbitState = MutableStateFlow(TidbitState())
+    val tidbitState = _tidbitState.asStateFlow()
 
-    private val _celebritiesList = MutableStateFlow<List<CelebrityData>>(emptyList())
-    val celebritiesList = _celebritiesList.asStateFlow()
+    private val _celebrityState = MutableStateFlow(CelebrityState())
+    val celebrityState = _celebrityState.asStateFlow()
 
-    private val _currentTidbitId = MutableStateFlow(0)
-    val currentTidbitId = _currentTidbitId.asStateFlow()
+    private val _sixMonthsTemperatureAverage = MutableStateFlow(SixMonthsWeatherData())
+    private val _sixMonthsWindSpeedAverage = MutableStateFlow(SixMonthsWeatherData())
+    private val _sixMonthsDayLightAverageInHours = MutableStateFlow(SixMonthsWeatherData())
+    private val _sixMonthsRainSumInMm = MutableStateFlow(SixMonthsWeatherData())
 
-    private val _tidbitCardState = MutableStateFlow(CardState.COLLAPSED)
-    val tidbitCardState = _tidbitCardState.asStateFlow()
-
-    private val _celebrityCardState = MutableStateFlow(CardState.COLLAPSED)
-    val celebrityCardState = _celebrityCardState.asStateFlow()
-
-    private val _sixMonthsTemperatureAverage = MutableStateFlow(
-        SixMonthsWeatherOverview(monthAverages = emptyList())
-    )
-    val sixMonthsTemperatureAverage = _sixMonthsTemperatureAverage.asStateFlow()
-
-    private val _sixMonthsWindSpeedAverage = MutableStateFlow(
-        SixMonthsWeatherOverview(monthAverages = emptyList())
-    )
-    val sixMonthsWindSpeedAverage = _sixMonthsWindSpeedAverage.asStateFlow()
-
-    private val _sixMonthsDayLightAverageInHours = MutableStateFlow(
-        SixMonthsWeatherOverview(monthAverages = emptyList())
-    )
-
-    val sixMonthDayLightAverageInHours = _sixMonthsDayLightAverageInHours.asStateFlow()
-
-    private val _sixMonthsRainSumInMm =
-        MutableStateFlow(SixMonthsWeatherOverview(monthAverages = emptyList()))
-    val sixMonthsRainSumInMm = _sixMonthsRainSumInMm.asStateFlow()
+    val weatherAverages = combine(
+        _sixMonthsTemperatureAverage,
+        _sixMonthsWindSpeedAverage,
+        _sixMonthsDayLightAverageInHours,
+        _sixMonthsRainSumInMm
+    ) { temperature, windSpeed, dayLight, rainSum ->
+        listOf(temperature, windSpeed, dayLight, rainSum)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _selectedChartData = MutableStateFlow(Constants.chartSelection.map {
         SelectableItemWithIcon(
@@ -100,7 +87,6 @@ class DetailViewModel(
 
 
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
-
     val weatherInfo = _weatherInfo.asStateFlow()
 
     fun getTidbitsByCountry(countryName: String) {
@@ -108,12 +94,20 @@ class DetailViewModel(
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
             when (result) {
                 is Response.Success -> {
-                    _tidbitsList.update {
-                        result.data
+                    _tidbitState.update {
+                        it.copy(
+                            tidbitData = result.data, errorMessage = null
+                        )
                     }
                 }
 
-                is Response.Error -> {}
+                is Response.Error -> {
+                    _tidbitState.update {
+                        it.copy(
+                            errorMessage = result.message
+                        )
+                    }
+                }
             }
         }
     }
@@ -138,21 +132,29 @@ class DetailViewModel(
             val result = celebrityRepository.getCelebritiesByCountryName(countryName = countryName)
             when (result) {
                 is Response.Success -> {
-                    _celebritiesList.update {
-                        result.data
+                    _celebrityState.update {
+                        it.copy(
+                            celebrityData = result.data
+                        )
                     }
                 }
 
                 is Response.Error -> {
-
+                    _celebrityState.update {
+                        it.copy(
+                            errorMessage = result.message
+                        )
+                    }
                 }
             }
         }
     }
 
     fun setCurrentTidbitId(id: Int) {
-        _currentTidbitId.update {
-            id
+        _tidbitState.update {
+            it.copy(
+                currentId = id
+            )
         }
     }
 
@@ -206,11 +208,19 @@ class DetailViewModel(
     }
 
     fun updateTidbitCardState(newState: CardState) {
-        _tidbitCardState.update { newState }
+        _tidbitState.update {
+            it.copy(
+                cardState = newState
+            )
+        }
     }
 
     fun updateCelebrityCardState(newState: CardState) {
-        _celebrityCardState.update { newState }
+        _celebrityState.update {
+            it.copy(
+                cardState = newState
+            )
+        }
     }
 
 
@@ -309,14 +319,12 @@ class DetailViewModel(
         _isMapVisible.update { false }
         _weatherInfo.update { null }
         _countryGeolocation.update { null }
-        _tidbitsList.update { emptyList() }
-        _celebritiesList.update { emptyList() }
-        _tidbitCardState.update { CardState.COLLAPSED }
-        _celebrityCardState.update { CardState.COLLAPSED }
-        _sixMonthsTemperatureAverage.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
-        _sixMonthsRainSumInMm.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
-        _sixMonthsDayLightAverageInHours.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
-        _sixMonthsWindSpeedAverage.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _tidbitState.update { TidbitState() }
+        _celebrityState.update { CelebrityState() }
+        _sixMonthsTemperatureAverage.update { SixMonthsWeatherData(monthAverages = emptyList()) }
+        _sixMonthsRainSumInMm.update { SixMonthsWeatherData(monthAverages = emptyList()) }
+        _sixMonthsDayLightAverageInHours.update { SixMonthsWeatherData(monthAverages = emptyList()) }
+        _sixMonthsWindSpeedAverage.update { SixMonthsWeatherData(monthAverages = emptyList()) }
     }
 
 }

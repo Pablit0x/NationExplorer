@@ -1,6 +1,6 @@
 package com.pscode.app.data.remote
 
-import com.pscode.app.data.model.celebrity.CelebrityDto
+import com.pscode.app.data.model.celebrity.CelebritiesDto
 import com.pscode.app.domain.remote.CelebrityApi
 import com.pscode.app.utils.Response
 import io.ktor.client.HttpClient
@@ -18,11 +18,11 @@ class CelebrityApiImpl(private val httpClient: HttpClient) : CelebrityApi {
     private val baseUrl = "https://pablit0x.github.io/nation_explorer_celebrities_api/"
 
 
-    override suspend fun getCelebritiesByCountryName(countryName: String): Response<CelebrityDto> {
+    override suspend fun getCelebritiesByCountryName(countryName: String): Response<CelebritiesDto> {
         return try {
             Response.Success(data = httpClient.get {
                 url("${baseUrl}/$countryName.json")
-            }.body<CelebrityDto>())
+            }.body<CelebritiesDto>())
         } catch (e: IOException) {
             Response.Error("Network issue.")
         } catch (e: ClientRequestException) {

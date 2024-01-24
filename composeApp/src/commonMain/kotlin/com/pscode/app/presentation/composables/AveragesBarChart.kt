@@ -30,12 +30,12 @@ import com.carlosgub.kotlinm.charts.bar.BarChartData
 import com.carlosgub.kotlinm.charts.bar.BarChartEntry
 import com.carlosgub.kotlinm.charts.round
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.SixMonthsWeatherOverview
-import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
+import com.pscode.app.domain.model.SelectableItemWithIcon
+import com.pscode.app.domain.model.SixMonthsWeatherData
 
 @Composable
 fun AveragesBarChart(
-    sixMonthsWeatherOverview: List<SixMonthsWeatherOverview>,
+    sixMonthsWeatherData: List<SixMonthsWeatherData>,
     chartSelectionItems: List<SelectableItemWithIcon>,
     onChartSelectionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -49,9 +49,9 @@ fun AveragesBarChart(
 
         when (currentlySelectedItem) {
             "Temperature" -> {
-                if (sixMonthsWeatherOverview[0].monthAverages.isNotEmpty()) {
+                if (sixMonthsWeatherData[0].monthAverages.isNotEmpty()) {
                     val barChartData =
-                        BarChartData(categories = sixMonthsWeatherOverview[0].monthAverages.flatMap { monthlyAverage ->
+                        BarChartData(categories = sixMonthsWeatherData[0].monthAverages.flatMap { monthlyAverage ->
                             listOf(
                                 BarChartCategory(
                                     name = monthlyAverage.month.take(3), entries = listOf(
@@ -125,9 +125,9 @@ fun AveragesBarChart(
             }
 
             "Wind Speed" -> {
-                if (sixMonthsWeatherOverview[1].monthAverages.isNotEmpty()) {
+                if (sixMonthsWeatherData[1].monthAverages.isNotEmpty()) {
                     val barChartData =
-                        BarChartData(categories = sixMonthsWeatherOverview[1].monthAverages.flatMap { monthlyAverage ->
+                        BarChartData(categories = sixMonthsWeatherData[1].monthAverages.flatMap { monthlyAverage ->
                             listOf(
                                 BarChartCategory(
                                     name = monthlyAverage.month.take(3), entries = listOf(
@@ -201,9 +201,9 @@ fun AveragesBarChart(
             }
 
             "Day Light" -> {
-                if (sixMonthsWeatherOverview[2].monthAverages.isNotEmpty()) {
+                if (sixMonthsWeatherData[2].monthAverages.isNotEmpty()) {
                     val barChartData =
-                        BarChartData(categories = sixMonthsWeatherOverview[2].monthAverages.flatMap { monthlyAverage ->
+                        BarChartData(categories = sixMonthsWeatherData[2].monthAverages.flatMap { monthlyAverage ->
                             listOf(
                                 BarChartCategory(
                                     name = monthlyAverage.month.take(3), entries = listOf(
@@ -277,9 +277,9 @@ fun AveragesBarChart(
             }
 
             "Rain" -> {
-                if (sixMonthsWeatherOverview[3].monthAverages.isNotEmpty()) {
+                if (sixMonthsWeatherData[3].monthAverages.isNotEmpty()) {
                     val barChartData =
-                        BarChartData(categories = sixMonthsWeatherOverview[3].monthAverages.flatMap { monthlyAverage ->
+                        BarChartData(categories = sixMonthsWeatherData[3].monthAverages.flatMap { monthlyAverage ->
                             listOf(
                                 BarChartCategory(
                                     name = monthlyAverage.month.take(3), entries = listOf(

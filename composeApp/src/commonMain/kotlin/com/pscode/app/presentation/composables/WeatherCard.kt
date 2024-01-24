@@ -49,9 +49,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.carlosgub.kotlinm.charts.round
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.SixMonthsWeatherOverview
+import com.pscode.app.domain.model.SelectableItemWithIcon
+import com.pscode.app.domain.model.SixMonthsWeatherData
 import com.pscode.app.domain.model.WeatherInfo
-import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
 import kotlin.math.roundToInt
 
 data class WeatherItemData(
@@ -72,7 +72,7 @@ data class WeatherTabItem(
 fun WeatherCard(
     countryName: String,
     weatherInfo: WeatherInfo?,
-    sixMonthsWeatherOverview: List<SixMonthsWeatherOverview>,
+    sixMonthsWeatherData: List<SixMonthsWeatherData>,
     chartSelectionItems: List<SelectableItemWithIcon>,
     onChartSelectionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -218,7 +218,7 @@ fun WeatherCard(
 
                     weatherTabItems.indexOf(averagesWeatherTabItem) -> {
                         AveragesBarChart(
-                            sixMonthsWeatherOverview = sixMonthsWeatherOverview,
+                            sixMonthsWeatherData = sixMonthsWeatherData,
                             chartSelectionItems = chartSelectionItems,
                             onChartSelectionItemClicked = onChartSelectionItemClicked,
                             modifier = Modifier.fillMaxSize().padding(8.dp)

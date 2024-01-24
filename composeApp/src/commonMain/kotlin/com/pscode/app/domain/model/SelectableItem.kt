@@ -1,4 +1,4 @@
-package com.pscode.app.presentation.screens.countries.overview
+package com.pscode.app.domain.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

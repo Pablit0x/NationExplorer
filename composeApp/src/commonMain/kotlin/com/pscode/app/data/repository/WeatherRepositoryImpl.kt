@@ -3,7 +3,7 @@ package com.pscode.app.data.repository
 
 import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.MonthlyAverage
-import com.pscode.app.domain.model.SixMonthsWeatherOverview
+import com.pscode.app.domain.model.SixMonthsWeatherData
 import com.pscode.app.domain.model.WeatherConditions
 import com.pscode.app.domain.model.WeatherInfo
 import com.pscode.app.domain.model.toWeatherConditions
@@ -16,7 +16,7 @@ import kotlinx.datetime.LocalDate
 class WeatherRepositoryImpl(
     private val weatherApi: WeatherApi
 ) : WeatherRepository {
-    override suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview> {
+    override suspend fun getTemperatureRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherData> {
         return when (val result =
             weatherApi.getTemperatureRangePastSixMonths(locationData = locationData)) {
 
@@ -26,8 +26,8 @@ class WeatherRepositoryImpl(
                 val datesGroupedByMonths =
                     dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
 
-                val sixMonthsWeatherOverview =
-                    SixMonthsWeatherOverview(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                val sixMonthsWeatherData =
+                    SixMonthsWeatherData(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
                         val averageTemperature =
                             dailyData.temperature2mMax.zip(dailyData.temperature2mMin) { max, min -> (max + min) / 2 }
                                 .filterIndexed { index, _ ->
@@ -39,7 +39,7 @@ class WeatherRepositoryImpl(
                                 }.average()
                         MonthlyAverage(month = month, averageValue = averageTemperature)
                     })
-                Response.Success(data = sixMonthsWeatherOverview)
+                Response.Success(data = sixMonthsWeatherData)
             }
 
             is Response.Error -> {
@@ -48,7 +48,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    override suspend fun getWindSpeedRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview> {
+    override suspend fun getWindSpeedRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherData> {
         return when (val result =
             weatherApi.getWindSpeedRangePastSixMonths(locationData = locationData)) {
 
@@ -59,8 +59,8 @@ class WeatherRepositoryImpl(
                     dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
 
 
-                val sixMonthsWeatherOverview =
-                    SixMonthsWeatherOverview(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                val sixMonthsWeatherData =
+                    SixMonthsWeatherData(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
                         val averageWindSpeed = dailyData.windSpeed10mMax.filterIndexed { index, _ ->
                             datesInMonth.contains(
                                 LocalDate.parse(
@@ -71,7 +71,7 @@ class WeatherRepositoryImpl(
 
                         MonthlyAverage(month = month, averageValue = averageWindSpeed)
                     })
-                Response.Success(data = sixMonthsWeatherOverview)
+                Response.Success(data = sixMonthsWeatherData)
             }
 
             is Response.Error -> {
@@ -80,7 +80,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    override suspend fun getDayLightRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview> {
+    override suspend fun getDayLightRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherData> {
         return when (val result =
             weatherApi.getDayLightDurationRangePastSixMonths(locationData = locationData)) {
 
@@ -91,8 +91,8 @@ class WeatherRepositoryImpl(
                     dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
 
 
-                val sixMonthsWeatherOverview =
-                    SixMonthsWeatherOverview(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                val sixMonthsWeatherData =
+                    SixMonthsWeatherData(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
                         val averageDayLightInSeconds =
                             dailyData.daylightDuration.filterIndexed { index, _ ->
                                 datesInMonth.contains(
@@ -106,7 +106,7 @@ class WeatherRepositoryImpl(
 
                         MonthlyAverage(month = month, averageValue = averageDayLightInHours)
                     })
-                Response.Success(data = sixMonthsWeatherOverview)
+                Response.Success(data = sixMonthsWeatherData)
             }
 
             is Response.Error -> {
@@ -115,7 +115,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    override suspend fun getRainSumRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherOverview> {
+    override suspend fun getRainSumRangePastSixMonths(locationData: LocationData): Response<SixMonthsWeatherData> {
         return when (val result =
             weatherApi.getRainSumRangePastSixMonths(locationData = locationData)) {
 
@@ -126,8 +126,8 @@ class WeatherRepositoryImpl(
                     dailyData.time.map { LocalDate.parse(it) }.groupBy { it.month.name }
 
 
-                val sixMonthsWeatherOverview =
-                    SixMonthsWeatherOverview(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
+                val sixMonthsWeatherData =
+                    SixMonthsWeatherData(monthAverages = datesGroupedByMonths.map { (month, datesInMonth) ->
                         val averageRainSumInMm = dailyData.rainSum.filterIndexed { index, _ ->
                             datesInMonth.contains(
                                 LocalDate.parse(
@@ -138,7 +138,7 @@ class WeatherRepositoryImpl(
 
                         MonthlyAverage(month = month, averageValue = averageRainSumInMm)
                     })
-                Response.Success(data = sixMonthsWeatherOverview)
+                Response.Success(data = sixMonthsWeatherData)
             }
 
             is Response.Error -> {

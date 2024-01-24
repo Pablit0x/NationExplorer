@@ -19,22 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityData
-import com.pscode.app.domain.model.TidbitData
-import com.pscode.app.presentation.screens.countries.detail.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
+import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun ExploreAndLearnCards(
-    currentTidbitId: Int,
-    tidbits: List<TidbitData>,
+    tidbitState: TidbitState,
+    celebrityState: CelebrityState,
     setCurrentTidbitId: (Int) -> Unit,
     displayShowMapCard: Boolean,
     onShowOnMapCardClicked: () -> Unit,
-    celebrity: CelebrityData?,
-    celebrityCardState: CardState,
-    tidbitCardState: CardState,
     onUpdateTidbitCardState: (CardState) -> Unit,
     onUpdateCelebrityCardState: (CardState) -> Unit,
     modifier: Modifier = Modifier
@@ -43,12 +40,14 @@ fun ExploreAndLearnCards(
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val tidbitWidth =
-        remember(tidbitCardState) { if (tidbitCardState == CardState.EXPENDED) 1f else 0.6f }
+        remember(tidbitState.cardState) { if (tidbitState.cardState == CardState.EXPENDED) 1f else 0.6f }
     val celebrityWidth =
-        remember(celebrityCardState) { if (celebrityCardState == CardState.EXPENDED) 1f else 0.6f }
+        remember(celebrityState.cardState) { if (celebrityState.cardState == CardState.EXPENDED) 1f else 0.6f }
 
-    val showSectionHeadline = remember(displayShowMapCard, tidbits, celebrity) {
-        displayShowMapCard || tidbits.isNotEmpty() || celebrity != null
+    val showSectionHeadline = remember(
+        displayShowMapCard, tidbitState.tidbitData.data, celebrityState.celebrityData.data
+    ) {
+        displayShowMapCard || tidbitState.tidbitData.data.isNotEmpty() || celebrityState.celebrityData.data.firstOrNull() != null
     }
 
     Column(
@@ -87,13 +86,11 @@ fun ExploreAndLearnCards(
 
             item {
                 TidbitCard(
-                    currentTidbitId = currentTidbitId,
-                    tidbits = tidbits,
+                    tidbitState = tidbitState,
                     setCurrentTidbitId = setCurrentTidbitId,
                     modifier = Modifier.animateContentSize().fillParentMaxWidth(tidbitWidth),
-                    cardState = tidbitCardState,
                     onClick = {
-                        when (tidbitCardState) {
+                        when (tidbitState.cardState) {
                             CardState.EXPENDED -> onUpdateTidbitCardState(CardState.COLLAPSED)
                             CardState.COLLAPSED -> {
                                 onUpdateTidbitCardState(CardState.EXPENDED)
@@ -107,11 +104,11 @@ fun ExploreAndLearnCards(
             }
 
             item {
-                CelebrityCard(celebrity = celebrity,
+                CelebrityCard(
+                    celebrityState = celebrityState,
                     modifier = Modifier.animateContentSize().fillParentMaxWidth(celebrityWidth),
-                    cardState = celebrityCardState,
                     onClick = {
-                        when (celebrityCardState) {
+                        when (celebrityState.cardState) {
                             CardState.EXPENDED -> onUpdateCelebrityCardState(CardState.COLLAPSED)
                             CardState.COLLAPSED -> {
                                 onUpdateCelebrityCardState(CardState.EXPENDED)

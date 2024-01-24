@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
 import com.pscode.app.presentation.composables.AutoResizedText
+import com.pscode.app.presentation.screens.countries.overview.states.SearchWidgetState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

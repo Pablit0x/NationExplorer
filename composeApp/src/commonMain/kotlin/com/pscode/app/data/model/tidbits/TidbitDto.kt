@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Tidbit(
+data class TidbitDto(
     @SerialName("description")
     val description: String,
     @SerialName("id")

@@ -45,21 +45,16 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
-        val tidbitsList by viewModel.tidbitsList.collectAsState()
-        val celebritiesList by viewModel.celebritiesList.collectAsState()
-        val currentTidbitId by viewModel.currentTidbitId.collectAsState()
+
+        val tidbitState by viewModel.tidbitState.collectAsState()
+        val celebrityState by viewModel.celebrityState.collectAsState()
         val hasCapital = selectedCountry.capitals.isNotEmpty()
         val isMapVisible by viewModel.isMapVisible.collectAsState()
         val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
         val networkStatus by viewModel.connectivityStatus.collectAsState()
-        val tidbitCardState by viewModel.tidbitCardState.collectAsState()
-        val celebrityCardState by viewModel.celebrityCardState.collectAsState()
-        val sixMonthsTemperatureAverage by viewModel.sixMonthsTemperatureAverage.collectAsState()
-        val sixMonthsWindSpeedAverage by viewModel.sixMonthsWindSpeedAverage.collectAsState()
-        val sixMonthDayLightAverageInHours by viewModel.sixMonthDayLightAverageInHours.collectAsState()
-        val sixMonthsRainSumInMm by viewModel.sixMonthsRainSumInMm.collectAsState()
         val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
         val weatherState by viewModel.weatherInfo.collectAsState()
+        val weatherAverages by viewModel.weatherAverages.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null } }
 
@@ -166,12 +161,9 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                     )
 
                     ExploreAndLearnCards(
-                        currentTidbitId = currentTidbitId,
-                        tidbits = tidbitsList,
-                        celebrity = celebritiesList.firstOrNull(),
+                        tidbitState = tidbitState,
+                        celebrityState = celebrityState,
                         displayShowMapCard = displayShowMapButton,
-                        tidbitCardState = tidbitCardState,
-                        celebrityCardState = celebrityCardState,
                         onShowOnMapCardClicked = viewModel::showMap,
                         setCurrentTidbitId = viewModel::setCurrentTidbitId,
                         onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
@@ -184,12 +176,7 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                     if (hasCapital) {
                         WeatherCard(
                             countryName = selectedCountry.name,
-                            sixMonthsWeatherOverview = listOf(
-                                sixMonthsTemperatureAverage,
-                                sixMonthsWindSpeedAverage,
-                                sixMonthDayLightAverageInHours,
-                                sixMonthsRainSumInMm
-                            ),
+                            sixMonthsWeatherData = weatherAverages,
                             weatherInfo = weatherState,
                             chartSelectionItems = selectedChartDataItem,
                             onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },

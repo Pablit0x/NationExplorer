@@ -4,6 +4,6 @@ import com.pscode.app.domain.model.CelebrityData
 import com.pscode.app.utils.Response
 
 interface CelebrityRepository {
-    suspend fun getCelebritiesByCountryName(countryName: String): Response<List<CelebrityData>>
+    suspend fun getCelebritiesByCountryName(countryName: String): Response<CelebrityData>
 
 }

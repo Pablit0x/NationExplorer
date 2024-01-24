@@ -1,7 +1,7 @@
 package com.pscode.app.domain.model
 
-data class SixMonthsWeatherOverview(
-    val monthAverages: List<MonthlyAverage>
+data class SixMonthsWeatherData(
+    val monthAverages: List<MonthlyAverage> = emptyList()
 )
 
 data class MonthlyAverage(

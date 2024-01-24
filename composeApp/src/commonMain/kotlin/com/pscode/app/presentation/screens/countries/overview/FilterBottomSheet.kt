@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
+import com.pscode.app.domain.model.SelectableItem
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.presentation.composables.ContinentFilterSection
 import com.pscode.app.presentation.composables.PopulationFilterSection
 import com.pscode.app.presentation.composables.ResetFiltersAnimatedButton
 import com.pscode.app.presentation.composables.ShowOnlyFavouritesFilterSection
+import com.pscode.app.presentation.screens.countries.overview.states.FilterWidgetState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

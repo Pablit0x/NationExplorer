@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pscode.app.presentation.screens.countries.overview.SelectableItemWithIcon
+import com.pscode.app.domain.model.SelectableItemWithIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

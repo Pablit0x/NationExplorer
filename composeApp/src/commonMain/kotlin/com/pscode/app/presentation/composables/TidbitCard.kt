@@ -30,22 +30,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.TidbitData
-import com.pscode.app.presentation.screens.countries.detail.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
 import com.pscode.app.utils.Constants
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TidbitCard(
-    currentTidbitId: Int,
-    tidbits: List<TidbitData>,
+    tidbitState: TidbitState,
     setCurrentTidbitId: (Int) -> Unit,
     onClick: () -> Unit,
-    cardState: CardState,
     modifier: Modifier
 ) {
-    if (tidbits.isNotEmpty()) {
+    if (tidbitState.tidbitData.data.isNotEmpty()) {
         val horizontalPagerState = rememberPagerState(pageCount = { Constants.NUMBER_OF_TIDBITS })
         val scope = rememberCoroutineScope()
 
@@ -78,7 +76,7 @@ fun TidbitCard(
                         )
                     }
 
-                    if (cardState == CardState.EXPENDED) {
+                    if (tidbitState.cardState == CardState.EXPENDED) {
                         Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
                     } else {
                         Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
@@ -86,7 +84,7 @@ fun TidbitCard(
 
                 }
 
-                if (cardState == CardState.EXPENDED) {
+                if (tidbitState.cardState == CardState.EXPENDED) {
                     Column(
                         modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
                         verticalArrangement = Arrangement.SpaceBetween,
@@ -102,14 +100,14 @@ fun TidbitCard(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = tidbits[currentTidbitId].title,
+                                    text = tidbitState.tidbitData.data[tidbitState.currentId].title,
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
 
                                 Text(
-                                    text = tidbits[currentTidbitId].description,
+                                    text = tidbitState.tidbitData.data[tidbitState.currentId].description,
                                     style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier.fillMaxWidth(),
                                     textAlign = TextAlign.Center

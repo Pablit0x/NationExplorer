@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.presentation.screens.countries.overview.SelectableItem
+import com.pscode.app.domain.model.SelectableItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

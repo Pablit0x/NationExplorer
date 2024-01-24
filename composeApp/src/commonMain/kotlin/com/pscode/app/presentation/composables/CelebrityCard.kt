@@ -26,18 +26,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CelebrityData
-import com.pscode.app.presentation.screens.countries.detail.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CardState
+import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
 fun CelebrityCard(
-    celebrity: CelebrityData?, onClick: () -> Unit, cardState: CardState, modifier: Modifier
+    celebrityState: CelebrityState, onClick: () -> Unit, modifier: Modifier
 ) {
-    if (celebrity != null) {
 
-
+    celebrityState.celebrityData.data.firstOrNull()?.let { firstCelebrity ->
         ElevatedCard(modifier = modifier, shape = RoundedCornerShape(10)) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
@@ -62,7 +61,7 @@ fun CelebrityCard(
                         )
                     }
 
-                    if (cardState == CardState.EXPENDED) {
+                    if (celebrityState.cardState == CardState.EXPENDED) {
                         Icon(imageVector = Icons.Default.KeyboardArrowUp, "Close tidbit")
                     } else {
                         Icon(imageVector = Icons.Default.KeyboardArrowDown, "Show tidbit")
@@ -70,14 +69,14 @@ fun CelebrityCard(
 
                 }
 
-                if (cardState == CardState.EXPENDED) {
+                if (celebrityState.cardState == CardState.EXPENDED) {
                     Row(
                         modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
 
                         KamelImage(
-                            resource = asyncPainterResource(celebrity.imageUrl),
+                            resource = asyncPainterResource(firstCelebrity.imageUrl),
                             contentDescription = "Celebrity Photo",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.clip(shape = RoundedCornerShape(100))
@@ -90,14 +89,14 @@ fun CelebrityCard(
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = celebrity.name,
+                                text = firstCelebrity.name,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
-                                text = celebrity.description,
+                                text = firstCelebrity.description,
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
