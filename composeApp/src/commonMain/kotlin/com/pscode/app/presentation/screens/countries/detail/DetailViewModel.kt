@@ -64,9 +64,6 @@ class DetailViewModel(
     private val _currentTidbitId = MutableStateFlow(0)
     val currentTidbitId = _currentTidbitId.asStateFlow()
 
-    private val _didFetchFail = MutableStateFlow(false)
-    val didFetchFail = _didFetchFail.asStateFlow()
-
     private val _tidbitCardState = MutableStateFlow(CardState.COLLAPSED)
     val tidbitCardState = _tidbitCardState.asStateFlow()
 
@@ -116,9 +113,7 @@ class DetailViewModel(
                     }
                 }
 
-                is Response.Error -> {
-
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -133,9 +128,7 @@ class DetailViewModel(
                     }
                 }
 
-                is Response.Error -> {
-                    _eventsChannel.send(Event.ShowSnackbarMessage(result.message))
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -242,7 +235,6 @@ class DetailViewModel(
                 }
 
                 is Response.Error -> {
-                    _didFetchFail.update { true }
                 }
             }
         }
@@ -257,11 +249,7 @@ class DetailViewModel(
                     _sixMonthsTemperatureAverage.update { response.data }
                 }
 
-                is Response.Error -> {
-                    _eventsChannel.send(
-                        Event.ShowSnackbarMessage(message = response.message)
-                    )
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -275,11 +263,7 @@ class DetailViewModel(
                     _sixMonthsDayLightAverageInHours.update { response.data }
                 }
 
-                is Response.Error -> {
-                    _eventsChannel.send(
-                        Event.ShowSnackbarMessage(message = response.message)
-                    )
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -293,11 +277,7 @@ class DetailViewModel(
                     _sixMonthsRainSumInMm.update { response.data }
                 }
 
-                is Response.Error -> {
-                    _eventsChannel.send(
-                        Event.ShowSnackbarMessage(message = response.message)
-                    )
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -311,11 +291,7 @@ class DetailViewModel(
                     _sixMonthsWindSpeedAverage.update { response.data }
                 }
 
-                is Response.Error -> {
-                    _eventsChannel.send(
-                        Event.ShowSnackbarMessage(message = response.message)
-                    )
-                }
+                is Response.Error -> {}
             }
         }
     }
@@ -331,7 +307,6 @@ class DetailViewModel(
 
     fun resetViewModel() {
         _isMapVisible.update { false }
-        _didFetchFail.update { false }
         _weatherInfo.update { null }
         _countryGeolocation.update { null }
         _tidbitsList.update { emptyList() }
@@ -339,6 +314,9 @@ class DetailViewModel(
         _tidbitCardState.update { CardState.COLLAPSED }
         _celebrityCardState.update { CardState.COLLAPSED }
         _sixMonthsTemperatureAverage.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _sixMonthsRainSumInMm.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _sixMonthsDayLightAverageInHours.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
+        _sixMonthsWindSpeedAverage.update { SixMonthsWeatherOverview(monthAverages = emptyList()) }
     }
 
 }

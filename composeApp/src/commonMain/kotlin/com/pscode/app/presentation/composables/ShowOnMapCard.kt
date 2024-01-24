@@ -30,8 +30,6 @@ fun ShowOnMapCard(
     AnimatedVisibility(
         visible = visible, enter = slideInHorizontally(), exit = slideOutHorizontally()
     ) {
-
-
         ElevatedCard(modifier = modifier, shape = RoundedCornerShape(10), onClick = onClick) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)

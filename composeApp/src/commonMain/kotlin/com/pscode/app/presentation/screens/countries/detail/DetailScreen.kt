@@ -51,7 +51,6 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
         val hasCapital = selectedCountry.capitals.isNotEmpty()
         val isMapVisible by viewModel.isMapVisible.collectAsState()
         val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
-        val fetchFailure by viewModel.didFetchFail.collectAsState()
         val networkStatus by viewModel.connectivityStatus.collectAsState()
         val tidbitCardState by viewModel.tidbitCardState.collectAsState()
         val celebrityCardState by viewModel.celebrityCardState.collectAsState()
@@ -62,7 +61,7 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
         val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
         val weatherState by viewModel.weatherInfo.collectAsState()
 
-        val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null && networkStatus == Status.Available } }
+        val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null } }
 
         val navigator = LocalNavigator.currentOrThrow
 
@@ -109,11 +108,9 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
         LaunchedEffect(networkStatus) {
             when (networkStatus) {
                 Status.Available -> {
-                    if (fetchFailure) {
-                        viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
-                        viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
-                        viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
-                    }
+                    viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
+                    viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
+                    viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
                 }
 
                 Status.Unavailable -> {

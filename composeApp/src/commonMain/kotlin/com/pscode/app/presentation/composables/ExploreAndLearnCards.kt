@@ -1,6 +1,9 @@
 package com.pscode.app.presentation.composables
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,16 +47,23 @@ fun ExploreAndLearnCards(
     val celebrityWidth =
         remember(celebrityCardState) { if (celebrityCardState == CardState.EXPENDED) 1f else 0.6f }
 
+    val showSectionHeadline = remember(displayShowMapCard, tidbits, celebrity) {
+        displayShowMapCard || tidbits.isNotEmpty() || celebrity != null
+    }
+
     Column(
         modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
-            AutoResizedText(
-                text = SharedRes.string.explore_and_learn,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+
+        AnimatedVisibility(visible = showSectionHeadline, enter = fadeIn(), exit = fadeOut()) {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+                AutoResizedText(
+                    text = SharedRes.string.explore_and_learn,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
 
 
@@ -76,7 +86,8 @@ fun ExploreAndLearnCards(
             }
 
             item {
-                TidbitCard(currentTidbitId = currentTidbitId,
+                TidbitCard(
+                    currentTidbitId = currentTidbitId,
                     tidbits = tidbits,
                     setCurrentTidbitId = setCurrentTidbitId,
                     modifier = Modifier.animateContentSize().fillParentMaxWidth(tidbitWidth),
