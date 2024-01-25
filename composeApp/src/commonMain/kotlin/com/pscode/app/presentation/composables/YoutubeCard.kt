@@ -35,8 +35,7 @@ fun YoutubeCard(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().noRippleClickable(onClick)
-                        .padding(bottom = 4.dp),
+                    modifier = Modifier.fillMaxWidth().noRippleClickable(onClick),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -67,7 +66,7 @@ fun YoutubeCard(
                         modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        YoutubeView(videoId = youtubeVideoData.videoId, modifier = Modifier.fillMaxSize())
+                        YoutubeView(videoId = youtubeVideoData.videoId, modifier = Modifier.fillMaxSize().padding(top = 4.dp))
                     }
                 }
             }
