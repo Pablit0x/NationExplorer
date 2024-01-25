@@ -2,8 +2,10 @@ package com.pscode.app.domain.model
 
 import com.pscode.app.data.model.weather.live.weather.WeatherDataDto
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 data class WeatherData(
@@ -54,14 +56,16 @@ fun WeatherDataDto.toWeatherDataMap(weatherConditions: List<WeatherConditions>):
 
 fun WeatherDataDto.toWeatherInfo(weatherConditions: List<WeatherConditions>): WeatherInfo {
     val weatherDataMap = this.toWeatherDataMap(weatherConditions = weatherConditions)
-    val now = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
+    val timeZone = TimeZone.currentSystemDefault()
+    val nowInstant = Clock.System.now()
+    val now = nowInstant.toLocalDateTime(timeZone = timeZone)
+
     val currentWeatherData = weatherDataMap[0]?.find {
-        val hour = if(now.minute < 30) now.hour else now.hour + 1
+        val hour = if (now.minute < 30) now.hour else nowInstant.plus(DateTimePeriod(hours = 1), timeZone).toLocalDateTime(timeZone = timeZone).hour
         it.date.hour == hour
     }
     return WeatherInfo(
-        weatherDataPerDay = weatherDataMap,
-        currentWeatherData = currentWeatherData
+        weatherDataPerDay = weatherDataMap, currentWeatherData = currentWeatherData
     )
 }
 

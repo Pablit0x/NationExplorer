@@ -14,6 +14,7 @@ import com.pscode.app.domain.repository.WeatherRepository
 import com.pscode.app.presentation.screens.countries.detail.states.CardState
 import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
 import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
+import com.pscode.app.presentation.screens.countries.detail.states.YoutubeVideoState
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Constants
 import com.pscode.app.utils.NetworkConnectivity
@@ -62,6 +63,9 @@ class DetailViewModel(
 
     private val _celebrityState = MutableStateFlow(CelebrityState())
     val celebrityState = _celebrityState.asStateFlow()
+
+    private val _youtubeVideoState = MutableStateFlow(YoutubeVideoState())
+    val youtubeVideoState = _youtubeVideoState.asStateFlow()
 
     private val _sixMonthsTemperatureAverage = MutableStateFlow(SixMonthsWeatherData())
     private val _sixMonthsWindSpeedAverage = MutableStateFlow(SixMonthsWeatherData())
@@ -122,7 +126,9 @@ class DetailViewModel(
                     }
                 }
 
-                is Response.Error -> {}
+                is Response.Error -> {
+                    _eventsChannel.send(Event.ShowSnackbarMessage(result.message))
+                }
             }
         }
     }
@@ -223,6 +229,14 @@ class DetailViewModel(
         }
     }
 
+    fun updateYoutubeCardState(newState: CardState){
+        _youtubeVideoState.update {
+            it.copy(
+                cardState = newState
+            )
+        }
+    }
+
 
     fun getGeolocationByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -236,11 +250,11 @@ class DetailViewModel(
                         result.data
                     }
                     _countryGeolocation.value?.let { locationOverview ->
-                        getCurrentWeather(locationData = locationOverview)
                         getTemperatureRangePastSixMonths(locationData = locationOverview)
                         getWindSpeedRangePastSixMonths(locationData = locationOverview)
                         getDayLightRangePastSixMonths(locationData = locationOverview)
                         getRainSumRangePastSixMonths(locationData = locationOverview)
+                        getCurrentWeather(locationData = locationOverview)
                     }
                 }
 

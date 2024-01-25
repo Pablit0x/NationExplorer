@@ -26,6 +26,7 @@ maps-compose = "2.7.2"
 maps-services = "18.2.0"
 secrets-plugin = "2.0.1"
 mongodb-realm = "1.13.0"
+android-yt-player = "12.1.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -57,6 +58,7 @@ kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" 
 google-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
 google-play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps-services" }
 mongodb-realm = { module = "io.realm.kotlin:library-sync", version.ref = "mongodb-realm" }
+android-youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "android-yt-player"}
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

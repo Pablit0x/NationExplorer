@@ -8,6 +8,8 @@ import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
 import com.pscode.app.presentation.theme.AppTheme
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import org.koin.compose.KoinApplication
 
 
@@ -25,6 +27,9 @@ internal fun App() {
     }
 }
 
+fun debugBuild() {
+    Napier.base(DebugAntilog())
+}
 
 
 

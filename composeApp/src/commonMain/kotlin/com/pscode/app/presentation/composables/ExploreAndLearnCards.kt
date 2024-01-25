@@ -22,6 +22,7 @@ import com.pscode.app.SharedRes
 import com.pscode.app.presentation.screens.countries.detail.states.CardState
 import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
 import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
+import com.pscode.app.presentation.screens.countries.detail.states.YoutubeVideoState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -29,11 +30,13 @@ import kotlinx.coroutines.launch
 fun ExploreAndLearnCards(
     tidbitState: TidbitState,
     celebrityState: CelebrityState,
+    youtubeVideoState: YoutubeVideoState,
     setCurrentTidbitId: (Int) -> Unit,
     displayShowMapCard: Boolean,
     onShowOnMapCardClicked: () -> Unit,
     onUpdateTidbitCardState: (CardState) -> Unit,
     onUpdateCelebrityCardState: (CardState) -> Unit,
+    onUpdateYoutubeCardState: (CardState) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -43,6 +46,8 @@ fun ExploreAndLearnCards(
         remember(tidbitState.cardState) { if (tidbitState.cardState == CardState.EXPENDED) 1f else 0.6f }
     val celebrityWidth =
         remember(celebrityState.cardState) { if (celebrityState.cardState == CardState.EXPENDED) 1f else 0.6f }
+    val youtubeWidth =
+        remember(youtubeVideoState.cardState) { if (youtubeVideoState.cardState == CardState.EXPENDED) 1f else 0.6f }
 
     val showSectionHeadline = remember(
         displayShowMapCard, tidbitState.tidbitData.data, celebrityState.celebrityData.data
@@ -85,8 +90,7 @@ fun ExploreAndLearnCards(
             }
 
             item {
-                TidbitCard(
-                    tidbitState = tidbitState,
+                TidbitCard(tidbitState = tidbitState,
                     setCurrentTidbitId = setCurrentTidbitId,
                     modifier = Modifier.animateContentSize().fillParentMaxWidth(tidbitWidth),
                     onClick = {
@@ -104,8 +108,7 @@ fun ExploreAndLearnCards(
             }
 
             item {
-                CelebrityCard(
-                    celebrityState = celebrityState,
+                CelebrityCard(celebrityState = celebrityState,
                     modifier = Modifier.animateContentSize().fillParentMaxWidth(celebrityWidth),
                     onClick = {
                         when (celebrityState.cardState) {
@@ -119,6 +122,28 @@ fun ExploreAndLearnCards(
                             }
                         }
                     })
+            }
+
+            item {
+                YoutubeCard(
+                    youtubeVideoState = youtubeVideoState,
+                    onClick = {
+                        when (youtubeVideoState.cardState) {
+                            CardState.COLLAPSED -> {
+                                onUpdateYoutubeCardState(CardState.EXPENDED)
+                                scope.launch {
+                                    delay(500)
+                                    listState.animateScrollToItem(3)
+                                }
+                            }
+
+                            CardState.EXPENDED -> {
+                                onUpdateYoutubeCardState(CardState.COLLAPSED)
+                            }
+                        }
+                    },
+                    modifier = Modifier.animateContentSize().fillParentMaxWidth(youtubeWidth),
+                )
             }
         }
 

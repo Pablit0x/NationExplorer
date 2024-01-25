@@ -71,6 +71,7 @@
     <string name="no_internet">No Internet Connection ⚠️</string>
     <string name="dismiss">Dismiss</string>
     <string name="most_famous_person">Famous person</string>
+    <string name="video">Video</string>
     <string name="explore_and_learn">Explore &amp; Learn</string>
     <string name="average_temperature">Average Temperature in ${month}</string>
     <string name="average_wind_speed">Average Wind Speed in ${month}</string>

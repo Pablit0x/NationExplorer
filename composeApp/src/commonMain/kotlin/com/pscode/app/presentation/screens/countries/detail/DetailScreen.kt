@@ -45,15 +45,15 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
-
         val tidbitState by viewModel.tidbitState.collectAsState()
         val celebrityState by viewModel.celebrityState.collectAsState()
+        val youtubeVideoState by viewModel.youtubeVideoState.collectAsState()
         val hasCapital = selectedCountry.capitals.isNotEmpty()
         val isMapVisible by viewModel.isMapVisible.collectAsState()
         val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
         val networkStatus by viewModel.connectivityStatus.collectAsState()
         val selectedChartDataItem by viewModel.selectedChartData.collectAsState()
-        val weatherState by viewModel.weatherInfo.collectAsState()
+        val weatherInfo by viewModel.weatherInfo.collectAsState()
         val weatherAverages by viewModel.weatherAverages.collectAsState()
 
         val displayShowMapButton by remember { derivedStateOf { countryGeolocation != null } }
@@ -163,26 +163,25 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                     ExploreAndLearnCards(
                         tidbitState = tidbitState,
                         celebrityState = celebrityState,
+                        youtubeVideoState = youtubeVideoState,
                         displayShowMapCard = displayShowMapButton,
                         onShowOnMapCardClicked = viewModel::showMap,
                         setCurrentTidbitId = viewModel::setCurrentTidbitId,
                         onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
                         onUpdateTidbitCardState = viewModel::updateTidbitCardState,
+                        onUpdateYoutubeCardState = viewModel::updateYoutubeCardState,
                         modifier = Modifier.fillMaxWidth()
                     )
 
 
-
-                    if (hasCapital) {
-                        WeatherCard(
-                            countryName = selectedCountry.name,
-                            sixMonthsWeatherData = weatherAverages,
-                            weatherInfo = weatherState,
-                            chartSelectionItems = selectedChartDataItem,
-                            onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                    WeatherCard(
+                        countryName = selectedCountry.name,
+                        sixMonthsWeatherData = weatherAverages,
+                        weatherInfo = weatherInfo,
+                        chartSelectionItems = selectedChartDataItem,
+                        onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }

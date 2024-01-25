@@ -21,6 +21,7 @@ class AndroidApp : Application() {
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        debugBuild()
         countryCacheFilePath = "${filesDir.path}/country_cache.json"
         geolocationCachePath = "${filesDir.path}/geolocation_cache.json"
         setContent {
