@@ -11,7 +11,6 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
-import com.pscode.app.domain.repository.YoutubeVideoRepository
 import com.pscode.app.presentation.screens.countries.detail.states.CardState
 import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
 import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
@@ -40,7 +39,6 @@ class DetailViewModel(
     private val tidbitsRepository: TidbitsRepository,
     private val countryRepository: CountryRepository,
     private val celebrityRepository: CelebrityRepository,
-    private val youtubeVideoRepository: YoutubeVideoRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
@@ -100,10 +98,19 @@ class DetailViewModel(
             val result = tidbitsRepository.getTidbitsByCountryName(countryName = countryName)
             when (result) {
                 is Response.Success -> {
-                    _tidbitState.update {
-                        it.copy(
-                            tidbitData = result.data, errorMessage = null
-                        )
+                    result.data.let { (tidbitData, youtubeVideoData) ->
+
+                        _tidbitState.update {
+                            it.copy(
+                                tidbitData = tidbitData
+                            )
+                        }
+
+                        _youtubeVideoState.update {
+                            it.copy(
+                                youtubeVideoData = youtubeVideoData
+                            )
+                        }
                     }
                 }
 
@@ -149,29 +156,6 @@ class DetailViewModel(
 
                 is Response.Error -> {
                     _celebrityState.update {
-                        it.copy(
-                            errorMessage = result.message
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun getYoutubeVideoForCountry(countryName: String) {
-        viewModelScope.launch {
-            val result = youtubeVideoRepository.getVideoIdByCountry(countryName = countryName)
-            when (result) {
-                is Response.Success -> {
-                    _youtubeVideoState.update {
-                        it.copy(
-                            youtubeVideoData = result.data
-                        )
-                    }
-                }
-
-                is Response.Error -> {
-                    _youtubeVideoState.update {
                         it.copy(
                             errorMessage = result.message
                         )
@@ -360,6 +344,7 @@ class DetailViewModel(
         _countryGeolocation.update { null }
         _tidbitState.update { TidbitState() }
         _celebrityState.update { CelebrityState() }
+        _youtubeVideoState.update { YoutubeVideoState() }
         _sixMonthsTemperatureAverage.update { SixMonthsWeatherData(monthAverages = emptyList()) }
         _sixMonthsRainSumInMm.update { SixMonthsWeatherData(monthAverages = emptyList()) }
         _sixMonthsDayLightAverageInHours.update { SixMonthsWeatherData(monthAverages = emptyList()) }

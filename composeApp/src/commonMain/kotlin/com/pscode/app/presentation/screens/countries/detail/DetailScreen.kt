@@ -98,7 +98,6 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
             viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
             viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
             viewModel.setFavouriteStatus(isFavourite = selectedCountry.isFavourite)
-            viewModel.getYoutubeVideoForCountry(countryName = selectedCountry.name)
         }
 
         LaunchedEffect(networkStatus) {

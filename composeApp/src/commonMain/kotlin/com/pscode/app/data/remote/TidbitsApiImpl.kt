@@ -15,7 +15,7 @@ import kotlinx.coroutines.CancellationException
 
 class TidbitsApiImpl(private val httpClient: HttpClient) : TidbitsApi {
 
-    private val baseUrl = "https://pablit0x.github.io/nation_explorer_tidbits_api/"
+    private val baseUrl = "https://pablit0x.github.io/nation_explorer_tidbits_api"
 
     override suspend fun getTidbitsByCountryName(countryName: String): Response<TidbitsDto> {
         return try {
