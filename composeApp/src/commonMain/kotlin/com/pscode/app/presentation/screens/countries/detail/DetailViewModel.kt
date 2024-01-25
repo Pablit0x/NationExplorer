@@ -11,6 +11,7 @@ import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
+import com.pscode.app.domain.repository.YoutubeVideoRepository
 import com.pscode.app.presentation.screens.countries.detail.states.CardState
 import com.pscode.app.presentation.screens.countries.detail.states.CelebrityState
 import com.pscode.app.presentation.screens.countries.detail.states.TidbitState
@@ -39,6 +40,7 @@ class DetailViewModel(
     private val tidbitsRepository: TidbitsRepository,
     private val countryRepository: CountryRepository,
     private val celebrityRepository: CelebrityRepository,
+    private val youtubeVideoRepository: YoutubeVideoRepository,
     networkConnectivity: NetworkConnectivity
 ) : ViewModel() {
 
@@ -156,6 +158,29 @@ class DetailViewModel(
         }
     }
 
+    fun getYoutubeVideoForCountry(countryName: String) {
+        viewModelScope.launch {
+            val result = youtubeVideoRepository.getVideoIdByCountry(countryName = countryName)
+            when (result) {
+                is Response.Success -> {
+                    _youtubeVideoState.update {
+                        it.copy(
+                            youtubeVideoData = result.data
+                        )
+                    }
+                }
+
+                is Response.Error -> {
+                    _youtubeVideoState.update {
+                        it.copy(
+                            errorMessage = result.message
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     fun setCurrentTidbitId(id: Int) {
         _tidbitState.update {
             it.copy(
@@ -229,7 +254,7 @@ class DetailViewModel(
         }
     }
 
-    fun updateYoutubeCardState(newState: CardState){
+    fun updateYoutubeCardState(newState: CardState) {
         _youtubeVideoState.update {
             it.copy(
                 cardState = newState

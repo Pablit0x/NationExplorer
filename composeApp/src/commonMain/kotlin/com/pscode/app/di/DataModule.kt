@@ -7,24 +7,28 @@ import com.pscode.app.data.remote.CountryApiImpl
 import com.pscode.app.data.remote.GeolocationApiImpl
 import com.pscode.app.data.remote.TidbitsApiImpl
 import com.pscode.app.data.remote.WeatherApiImpl
+import com.pscode.app.data.remote.YoutubeVideoApiImpl
 import com.pscode.app.data.repository.CelebrityRepositoryImpl
 import com.pscode.app.data.repository.CountryRepositoryImpl
 import com.pscode.app.data.repository.GeolocationRepositoryImpl
 import com.pscode.app.data.repository.MongoRepositoryImpl
 import com.pscode.app.data.repository.TidbitsRepositoryImpl
 import com.pscode.app.data.repository.WeatherRepositoryImpl
+import com.pscode.app.data.repository.YoutubeVideoRepositoryImpl
 import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.remote.CelebrityApi
 import com.pscode.app.domain.remote.CountryApi
 import com.pscode.app.domain.remote.GeolocationApi
 import com.pscode.app.domain.remote.TidbitsApi
 import com.pscode.app.domain.remote.WeatherApi
+import com.pscode.app.domain.remote.YoutubeVideoApi
 import com.pscode.app.domain.repository.CelebrityRepository
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.GeolocationRepository
 import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.domain.repository.TidbitsRepository
 import com.pscode.app.domain.repository.WeatherRepository
+import com.pscode.app.domain.repository.YoutubeVideoRepository
 import com.pscode.app.utils.Constants.APP_ID
 import com.russhwolf.settings.Settings
 import io.github.xxfast.kstore.KStore
@@ -68,4 +72,6 @@ val dataModule = module {
     single<TidbitsRepository> { TidbitsRepositoryImpl(tidbitsApi = get()) }
     single<CelebrityApi> { CelebrityApiImpl(httpClient = get()) }
     single<CelebrityRepository> { CelebrityRepositoryImpl(celebrityApi = get()) }
+    single<YoutubeVideoApi>{YoutubeVideoApiImpl(httpClient = get())}
+    single<YoutubeVideoRepository>{YoutubeVideoRepositoryImpl(youtubeVideoApi = get())}
 }

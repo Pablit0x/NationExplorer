@@ -14,6 +14,7 @@ val viewModelModule = module {
             tidbitsRepository = get(),
             countryRepository = get(),
             celebrityRepository = get(),
+            youtubeVideoRepository = get(),
             networkConnectivity = get()
         )
     }

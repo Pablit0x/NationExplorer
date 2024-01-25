@@ -29,7 +29,7 @@ import com.pscode.app.presentation.screens.countries.detail.states.YoutubeVideoS
 fun YoutubeCard(
     youtubeVideoState: YoutubeVideoState, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    youtubeVideoState.videoId?.let { videoId ->
+    youtubeVideoState.youtubeVideoData?.let { youtubeVideoData ->
         ElevatedCard(modifier = modifier, shape = RoundedCornerShape(10)) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
@@ -67,7 +67,7 @@ fun YoutubeCard(
                         modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        YoutubeView(videoId = videoId, modifier = Modifier.fillMaxSize())
+                        YoutubeView(videoId = youtubeVideoData.videoId, modifier = Modifier.fillMaxSize())
                     }
                 }
             }
