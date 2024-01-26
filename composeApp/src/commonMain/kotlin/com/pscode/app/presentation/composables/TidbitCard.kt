@@ -86,7 +86,7 @@ fun TidbitCard(
 
                 if (tidbitState.cardState == CardState.EXPENDED) {
                     Column(
-                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 8.dp),
+                        modifier = Modifier.fillMaxWidth().height(200.dp),
                         verticalArrangement = Arrangement.SpaceBetween,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

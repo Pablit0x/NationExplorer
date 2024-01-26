@@ -63,10 +63,13 @@ fun YoutubeCard(
 
                 if (youtubeVideoState.cardState == CardState.EXPENDED) {
                     Box(
-                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(vertical = 16.dp),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxWidth().height(200.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        YoutubeView(videoId = youtubeVideoData.videoId, modifier = Modifier.fillMaxSize().padding(top = 4.dp))
+                        YoutubeView(
+                            videoId = youtubeVideoData.videoId,
+                            modifier = Modifier.fillMaxSize().padding(vertical = 4.dp)
+                        )
                     }
                 }
             }

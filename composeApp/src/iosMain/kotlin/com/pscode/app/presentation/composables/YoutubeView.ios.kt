@@ -9,6 +9,7 @@ import androidx.compose.ui.interop.UIKitView
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLRequest
+import platform.UIKit.scalesLargeContentImage
 import platform.WebKit.WKWebView
 
 @OptIn(ExperimentalForeignApi::class)
@@ -20,6 +21,7 @@ actual fun YoutubeView(videoId: String, modifier: Modifier) {
     val webView by remember {
         mutableStateOf(WKWebView().apply {
             scrollView.scrollEnabled = false
+            scalesLargeContentImage = true
             loadRequest(NSURLRequest(youtubeUrl ?: return@apply))
         })
     }

@@ -154,7 +154,8 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    DetailedCountryOverviewCard(
+
+                DetailedCountryOverviewCard(
                         selectedCountry = selectedCountry,
                         hasCapitalCity = hasCapital,
                         modifier = Modifier.fillMaxWidth()
