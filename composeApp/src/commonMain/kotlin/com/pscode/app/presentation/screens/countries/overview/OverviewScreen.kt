@@ -37,6 +37,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
 import com.pscode.app.domain.model.CountryData
@@ -101,21 +102,20 @@ class OverviewScreen : Screen {
             }
         }
 
-        Scaffold(
-            topBar = {
-                OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
-                    searchWidgetState = searchState.widgetState,
-                    searchTextState = searchText,
-                    isFiltering = filterState.isFiltering,
-                    onFilterClicked = { viewModel.updateFilterWidgetState(newState = WidgetState.OPEN) },
-                    onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = WidgetState.CLOSED) },
-                    onSearchTriggered = { viewModel.updateSearchWidgetState(newState = WidgetState.OPEN) },
-                    onSearchTextChange = { updatedSearchText -> viewModel.updateSearchText(text = updatedSearchText) })
-            },
+        Scaffold(topBar = {
+            OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
+                searchWidgetState = searchState.widgetState,
+                searchTextState = searchText,
+                isFiltering = filterState.isFiltering,
+                onFilterClicked = { viewModel.updateFilterWidgetState(newState = WidgetState.OPEN) },
+                onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = WidgetState.CLOSED) },
+                onSearchTriggered = { viewModel.updateSearchWidgetState(newState = WidgetState.OPEN) },
+                onSearchTextChange = { updatedSearchText -> viewModel.updateSearchText(text = updatedSearchText) })
+        },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        navigator.push(item = FlagGameScreen())
+                        navigator.navigate(screen = FlagGameScreen())
                     },
                     icon = {
                         Icon(
@@ -167,9 +167,7 @@ class OverviewScreen : Screen {
                                     CountryListItem(
                                         countryData = country,
                                         onCountryClick = { selectedCountry ->
-                                            navigator.push(
-                                                item = DetailScreen(selectedCountry = selectedCountry)
-                                            )
+                                            navigator.navigate(screen = DetailScreen(selectedCountry = selectedCountry))
                                         },
                                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                                     )
@@ -188,8 +186,7 @@ class OverviewScreen : Screen {
                         )
                     }
 
-                    FilterBottomSheet(
-                        sheetState = sheetState,
+                    FilterBottomSheet(sheetState = sheetState,
                         filterState = filterState,
                         onUpdateFilterWidgetState = { updatedFilterWidgetState ->
                             viewModel.updateFilterWidgetState(updatedFilterWidgetState)
@@ -223,4 +220,10 @@ private fun getScrollIndex(
         index += 1 + value.size
     }
     return index
+}
+
+private fun Navigator.navigate(screen: Screen) {
+    if (this.lastItem is OverviewScreen) {
+        this.push(item = screen)
+    }
 }
