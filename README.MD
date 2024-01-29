@@ -51,7 +51,7 @@ Nation Explorer - https://bit.ly/nation-explorer
 
 ## Demo
 
-https://github.com/Pablit0x/NationExplorer/assets/76017191/11776003-a988-4dba-ba37-018e04a7d645
+https://github.com/Pablit0x/NationExplorer/assets/76017191/06693236-55c2-4ea1-ac8b-6478a36653e2
 
 ## Screenshots
 
