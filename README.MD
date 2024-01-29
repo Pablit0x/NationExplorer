@@ -57,7 +57,7 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/06693236-55c2-4ea1-ac
 
 ### Android
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/4c279a34-74b3-4b6d-a868-590d1cce5966)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/b79f6669-2d97-4ce0-9314-9291d55a7786)
 
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/e1b532b4-1282-4535-a955-018136a4f8ac)
 
@@ -65,7 +65,7 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/06693236-55c2-4ea1-ac
 
 ![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/08487342-af1b-4665-b8c4-5441e03163fc)
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/23156731-9a7a-4544-ab36-362b0f0e04d0)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/ccaf76b7-0b46-4e6a-9ec4-f91c6eae3f59)
 
 ### iOS
 
