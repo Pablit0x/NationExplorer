@@ -4,7 +4,7 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**for both 
 that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users
 with an engaging experience to discover and interact with countries across the globe.
 
-![world](https://github.com/Pablit0x/NationExplorer/assets/76017191/f888ae2a-b096-4ed9-b9d6-4d19aa2b0fef)
+![world](https://github.com/Pablit0x/NationExplorer/assets/76017191/badcca82-e8c5-4c25-b9db-dc7470d60507)
 
 ## Features
 
@@ -51,24 +51,32 @@ Nation Explorer - https://bit.ly/nation-explorer
 
 ## Demo
 
-https://github.com/Pablit0x/NationExplorer/assets/76017191/11776003-a988-4dba-ba37-018e04a7d645
+https://github.com/Pablit0x/NationExplorer/assets/76017191/06693236-55c2-4ea1-ac8b-6478a36653e2
 
 ## Screenshots
 
 ### Android
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/4c279a34-74b3-4b6d-a868-590d1cce5966)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/b79f6669-2d97-4ce0-9314-9291d55a7786)
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/2dc487f7-f900-409f-b9f9-9eac6b1899e7)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/e1b532b4-1282-4535-a955-018136a4f8ac)
 
-![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/23156731-9a7a-4544-ab36-362b0f0e04d0)
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/3356596f-92e5-44e6-b059-6b538007e11c)
+
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/08487342-af1b-4665-b8c4-5441e03163fc)
+
+![Android Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/ccaf76b7-0b46-4e6a-9ec4-f91c6eae3f59)
 
 ### iOS
 
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/39f74495-65de-44f1-bb3c-bdd2438374fe)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/97fd25fe-1a19-4e85-99ba-61896659cc0b)
 
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/ffacf4bf-089a-4b80-a40d-98fa343585c9)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/12e66609-361d-4f5e-97ca-02ed05da38ac)
 
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/14df6335-1f41-4fe2-b3f8-d318b6c17cdf)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/c3d2b5e8-153c-445e-8f03-90417ed8d15e)
+
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/285c140f-069f-4b0f-870e-c73633f7cbcf)
+
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/6ac792c0-7ed7-4a9c-a179-2b83d7309b6f)
 
 Feel free to contribute, report issues, or suggest enhancements!
