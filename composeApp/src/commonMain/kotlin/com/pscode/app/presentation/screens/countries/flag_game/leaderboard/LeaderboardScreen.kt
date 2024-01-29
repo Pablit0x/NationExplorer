@@ -35,12 +35,13 @@ class LeaderboardScreen : Screen {
 
 
         Scaffold(topBar = { LeaderBoardScreenTopBar(navigator = navigator) }) { innerPadding ->
-            if (isLoading) {
+            if (isLoading || results.isEmpty()) {
                 FullScreenLoadingIndicator(innerPadding = innerPadding,
                     onNavigateBackOnDrag = { navigator.popUntilRoot() })
             } else {
                 Column(
                     modifier = Modifier.fillMaxSize().padding(innerPadding)
+                        .padding(horizontal = 2.dp)
                         .navigateBackOnDrag(onNavigateBack = { navigator.popUntilRoot() })
                 ) {
 

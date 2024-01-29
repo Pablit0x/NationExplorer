@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.ResultData
+import com.pscode.app.domain.model.Result
 import com.pscode.app.presentation.composables.AnimatedBorderCard
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.utils.Constants
@@ -30,7 +30,7 @@ import com.pscode.app.utils.Constants
 @Composable
 fun TopRankItem(
     rank: Int,
-    resultData: ResultData,
+    resultData: Result,
     borderGradientColors: List<Color>,
     modifier: Modifier = Modifier
 ) {

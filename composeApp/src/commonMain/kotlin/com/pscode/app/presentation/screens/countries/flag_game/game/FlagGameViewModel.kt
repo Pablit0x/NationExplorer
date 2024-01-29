@@ -1,7 +1,7 @@
 package com.pscode.app.presentation.screens.countries.flag_game.game
 
 import com.pscode.app.domain.model.CountryData
-import com.pscode.app.domain.model.ResultData
+import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.CountryRepository
 import com.pscode.app.domain.repository.MongoRepository
 import com.pscode.app.utils.Constants
@@ -243,13 +243,12 @@ class FlagGameViewModel(
     }
 
     private fun sendPersonalBestToOnlineLeaderboard() {
-        val resultData = ResultData().apply {
+        val resultData = Result().apply {
             score = userScore.value
             time = currentStopWatchTime.value
             timeMillis = parseTimeToMillis(timeString = currentStopWatchTime.value)
             username = _username.value
         }
-
         viewModelScope.launch(Dispatchers.IO) {
             mongoRepository.upsertResult(resultData)
         }

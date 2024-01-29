@@ -13,13 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.pscode.app.domain.model.ResultData
+import com.pscode.app.domain.model.Result
 import com.pscode.app.presentation.composables.AutoResizedText
 import com.pscode.app.utils.Constants.NUMBER_OF_ROUNDS
 
 @Composable
 fun LeaderboardListItem(
-    rank: Int, resultData: ResultData, isCurrentUser: Boolean, modifier: Modifier = Modifier
+    rank: Int, resultData: Result, isCurrentUser: Boolean, modifier: Modifier = Modifier
 ) {
     ElevatedCard(
         modifier = modifier, colors = if (isCurrentUser) CardDefaults.elevatedCardColors(

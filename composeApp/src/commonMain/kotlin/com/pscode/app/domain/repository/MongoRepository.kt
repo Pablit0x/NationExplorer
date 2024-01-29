@@ -1,10 +1,10 @@
 package com.pscode.app.domain.repository
 
-import com.pscode.app.domain.model.ResultData
 import kotlinx.coroutines.flow.Flow
+import com.pscode.app.domain.model.Result
 
 interface MongoRepository {
     fun configureRealm()
-    fun getResults(): Flow<List<ResultData>>
-    suspend fun upsertResult(resultData: ResultData)
+    fun getResults(): Flow<List<Result>>
+    suspend fun upsertResult(resultData: Result)
 }
