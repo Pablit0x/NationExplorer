@@ -71,7 +71,11 @@ https://github.com/Pablit0x/NationExplorer/assets/76017191/06693236-55c2-4ea1-ac
 
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/39f74495-65de-44f1-bb3c-bdd2438374fe)
 
-![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/ffacf4bf-089a-4b80-a40d-98fa343585c9)
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/12e66609-361d-4f5e-97ca-02ed05da38ac)
+
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/c3d2b5e8-153c-445e-8f03-90417ed8d15e)
+
+![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/285c140f-069f-4b0f-870e-c73633f7cbcf)
 
 ![iOS Screenshots](https://github.com/Pablit0x/NationExplorer/assets/76017191/14df6335-1f41-4fe2-b3f8-d318b6c17cdf)
 
