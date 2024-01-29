@@ -4,7 +4,7 @@ Nation Explorer is a Compose Multiplatform offline-first mobile app (**for both 
 that offers an exploration of countries worldwide. Leveraging modern technologies, it provides users
 with an engaging experience to discover and interact with countries across the globe.
 
-![world](https://github.com/Pablit0x/NationExplorer/assets/76017191/0ce2979b-c091-487d-b5c1-de9efb6562c9)
+![world](https://github.com/Pablit0x/NationExplorer/assets/76017191/badcca82-e8c5-4c25-b9db-dc7470d60507)
 
 ## Features
 
