@@ -71,7 +71,7 @@ fun CelebrityCard(
 
                 if (celebrityState.cardState == CardState.EXPENDED) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().height(200.dp),
+                        modifier = Modifier.fillMaxWidth().height(220.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
 
