@@ -46,6 +46,9 @@ class DetailViewModel(
         viewModelScope, SharingStarted.WhileSubscribed(5000), initialValue = Status.Idle
     )
 
+    private val _selectedCountry = MutableStateFlow<CountryData?>(null)
+    val selectedCountry = _selectedCountry.asStateFlow()
+
     private val _isCountryFavourite = MutableStateFlow(false)
     val isCountryFavourite = _isCountryFavourite.asStateFlow()
 
@@ -92,6 +95,23 @@ class DetailViewModel(
 
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
     val weatherInfo = _weatherInfo.asStateFlow()
+
+    fun getSelectedCountryByName(countryName: String) {
+        viewModelScope.launch {
+            val result = countryRepository.getCountryByName(countryName = countryName)
+            when (result) {
+                is Response.Success -> {
+                    _selectedCountry.update {
+                        result.data
+                    }
+                }
+
+                is Response.Error -> {
+
+                }
+            }
+        }
+    }
 
     fun getTidbitsByCountry(countryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -195,9 +215,9 @@ class DetailViewModel(
     }
 
 
-    fun toggleCountryFavourite(country: CountryData) {
+    fun toggleCountryFavourite(countryName: String) {
         viewModelScope.launch {
-            countryRepository.toggleFavourites(country = country).let { response ->
+            countryRepository.toggleFavourites(countryName = countryName).let { response ->
                 when (response) {
                     is Response.Success -> {
                         _isCountryFavourite.update { currentFavouriteValue ->
@@ -206,10 +226,10 @@ class DetailViewModel(
                         if (isCountryFavourite.value) {
                             _eventsChannel.send(
                                 Event.ShowSnackbarMessageWithAction(message = SharedRes.string.country_added_to_favourites.format(
-                                    country = country.name
+                                    country = countryName
                                 ),
                                     actionLabel = SharedRes.string.Undo,
-                                    action = { toggleCountryFavourite(country = country) })
+                                    action = { toggleCountryFavourite(countryName = countryName) })
                             )
                         }
                     }

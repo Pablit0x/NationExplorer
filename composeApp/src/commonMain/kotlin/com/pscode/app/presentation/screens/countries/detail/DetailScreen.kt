@@ -39,16 +39,20 @@ import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.utils.Status
 import org.koin.compose.koinInject
 
-class DetailScreen(private val selectedCountry: CountryData) : Screen {
+class DetailScreen(private val selectedCountryName: String) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val viewModel = koinInject<DetailViewModel>()
+
+        val selectedCountry by viewModel.selectedCountry.collectAsState()
         val countryGeolocation by viewModel.countryGeolocation.collectAsState()
         val tidbitState by viewModel.tidbitState.collectAsState()
         val celebrityState by viewModel.celebrityState.collectAsState()
         val youtubeVideoState by viewModel.youtubeVideoState.collectAsState()
-        val hasCapital = selectedCountry.capitals.isNotEmpty()
+        val hasCapital = remember(selectedCountry) {
+            selectedCountry?.capitals?.isNotEmpty() ?: false
+        }
         val isMapVisible by viewModel.isMapVisible.collectAsState()
         val isCountryFavourite by viewModel.isCountryFavourite.collectAsState()
         val networkStatus by viewModel.connectivityStatus.collectAsState()
@@ -93,19 +97,27 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
             }
         }
 
-        LaunchedEffect(true) {
-            viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
-            viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
-            viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
-            viewModel.setFavouriteStatus(isFavourite = selectedCountry.isFavourite)
+        LaunchedEffect(Unit){
+            viewModel.getSelectedCountryByName(countryName = selectedCountryName)
+        }
+
+        LaunchedEffect(selectedCountry) {
+            selectedCountry?.let { country ->
+                viewModel.getGeolocationByCountry(countryName = country.name)
+                viewModel.getTidbitsByCountry(countryName = country.name)
+                viewModel.getCelebritiesByCountry(countryName = country.name)
+                viewModel.setFavouriteStatus(isFavourite = country.isFavourite)
+            }
         }
 
         LaunchedEffect(networkStatus) {
             when (networkStatus) {
                 Status.Available -> {
-                    viewModel.getGeolocationByCountry(countryName = selectedCountry.name)
-                    viewModel.getTidbitsByCountry(countryName = selectedCountry.name)
-                    viewModel.getCelebritiesByCountry(countryName = selectedCountry.name)
+                    selectedCountry?.let { country ->
+                        viewModel.getGeolocationByCountry(countryName = country.name)
+                        viewModel.getTidbitsByCountry(countryName = country.name)
+                        viewModel.getCelebritiesByCountry(countryName = country.name)
+                    }
                 }
 
                 Status.Unavailable -> {
@@ -125,64 +137,65 @@ class DetailScreen(private val selectedCountry: CountryData) : Screen {
             }
         }
 
-        Scaffold(
-            topBar = {
-                DetailScreenTopBar(
-                    navigator = navigator,
-                    onToggleFavourite = { viewModel.toggleCountryFavourite(country = selectedCountry) },
-                    isCountryFavourite = isCountryFavourite,
-                    title = selectedCountry.name,
-                    scrollBehavior = scrollBehavior
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-        ) { innerPadding ->
-
-            if (isMapVisible) {
-                FullScreenMapDialog(
-                    countryArea = selectedCountry.area,
-                    locationData = countryGeolocation,
-                    hideMap = viewModel::hideMap,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Column(
-                    modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
-                        .verticalScroll(state = scrollState)
-                        .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                DetailedCountryOverviewCard(
-                        selectedCountry = selectedCountry,
-                        hasCapitalCity = hasCapital,
-                        modifier = Modifier.fillMaxWidth()
+        selectedCountry?.let { country ->
+            Scaffold(
+                topBar = {
+                    DetailScreenTopBar(
+                        navigator = navigator,
+                        onToggleFavourite = { viewModel.toggleCountryFavourite(countryName = country.name) },
+                        isCountryFavourite = isCountryFavourite,
+                        title = selectedCountryName,
+                        scrollBehavior = scrollBehavior
                     )
+                },
+                snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            ) { innerPadding ->
 
-                    ExploreAndLearnCards(
-                        tidbitState = tidbitState,
-                        celebrityState = celebrityState,
-                        youtubeVideoState = youtubeVideoState,
-                        displayShowMapCard = displayShowMapButton,
-                        onShowOnMapCardClicked = viewModel::showMap,
-                        setCurrentTidbitId = viewModel::setCurrentTidbitId,
-                        onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
-                        onUpdateTidbitCardState = viewModel::updateTidbitCardState,
-                        onUpdateYoutubeCardState = viewModel::updateYoutubeCardState,
-                        modifier = Modifier.fillMaxWidth()
+                if (isMapVisible) {
+                    FullScreenMapDialog(
+                        locationData = countryGeolocation,
+                        hideMap = viewModel::hideMap,
+                        modifier = Modifier.fillMaxSize()
                     )
+                } else {
+                    Column(
+                        modifier = Modifier.padding(innerPadding).padding(12.dp).fillMaxSize()
+                            .verticalScroll(state = scrollState)
+                            .navigateBackOnDrag(onNavigateBack = { navigator.pop() }),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        DetailedCountryOverviewCard(
+                            selectedCountry = country,
+                            hasCapitalCity = hasCapital,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        ExploreAndLearnCards(
+                            tidbitState = tidbitState,
+                            celebrityState = celebrityState,
+                            youtubeVideoState = youtubeVideoState,
+                            displayShowMapCard = displayShowMapButton,
+                            onShowOnMapCardClicked = viewModel::showMap,
+                            setCurrentTidbitId = viewModel::setCurrentTidbitId,
+                            onUpdateCelebrityCardState = viewModel::updateCelebrityCardState,
+                            onUpdateTidbitCardState = viewModel::updateTidbitCardState,
+                            onUpdateYoutubeCardState = viewModel::updateYoutubeCardState,
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
 
-                    WeatherCard(
-                        countryName = selectedCountry.name,
-                        sixMonthsWeatherData = weatherAverages,
-                        weatherInfo = weatherInfo,
-                        chartSelectionItems = selectedChartDataItem,
-                        onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                        WeatherCard(
+                            countryName = country.name,
+                            sixMonthsWeatherData = weatherAverages,
+                            weatherInfo = weatherInfo,
+                            chartSelectionItems = selectedChartDataItem,
+                            onChartSelectionItemClicked = { viewModel.updateChartDataSelectedItem(it) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }

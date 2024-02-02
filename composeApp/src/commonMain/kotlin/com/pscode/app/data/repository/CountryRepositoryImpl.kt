@@ -7,8 +7,7 @@ import com.pscode.app.utils.Response
 import io.github.xxfast.kstore.KStore
 
 class CountryRepositoryImpl(
-    private val countryApi: CountryApi,
-    private val countryDataCache: KStore<List<CountryData>>
+    private val countryApi: CountryApi, private val countryDataCache: KStore<List<CountryData>>
 ) : CountryRepository {
     override suspend fun getAllCountries(): Response<List<CountryData>> {
         val cachedCountries = countryDataCache.get()
@@ -24,14 +23,14 @@ class CountryRepositoryImpl(
         return countryListResponse
     }
 
-    override suspend fun toggleFavourites(country: CountryData?): Response<List<CountryData>> {
+    override suspend fun toggleFavourites(country: String): Response<List<CountryData>> {
 
         val cachedCountries =
             countryDataCache.get() ?: return Response.Error("Country cache is null")
 
         val updatedList = cachedCountries.let { countries ->
             countries.map { cachedCountry ->
-                if (cachedCountry.name == country?.name) {
+                if (cachedCountry.name == country) {
                     cachedCountry.copy(
                         isFavourite = !cachedCountry.isFavourite
                     )
@@ -44,6 +43,15 @@ class CountryRepositoryImpl(
         countryDataCache.update { updatedList }
 
         return Response.Success(data = updatedList)
+    }
+
+    override suspend fun getCountryByName(countryName: String): Response<CountryData> {
+
+        val cachedCountries =
+            countryDataCache.get() ?: return Response.Error("Country cache is null")
+
+        return Response.Success(data = cachedCountries.first { it.name == countryName })
+
     }
 
 }

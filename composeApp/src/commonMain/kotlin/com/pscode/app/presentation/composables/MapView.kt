@@ -5,4 +5,4 @@ import androidx.compose.ui.Modifier
 import com.pscode.app.domain.model.LocationData
 
 @Composable
-expect fun MapView(locationData: LocationData, countryArea: Double, modifier: Modifier)
+expect fun MapView(locationData: LocationData, modifier: Modifier)

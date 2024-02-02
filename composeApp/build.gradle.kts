@@ -71,6 +71,7 @@ kotlin {
             implementation(libs.google.maps.compose)
             implementation(libs.google.play.services.maps)
             implementation(libs.android.youtube.player)
+            implementation(libs.android.youtube.ui)
 
         }
 

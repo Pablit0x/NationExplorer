@@ -167,7 +167,11 @@ class OverviewScreen : Screen {
                                     CountryListItem(
                                         countryData = country,
                                         onCountryClick = { selectedCountry ->
-                                            navigator.navigate(screen = DetailScreen(selectedCountry = selectedCountry))
+                                            navigator.navigate(
+                                                screen = DetailScreen(
+                                                    selectedCountryName = selectedCountry.name
+                                                )
+                                            )
                                         },
                                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                                     )

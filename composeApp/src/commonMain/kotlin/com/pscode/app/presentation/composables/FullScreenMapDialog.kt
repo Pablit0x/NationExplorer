@@ -19,7 +19,6 @@ import com.pscode.app.domain.model.LocationData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullScreenMapDialog(
-    countryArea: Double,
     hideMap: () -> Unit,
     locationData: LocationData?,
     modifier: Modifier = Modifier
@@ -43,7 +42,6 @@ fun FullScreenMapDialog(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    countryArea = countryArea,
                     locationData = it
                 )
             }

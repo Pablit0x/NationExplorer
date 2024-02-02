@@ -14,7 +14,7 @@ import platform.MapKit.MKMapView
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun MapView(locationData: LocationData, countryArea: Double, modifier: Modifier) {
+actual fun MapView(locationData: LocationData, modifier: Modifier) {
     val location = CLLocationCoordinate2DMake(
         latitude = locationData.latitude, longitude = locationData.longitude,
     )

@@ -14,7 +14,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.pscode.app.domain.model.LocationData
 
 @Composable
-actual fun MapView(locationData: LocationData, countryArea: Double, modifier: Modifier) {
+actual fun MapView(locationData: LocationData, modifier: Modifier) {
 
     var isLoading by remember { mutableStateOf(true) }
     val zoomLevel by remember { mutableFloatStateOf((5f)) }
