@@ -26,8 +26,8 @@ fun TidbitsDto.toTidbitData(): TidbitData {
 }
 
 
-fun TidbitsDto.toYoutubeVideoData() : YoutubeVideoData? {
-    return if(this.videoId == null){
+fun TidbitsDto.toYoutubeVideoData(): YoutubeVideoData? {
+    return if (this.videoId == null) {
         null
     } else {
         YoutubeVideoData(country = this.name, videoId = videoId)

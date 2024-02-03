@@ -58,7 +58,7 @@ kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" 
 google-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "maps-compose" }
 google-play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps-services" }
 mongodb-realm = { module = "io.realm.kotlin:library-sync", version.ref = "mongodb-realm" }
-android-youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "android-yt-player"}
+android-youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "android-yt-player" }
 android-youtube-ui = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui", version.ref = "android-yt-player" }
 
 [plugins]

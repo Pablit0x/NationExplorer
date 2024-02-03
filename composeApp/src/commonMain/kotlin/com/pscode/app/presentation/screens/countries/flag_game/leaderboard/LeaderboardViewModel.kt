@@ -1,5 +1,6 @@
 package com.pscode.app.presentation.screens.countries.flag_game.leaderboard
 
+import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.MongoRepository
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.realm.kotlin.mongodb.User
@@ -8,7 +9,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.pscode.app.domain.model.Result
 
 class LeaderboardViewModel(
     private val mongoRepository: MongoRepository, val currentUser: User?

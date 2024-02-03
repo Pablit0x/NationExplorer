@@ -15,7 +15,7 @@ class TidbitsRepositoryImpl(private val tidbitsApi: TidbitsApi) : TidbitsReposit
         val result =
             tidbitsApi.getTidbitsByCountryName(countryName = countryName.filterNot { it.isWhitespace() })
 
-         when (result) {
+        when (result) {
             is Response.Success -> {
 
                 val tidbitData = result.data.toTidbitData()

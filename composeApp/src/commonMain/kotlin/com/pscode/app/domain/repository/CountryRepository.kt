@@ -7,5 +7,5 @@ interface CountryRepository {
     suspend fun getAllCountries(): Response<List<CountryData>>
     suspend fun toggleFavourites(countryName: String): Response<List<CountryData>>
 
-    suspend fun getCountryByName(countryName: String) : Response<CountryData>
+    suspend fun getCountryByName(countryName: String): Response<CountryData>
 }

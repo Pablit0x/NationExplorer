@@ -5,5 +5,5 @@ import com.pscode.app.domain.model.CelebrityData
 data class CelebrityState(
     val celebrityData: CelebrityData = CelebrityData(),
     val cardState: CardState = CardState.COLLAPSED,
-    val errorMessage : String? = null
+    val errorMessage: String? = null
 )

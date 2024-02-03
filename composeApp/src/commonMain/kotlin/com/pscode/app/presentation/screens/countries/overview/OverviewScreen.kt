@@ -102,16 +102,17 @@ class OverviewScreen : Screen {
             }
         }
 
-        Scaffold(topBar = {
-            OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
-                searchWidgetState = searchState.widgetState,
-                searchTextState = searchText,
-                isFiltering = filterState.isFiltering,
-                onFilterClicked = { viewModel.updateFilterWidgetState(newState = WidgetState.OPEN) },
-                onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = WidgetState.CLOSED) },
-                onSearchTriggered = { viewModel.updateSearchWidgetState(newState = WidgetState.OPEN) },
-                onSearchTextChange = { updatedSearchText -> viewModel.updateSearchText(text = updatedSearchText) })
-        },
+        Scaffold(
+            topBar = {
+                OverviewScreenMainTopBar(scrollBehavior = scrollBehavior,
+                    searchWidgetState = searchState.widgetState,
+                    searchTextState = searchText,
+                    isFiltering = filterState.isFiltering,
+                    onFilterClicked = { viewModel.updateFilterWidgetState(newState = WidgetState.OPEN) },
+                    onCloseSearchClicked = { viewModel.updateSearchWidgetState(newState = WidgetState.CLOSED) },
+                    onSearchTriggered = { viewModel.updateSearchWidgetState(newState = WidgetState.OPEN) },
+                    onSearchTextChange = { updatedSearchText -> viewModel.updateSearchText(text = updatedSearchText) })
+            },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = {

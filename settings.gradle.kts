@@ -21,7 +21,8 @@ dependencyResolutionManagement {
 
             credentials {
                 username = "Pablit0x"
-                password = "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"
+                password =
+                    "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"
             }
         }
     }

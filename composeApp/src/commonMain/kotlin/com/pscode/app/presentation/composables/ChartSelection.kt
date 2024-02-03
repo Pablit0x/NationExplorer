@@ -21,20 +21,20 @@ fun ChartSelection(
 ) {
 
 
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            chartSelectionItems.forEach { chartItem ->
-                FilterChip(
-                    selected = chartItem.isSelected,
-                    label = {
-                        Icon(imageVector = chartItem.icon, contentDescription = "Chart Icon")
-                    },
-                    onClick = { onChartSelectionItemClicked(chartItem.label) },
-                    modifier = Modifier.padding(4.dp)
-                )
-            }
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        chartSelectionItems.forEach { chartItem ->
+            FilterChip(
+                selected = chartItem.isSelected,
+                label = {
+                    Icon(imageVector = chartItem.icon, contentDescription = "Chart Icon")
+                },
+                onClick = { onChartSelectionItemClicked(chartItem.label) },
+                modifier = Modifier.padding(4.dp)
+            )
+        }
     }
 }

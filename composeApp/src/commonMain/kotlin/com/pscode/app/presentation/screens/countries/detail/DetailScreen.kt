@@ -29,7 +29,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.pscode.app.SharedRes
-import com.pscode.app.domain.model.CountryData
 import com.pscode.app.presentation.composables.DetailedCountryOverviewCard
 import com.pscode.app.presentation.composables.ExploreAndLearnCards
 import com.pscode.app.presentation.composables.FullScreenMapDialog
@@ -97,7 +96,7 @@ class DetailScreen(private val selectedCountryName: String) : Screen {
             }
         }
 
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             viewModel.getSelectedCountryByName(countryName = selectedCountryName)
         }
 

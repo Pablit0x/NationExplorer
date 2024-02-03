@@ -190,7 +190,10 @@ fun WeatherCard(
                                     contentDescription = "Weather Tab Icon",
                                     tint = if (index == 0) Color.Red.copy(alpha = animatedAlpha) else MaterialTheme.colorScheme.onBackground
                                 )
-                                Text(text = weatherTabItem.title, color = MaterialTheme.colorScheme.onBackground)
+                                Text(
+                                    text = weatherTabItem.title,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
                             }
                         })
                 }

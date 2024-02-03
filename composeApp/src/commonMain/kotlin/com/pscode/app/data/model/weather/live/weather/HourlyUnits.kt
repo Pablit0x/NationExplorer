@@ -19,9 +19,9 @@ data class HourlyUnits(
     @SerialName("windspeed_10m")
     val windspeed10m: String,
     @SerialName("visibility")
-    val visibility : String,
+    val visibility: String,
     @SerialName("apparent_temperature")
-    val feelsLike : String,
+    val feelsLike: String,
     @SerialName("cloud_cover")
     val cloudiness: String
 )

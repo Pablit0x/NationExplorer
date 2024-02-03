@@ -61,7 +61,9 @@ fun WeatherDataDto.toWeatherInfo(weatherConditions: List<WeatherConditions>): We
     val now = nowInstant.toLocalDateTime(timeZone = timeZone)
 
     val currentWeatherData = weatherDataMap[0]?.find {
-        val hour = if (now.minute < 30) now.hour else nowInstant.plus(DateTimePeriod(hours = 1), timeZone).toLocalDateTime(timeZone = timeZone).hour
+        val hour =
+            if (now.minute < 30) now.hour else nowInstant.plus(DateTimePeriod(hours = 1), timeZone)
+                .toLocalDateTime(timeZone = timeZone).hour
         it.date.hour == hour
     }
     return WeatherInfo(

@@ -1,11 +1,11 @@
 package com.pscode.app.data.repository
 
+import com.pscode.app.domain.model.Result
 import com.pscode.app.domain.repository.MongoRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.User
-import com.pscode.app.domain.model.Result
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
