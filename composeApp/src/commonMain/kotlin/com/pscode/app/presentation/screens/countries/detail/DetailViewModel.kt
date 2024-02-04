@@ -24,6 +24,7 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -98,8 +99,7 @@ class DetailViewModel(
 
     fun getSelectedCountryByName(countryName: String) {
         viewModelScope.launch {
-            val result = countryRepository.getCountryByName(countryName = countryName)
-            when (result) {
+            when (val result = countryRepository.getCountryByName(countryName = countryName)) {
                 is Response.Success -> {
                     _selectedCountry.update {
                         result.data
@@ -107,7 +107,7 @@ class DetailViewModel(
                 }
 
                 is Response.Error -> {
-
+                    _eventsChannel.send(Event.ShowSnackbarMessage(result.message))
                 }
             }
         }
