@@ -77,5 +77,4 @@
     <string name="average_wind_speed">Average Wind Speed in ${month}</string>
     <string name="average_day_light">Average Day Light in ${month} per day</string>
     <string name="average_rain_sum">Average Rain Sum in ${month} per day</string>
-
 </resources>
