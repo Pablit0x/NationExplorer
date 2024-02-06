@@ -1,6 +1,7 @@
 package com.pscode.app.presentation.screens.countries.detail
 
 import com.pscode.app.SharedRes
+import com.pscode.app.domain.model.CelebrityData
 import com.pscode.app.domain.model.CountryData
 import com.pscode.app.domain.model.LocationData
 import com.pscode.app.domain.model.SelectableItemWithIcon
@@ -177,6 +178,7 @@ class DetailViewModel(
                 is Response.Error -> {
                     _celebrityState.update {
                         it.copy(
+                            celebrityData = CelebrityData(),
                             errorMessage = result.message
                         )
                     }
