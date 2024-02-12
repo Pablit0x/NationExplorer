@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Games
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -50,6 +51,8 @@ import com.pscode.app.presentation.screens.countries.detail.DetailScreen
 import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScreen
 import com.pscode.app.presentation.screens.countries.overview.states.WidgetState
 import com.pscode.app.presentation.screens.shared.Event
+import com.pscode.app.presentation.theme.LocalWindowSize
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -61,8 +64,10 @@ class OverviewScreen : Screen {
         val viewModel = koinInject<OverviewViewModel>()
 
         val isLoading by viewModel.isLoading.collectAsState()
-
         val searchText by viewModel.searchText.collectAsState()
+
+        val windowSize = LocalWindowSize.current
+
 
         val countries by viewModel.countries.collectAsState()
         val filterState by viewModel.filterState.collectAsState()
@@ -153,6 +158,12 @@ class OverviewScreen : Screen {
                             modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
+
+                            item {
+                                Button(onClick = {} ){
+                                    Text(text = windowSize.name)
+                                }
+                            }
 
                             groupedCountries.forEach { (letter, countries) ->
                                 stickyHeader {
