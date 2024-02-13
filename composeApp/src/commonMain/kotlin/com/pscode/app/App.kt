@@ -7,7 +7,6 @@ import com.pscode.app.di.connectivityModule
 import com.pscode.app.di.dataModule
 import com.pscode.app.di.viewModelModule
 import com.pscode.app.presentation.screens.countries.overview.OverviewScreen
-import com.pscode.app.presentation.theme.AppTheme
 import com.pscode.app.presentation.theme.CustomAppTheme
 import com.pscode.app.utils.WindowSize
 import io.github.aakira.napier.DebugAntilog

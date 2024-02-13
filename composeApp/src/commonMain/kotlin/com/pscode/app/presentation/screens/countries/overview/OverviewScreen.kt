@@ -52,7 +52,6 @@ import com.pscode.app.presentation.screens.countries.flag_game.game.FlagGameScre
 import com.pscode.app.presentation.screens.countries.overview.states.WidgetState
 import com.pscode.app.presentation.screens.shared.Event
 import com.pscode.app.presentation.theme.LocalWindowSize
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -160,7 +159,7 @@ class OverviewScreen : Screen {
                         ) {
 
                             item {
-                                Button(onClick = {} ){
+                                Button(onClick = {}) {
                                     Text(text = windowSize.name)
                                 }
                             }
