@@ -64,10 +64,6 @@ class OverviewScreen : Screen {
 
         val isLoading by viewModel.isLoading.collectAsState()
         val searchText by viewModel.searchText.collectAsState()
-
-        val windowSize = LocalWindowSize.current
-
-
         val countries by viewModel.countries.collectAsState()
         val filterState by viewModel.filterState.collectAsState()
         val searchState by viewModel.searchState.collectAsState()
@@ -157,13 +153,6 @@ class OverviewScreen : Screen {
                             modifier = Modifier.fillMaxHeight().fillMaxWidth(0.9f),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-
-                            item {
-                                Button(onClick = {}) {
-                                    Text(text = windowSize.name)
-                                }
-                            }
-
                             groupedCountries.forEach { (letter, countries) ->
                                 stickyHeader {
                                     LetterHeader(
