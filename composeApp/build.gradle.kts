@@ -58,10 +58,6 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) implementation(compose.components.resources)
         }
 
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-        }
-
         androidMain.dependencies {
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activityCompose)
